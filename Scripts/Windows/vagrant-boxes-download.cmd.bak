@@ -33,7 +33,11 @@ vagrant box add generic/ubuntu2204 --clean --provider virtualbox
 :: providers: vmware virtualbox hyper-v
 ::
 vagrant box add roboxes-x64/ubuntu2204 --clean --provider vmware_desktop
-::
+
+
+
+
+
 ::	alvistack/ubuntu-22.04
 ::	Ansible
 ::	providers: virtualbox

@@ -46,7 +46,7 @@ K	=	Kubernetes
 =end
 #
 #
-versie_vagrantfile = "6.23.12.12"
+versie_vagrantfile = "2024-01-16"
 #
 #
 #	Aanmaken variable met huidige datum 
@@ -194,6 +194,8 @@ linux_machines=[
 	#
 	#	Ansible Demo 
 	#
+	#	Controller 001
+	#
 	{
 		:hostname => "ulx-s-2204-l-a-001",
 		:weergavenaam => "DEMO-A-Controller",
@@ -206,7 +208,7 @@ linux_machines=[
 		:cpu => 2,
     },
 	#
-	#	Slave #1
+	#	Slave #1 (010)
 	#
 	{
 		:hostname => "ulx-s-2204-l-a-010",
@@ -220,7 +222,7 @@ linux_machines=[
 		:cpu => 2,
     },
 	#
-	#	Slave #2
+	#	Slave #2 (011) 
 	#
 	{
 		:hostname => "ulx-s-2204-l-a-011",
@@ -733,6 +735,41 @@ Vagrant.configure("2") do |config|
 				#
 			SHELL
 			#
+			# #############################################################
+			#
+			#						Provision
+			#				
+			#						Aanpassen DNS-Settings ivm EduRoam
+			#
+			# #############################################################
+			#
+			#
+			#	sed "s@mirrors.edge.kernel.org@nl.archive.ubuntu.com@" -i /etc/apt/sources.list
+			#
+			#
+			ulxnode.vm.provision "shell", inline: <<-SHELL
+				#
+				#
+				#	AANPASSEN /etc/netplan/01-netcfg.yaml naar de juiste settings IVM EduROAM
+				#
+				#
+				#	DNS Server 1 aanpassen naar ns1.saxion.nl
+				sed "s@4.2.2.1@145.76.2.75@" -i /etc/netplan/01-netcfg.yaml
+				#
+				#	DNS Server 2 aanpassen naar ns2.saxion.nl
+				sed "s@4.2.2.2@145.76.2.85@" -i /etc/netplan/01-netcfg.yaml
+				#
+				# 	Overige DNS servers toevoegen (o.a. d-hk-mer-ib02.infra.saxion.net = 145.2.14.10) 
+				#	sed "s@208.67.220.220@145.2.14.10@" -i /etc/netplan/01-netcfg.yaml
+				sed "s@208.67.220.220@145.2.14.10, 8.8.8.8, 8.8.4.4@" -i /etc/netplan/01-netcfg.yaml
+				#	
+				#	Doorvoeren van wijzigingen 
+				netplan apply 
+				#
+			SHELL
+			#
+			#
+			#
 			#
 			# #############################################################
 			#
@@ -743,10 +780,10 @@ Vagrant.configure("2") do |config|
 			# #############################################################
 			#
 			ulxnode.vm.provision "shell", inline: <<-SHELL
-				# Versie 1 (status: productie) 
-				sudo curl -s -o /home/vagrant/wsl2-config-latest.sh https://raw.githubusercontent.com/jatutert/WSL2/main/wsl2-config-latest.sh
-				sudo chmod +x /home/vagrant/wsl2-config-latest.sh
-				# Versie 2 (status: test) 
+				# 	Versie 1 (status: productie) 
+				#	sudo curl -s -o /home/vagrant/wsl2-config-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/wsl2-config-latest.sh
+				#	sudo chmod +x /home/vagrant/wsl2-config-latest.sh
+				# 	Versie 2 (status: productie) 
 				sudo curl -s -o /home/vagrant/ubuntu-config-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-latest.sh
 				sudo chmod +x /home/vagrant/ubuntu-config-latest.sh
 				#

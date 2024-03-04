@@ -444,7 +444,7 @@ setx VAGRANT_EXPERIMENTAL "1"
 setx VAGRANT_SUPPRESS_GO_EXPERIMENTAL_WARNING "1"
 ::
 setx VAGRANT_DEFAULT_PROVIDER "vmware_desktop"
-setx VAGRANT_VMWARE_CLONE_DIRECTORY "D:\Virtual-Machines\VMWare-WrkStat-Pro-Player\Vagrant"
+setx VAGRANT_VMWARE_CLONE_DIRECTORY "D:\Virtual-Machines\VMware-Workstation-PRO\Linux\Vagrant"
 :: 
 ::
 ::	Installatie Vagrant via WinGET
