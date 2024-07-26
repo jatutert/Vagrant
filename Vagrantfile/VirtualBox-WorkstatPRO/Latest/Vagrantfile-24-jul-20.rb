@@ -273,7 +273,7 @@ linux_machines=[
         :box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
         :ram => 			2048,
         :cpu => 			2,
@@ -284,7 +284,7 @@ linux_machines=[
         :box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
         :ram => 			4096,
         :cpu => 			2,
@@ -295,7 +295,7 @@ linux_machines=[
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -306,7 +306,7 @@ linux_machines=[
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"desktop",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			16384,
 		:cpu => 			2,
@@ -319,12 +319,12 @@ linux_machines=[
 	#	DBMS
 	#
 	{
-		:hostname => 		"U24-LTS-S-DBMS-001",
-		:weergavenaam => 	"U24-LTS-S-DBMS-001",
+		:hostname => 		"u24-lts-s-dbms-001",
+		:weergavenaam => 	"u24-lts-S-dbms-001",
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -333,12 +333,12 @@ linux_machines=[
 	#	WEBServer
 	#
 	{
-		:hostname => 		"U24-LTS-S-WSRV-001",
-		:weergavenaam => 	"U24-LTS-S-WSRV-001",
+		:hostname => 		"u24-lts-s-wsrv-001",
+		:weergavenaam => 	"u24-lts-S-wsrv-001",
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -349,12 +349,12 @@ linux_machines=[
 	#
 	#
 	{
-		:hostname => 		"U24-LTS-S-DCKR-001",
-		:weergavenaam => 	"U24-LTS-S-DCKR-001",
+		:hostname => 		"u24-lts-s-dckr-001",
+		:weergavenaam => 	"u24-lts-S-dckr-001",
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -373,7 +373,7 @@ linux_machines=[
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -387,7 +387,7 @@ linux_machines=[
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -553,8 +553,221 @@ windows_machines=[
 #
 #
 #
-#	Script staan op GitHub JATutert
+$terraform_install = <<SCRIPT
+	#
+	# Aanmaken HashiCorp Terraform installatie Script
+	#
+	#! /bin/bash
+	#
+	# mkdir /home/vagrant/scripts/terraform_scripts > /dev/null 2>&1
+	#
+	# create script 
+	echo '#!/bin/bash' > /home/vagrant/scripts/terraform_scripts/terraform-linux-install.sh
+	echo 'sudo snap install terraform' >> /home/vagrant/scripts/terraform_scripts/terraform-linux-install.sh
+	#
+	sudo chmod +x /home/vagrant/scripts/terraform_scripts/terraform-linux-install.sh
+SCRIPT
 #
+#
+# 	[1d] Script die bij provision virtuele machine met meer dan 8 GB RAM worden uitgevoerd
+#
+# 	[1d-1] 	minio_installatie [native install minio / niet voor minikube of kubernetes ] 
+#
+#
+$minio_linux_run = <<SCRIPT
+	#
+	#
+	#	MinIO Object Storage installatie op Linux (manier 3) 
+	#	Handleiding: https://min.io/docs/minio/linux/index.html
+	#  
+	# 
+	# Naslag: 
+	# https://www.digitalocean.com/community/tutorials/how-to-set-up-minio-object-storage-server-in-standalone-mode-on-ubuntu-20-04
+	# https://gist.github.com/kstevenson722/e7978a75aec25feaa6ad0965ec313e2d
+	#
+	#
+	#! /bin/bash
+	#
+	# create script
+	#
+	#	[Header]
+			echo '#! /bin/bash' > /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo '#' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo '# MinIO Native Installatie' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo '# (c) 2023 John Tutert' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo '#' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo '# Toevoegen Repository' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+	# 	[MinIO Server Installatie]
+			echo 'mkdir -p /home/vagrant/tmp' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo 'curl -s -o /home/vagrant/tmp/minio_20230920224955.0.0_amd64.deb https://dl.min.io/server/minio/release/linux-amd64/minio_20230920224955.0.0_amd64.deb' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo 'sudo dpkg -i /home/vagrant/tmp/minio_20230920224955.0.0_amd64.deb' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo 'rm /home/vagrant/tmp/minio_20230920224955.0.0_amd64.deb' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+	# 	[MinIO Groepen/Gebruikers]
+			echo sudo groupadd -r minio-user >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo sudo useradd -M -r -g minio-user minio-user >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+	# 	[MinIO Storage Folder]
+			echo sudo mkdir /mnt/data >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo sudo chown minio-user:minio-user /mnt/data >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+	# 	[MinIO Configuratie]
+			echo 'echo MINIO_VOLUMES="/mnt/data" >> /etc/default/minio' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo 'echo MINIO_OPTS="--certs-dir /home/vag.rant/.minio/certs --console-address :9001" >> /etc/default/minio' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo 'echo MINIO_ROOT_USER=minioadmin >> /etc/default/minio' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo 'echo MINIO_ROOT_PASSWORD=minioadmin >> /etc/default/minio' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+	# 	[MinIO UFW poorten openzetten]
+			echo sudo ufw allow 9000:9001/tcp >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+	# 	[Starten MinIO Server]
+			echo sudo systemctl start minio >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo sudo systemctl enable minio >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+	# 	[MinIO Client Installatie]
+			echo 'mkdir -p /home/vagrant/tmp' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo 'curl -s -o /home/vagrant/tmp/mcli_20230920152231.0.0_arm64.deb https://dl.min.io/client/mc/release/linux-amd64/mcli_20230920152231.0.0_arm64.deb' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo 'sudo dpkg -i /home/vagrant/tmp/mcli_20230920152231.0.0_arm64.deb' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			echo 'rm /home/vagrant/tmp/mcli_20230920152231.0.0_arm64.deb' >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+	# 	[KubeCTL MinIO Plugin]
+			#
+			# 	https://min.io/docs/minio/kubernetes/upstream/reference/kubectl-minio-plugin.html
+			#	https://www.origo.io/info/stabiledocs/guides/minio-object-storage-service/
+			#	echo wget https://github.com/minio/operator/releases/download/v5.0.6/kubectl-minio_5.0.6_linux_amd64 -O kubectl-minio >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			#	echo chmod +x kubectl-minio >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			#	echo sudo mv kubectl-minio /usr/local/bin/ >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			#
+			# 	https://www.olivercoding.com/2021-03-01-kubernetes-minio-init/
+			# 	echo kubectl create namespace minio-operator >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			# 	echo kubectl minio init --namespace minio-operator >> /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+			#
+	sudo chmod +x /home/vagrant/scripts/minio_scripts/minio-linux-run.sh
+SCRIPT
+#
+#
+# 	[1d-2] 	MicroK8S (Kubernetes voor desktops/laptops) installatie 
+#
+#
+$microK8S_install = <<SCRIPT
+	#
+	#
+	#! /bin/bash
+	#
+	# create script 
+	echo '#! /bin/bash' > /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	echo 'echo MicroK8S KubeCTL KubeADM Installation Script' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	echo 'echo WARNING !' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	echo 'echo This virtual machine will be rebooted at the end of this script !'  >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[1] Installatie MicroK8S versie 1.28 (UpStream Kubernetes) 16 augustus 2023
+	#
+	echo 'sudo snap install microk8s --classic --channel=latest > /dev/null 2>&1'	>> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[2] Configuratie Firewall 
+	#
+	echo 'sudo ufw allow in on cni0 > /dev/null 2>&1' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	echo 'sudo ufw allow out on cni0 > /dev/null 2>&1' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	echo 'sudo ufw default allow routed > /dev/null 2>&1' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[3] Gebruiker Vagrant toevoegen aan groep
+	#
+	echo 'sudo usermod -a -G microk8s vagrant' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[4] Directory Kube 
+	#
+	echo 'sudo mkdir /home/vagrant/.kube' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	echo 'sudo chown -f -R vagrant ~/.kube' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[5] Configuratie KubeCTL MicroK8S
+	#	https://anaisurl.com/kubernetes-kubectl-microk8s/
+	#
+	echo 'sudo microk8s config > /home/vagrant/.kube/config' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[6] Installatie KubeCTL
+	#	https://anaisurl.com/kubernetes-kubectl-microk8s/
+	#
+	echo 'sudo snap install kubectl --classic --channel=latest > /dev/null 2>&1' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[7]	Configuratie KubeCTL
+	#
+	echo 'kubectl config use-context microk8s --kubeconfig="/home/vagrant/.kube/config"' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[8] Installatie KubeAdm
+	#
+	echo 'sudo snap install kubeadm --classic --channel=latest > /dev/null 2>&1' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[8] Enable van Add-Ons op MicroK8S
+	echo 'sudo microk8s enable dashboard' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	# echo 'sudo microk8s enable dns' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	# echo 'sudo microk8s enable hostpath-storage' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	#	[9] DEMO Deployment van NGINX op MicroK8S
+	#	https://thenewstack.io/kubernetes-101-deploy-your-first-application-with-microk8s/
+	#
+	echo '#! /bin/bash' > /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	echo 'cd /home/$USER' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	echo 'clear' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	#
+	echo 'kubectl get nodes' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	echo 'kubectl get pods' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	echo 'kubectl create deployment nginx-webserver --image=nginx' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	echo 'kubectl expose deployment nginx-webserver --type="NodePort" --port 80' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	echo 'kubectl get pods' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	echo 'kubectl get svc nginx-webserver' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	chmod +x /home/vagrant/microk8s_demos/nginx/microK8s_nginx_webserver.sh
+	#
+	#	[10] DEMO Deployment van NGINX op MicroK8S met 4 replicas 
+	#	https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/
+	#
+	curl -s -o /home/vagrant/microk8s_demos/nginx/deployment-scale.yaml https://raw.githubusercontent.com/kubernetes/website/main/content/en/examples/application/deployment-scale.yaml
+	#
+	echo '#! /bin/bash' > /home/vagrant/microk8s_demos/nginx/microK8s_nginx_4_replicas.sh
+	echo 'cd /home/$USER' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_4_replicas.sh
+	echo 'clear' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_4_replicas.sh
+	#
+	echo 'kubectl apply -f /home/vagrant/microk8s_demos/nginx/deployment-scale.yaml' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_4_replicas.sh
+	echo 'kubectl expose deployment nginx-deployment --type="NodePort" --port 80' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_4_replicas.sh
+	echo 'kubectl get svc nginx-deployment' >> /home/vagrant/microk8s_demos/nginx/microK8s_nginx_4_replicas.sh
+	#
+	chmod +x /home/vagrant/microk8s_demos/nginx/microK8s_nginx_4_replicas.sh
+	#
+	#	[11] DEMO Deployment van MySQL 
+	#	https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/
+	#
+	curl -s -o /home/vagrant/docker-compose/mysql/mysql-pv.yaml https://raw.githubusercontent.com/kubernetes/website/main/content/en/examples/application/mysql/mysql-pv.yaml
+	curl -s -o /home/vagrant/docker-compose/mysql/mysql-deployment.yaml https://raw.githubusercontent.com/kubernetes/website/main/content/en/examples/application/mysql/mysql-deployment.yaml
+	#
+	echo '#! /bin/bash' > /home/vagrant/microk8s_demos/mysql/microK8s_mysql_single.sh
+	echo 'cd /home/$USER' >> /home/vagrant/microk8s_demos/mysql/microK8s_mysql_single.sh
+	echo 'clear' >> /home/vagrant/microk8s_demos/mysql/microK8s_mysql_single.sh
+	#
+	# Deploy the PV and PVC of the YAML file
+	echo 'kubectl apply -f /home/vagrant/docker-compose/mysql/mysql-pv.yaml' > /home/vagrant/microk8s_demos/mysql/microK8s_mysql_single.sh
+	# Deploy the contents of the YAML file
+	echo 'kubectl apply -f /home/vagrant/docker-compose/mysql/mysql-deployment.yaml' >> /home/vagrant/microk8s_demos/mysql/microK8s_mysql_single.sh
+	#
+	echo 'kubectl describe deployment mysql' >> /home/vagrant/microk8s_demos/mysql/microK8s_mysql_single.sh
+	echo 'kubectl describe pvc mysql-pv-claim' >> /home/vagrant/microk8s_demos/mysql/microK8s_mysql_single.sh
+	#
+	echo 'kubectl get pods -l app=mysql' >> /home/vagrant/microk8s_demos/mysql/microK8s_mysql_single.sh
+	#
+	chmod +x /home/vagrant/microk8s_demos/mysql/microK8s_mysql_single.sh
+	#
+	#	Herstarten om autorisatie MicroK8S voor gebruiker vagrant te laden
+	#
+	echo 'echo Restart of this virtual machine started' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	echo 'echo use vagrant ssh $HOSTNAME after reboot to return to virtual machine again' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	echo 'sudo shutdown -r now' >> /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+	#
+	sudo chmod +x /home/vagrant/scripts/microk8s_scripts/microK8s-linux-install.sh
+SCRIPT
+#
+#
+# 	[1d-2] 	MinIO ADD-ON op MicroK8S enable 
+#
+#
+$minio_microk8s_config = <<SCRIPT
+	#
+	#! /bin/bash
+	#
+	# create script 
+	echo 'sudo microk8s enable minio ' >> /home/vagrant/scripts/minio_scripts/minio_microk8s_config.sh
+	sudo chmod +x /home/vagrant/scripts/minio_scripts/minio_microk8s_config.sh
+SCRIPT
 #
 #
 #
@@ -570,14 +783,22 @@ windows_machines=[
 #
 #
 $windows_winget_install = <<SCRIPT
-	#	Niet in gebruik
+	:: 	Script maakt gebruik van winget-install powershell script
+	::	Origineel is te vinden op 
+	:: 	https://raw.githubusercontent.com/asheroto/winget-install/master/winget-install.ps1
+	::
+	powershell -Command "Invoke-WebRequest -URI https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/asheroto-412-winget-install.ps1 -OutFile C:\Users\$env:USERNAME\Downloads\winget-install.ps1"
+	powershell -file C:\Users\$env:USERNAME\Downloads\winget-install.ps1
+	wsreset
 SCRIPT
 #
 #
 # [2a-2] Services stoppen
 #
+#
 $windows_services_config = <<SCRIPT
-	#	Niet in gebruik 
+	powershell -Command "Invoke-WebRequest -URI https://raw.githubusercontent.com/jatutert/Windows-Config/main/Command/Free-Mem-Windows-Server-v01.cmd -OutFile C:\Users\$env:USERNAME\Downloads\Free-Mem-Windows-Server-v01.cmd"
+	%userprofile%\Downloads\Free-Mem-Windows-Server-v01.cmd
 SCRIPT
 #
 #
@@ -676,8 +897,8 @@ Vagrant.configure("2") do |config|
 				ulxnode.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/#{ENV['USERNAME']}/documents"
 				ulxnode.vm.synced_folder "#{ENV['TMP']}",                    "/home/#{ENV['USERNAME']}/tmp"
 				ulxnode.vm.synced_folder "#{ENV['PUBLIC']}",                 "/home/#{ENV['USERNAME']}/public"
-				# 	demo_node.vm.synced_folder "#{ENV['OneDriveCommercial']}",     "/home/#{ENV['USERNAME']}/OneDriveCommercial"
-				# 	demo_node.vm.synced_folder "#{ENV['OneDriveConsumer']}",       "/home/#{ENV['USERNAME']}/OneDriveConsumer"
+				# demo_node.vm.synced_folder "#{ENV['OneDriveCommercial']}",     "/home/#{ENV['USERNAME']}/OneDriveCommercial"
+				# demo_node.vm.synced_folder "#{ENV['OneDriveConsumer']}",       "/home/#{ENV['USERNAME']}/OneDriveConsumer"
 			end 
 			#
 			#
@@ -851,14 +1072,14 @@ Vagrant.configure("2") do |config|
 			#	node.vm.network "private_network", ip: "192.168.56.220", netmask: "255.255.255.0"
 			#
 			# 	Adapter 3 Bridged
-			# 	node.vm.network "public_network", bridge: "VMware Virtual Ethernet Adapter for VMnet8"
-			# 	node.vm.network "public_network", bridge: "Ethernet"
+			# node.vm.network "public_network", bridge: "VMware Virtual Ethernet Adapter for VMnet8"
+			# node.vm.network "public_network", bridge: "Ethernet"
 			#
 			#	Port-Forwarding
 			#
 			winnode.vm.network :forwarded_port, guest: 3389, host: 53389, auto_correct: true
-			# 	node.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
-			# 	node.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
+			# node.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
+			# node.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
 			#
 			# ####################################################################
 			#
@@ -924,27 +1145,22 @@ Vagrant.configure("2") do |config|
 			#
 			#	Windows Desktop initialisatie
 			#
-			if machine[:os] == "windows" && machine[:osedition] == "desktop"
-				#	Installatie WinGET
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-ConfInig/main/Powershell/asheroto-412-winget-install.ps1"
-				#	Stoppen en disabelen services
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V002.ps1"
+			if machine[:os] == "windows" && machine[:osedition] == "desktop"
+				winnode.vm.provision "shell", privileged: "true", inline: $windows_winget_install
+				winnode.vm.provision "shell", privileged: "true", inline: $windows_services_config
 			end
+			#
 			#
 			#	Windows Server initialisatie
 			#
-			if machine[:os] == "windows" && machine[:osedition] == "server"
-				#	Installatie WinGET
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/asheroto-412-winget-install.ps1"
-				#	Stoppen en disabelen services
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V002.ps1"
+			if machine[:os] == "windows" && machine[:osedition] == "server"
+				winnode.vm.provision "shell", privileged: "true", inline: $windows_winget_install
+				winnode.vm.provision "shell", privileged: "true", inline: $windows_services_config
 			end
 			#
 			winnode.vm.provision "shell", privileged: "true", inline: <<-SHELL
-				#
-				#
-				#
-				#
+				::
+				::
 			SHELL
 		end
 	end

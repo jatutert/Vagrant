@@ -273,7 +273,7 @@ linux_machines=[
         :box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
         :ram => 			2048,
         :cpu => 			2,
@@ -284,7 +284,7 @@ linux_machines=[
         :box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
         :ram => 			4096,
         :cpu => 			2,
@@ -295,7 +295,7 @@ linux_machines=[
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -306,7 +306,7 @@ linux_machines=[
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"desktop",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			16384,
 		:cpu => 			2,
@@ -319,12 +319,12 @@ linux_machines=[
 	#	DBMS
 	#
 	{
-		:hostname => 		"U24-LTS-S-DBMS-001",
-		:weergavenaam => 	"U24-LTS-S-DBMS-001",
+		:hostname => 		"u24-lts-s-dbms-001",
+		:weergavenaam => 	"u24-lts-S-dbms-001",
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -333,12 +333,12 @@ linux_machines=[
 	#	WEBServer
 	#
 	{
-		:hostname => 		"U24-LTS-S-WSRV-001",
-		:weergavenaam => 	"U24-LTS-S-WSRV-001",
+		:hostname => 		"u24-lts-s-wsrv-001",
+		:weergavenaam => 	"u24-lts-S-wsrv-001",
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -349,12 +349,12 @@ linux_machines=[
 	#
 	#
 	{
-		:hostname => 		"U24-LTS-S-DCKR-001",
-		:weergavenaam => 	"U24-LTS-S-DCKR-001",
+		:hostname => 		"u24-lts-s-dckr-001",
+		:weergavenaam => 	"u24-lts-S-dckr-001",
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -373,7 +373,7 @@ linux_machines=[
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -387,7 +387,7 @@ linux_machines=[
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
-		:osversie => 		2404, 
+		:osversie => 		2204, 
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
@@ -676,8 +676,8 @@ Vagrant.configure("2") do |config|
 				ulxnode.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/#{ENV['USERNAME']}/documents"
 				ulxnode.vm.synced_folder "#{ENV['TMP']}",                    "/home/#{ENV['USERNAME']}/tmp"
 				ulxnode.vm.synced_folder "#{ENV['PUBLIC']}",                 "/home/#{ENV['USERNAME']}/public"
-				# 	demo_node.vm.synced_folder "#{ENV['OneDriveCommercial']}",     "/home/#{ENV['USERNAME']}/OneDriveCommercial"
-				# 	demo_node.vm.synced_folder "#{ENV['OneDriveConsumer']}",       "/home/#{ENV['USERNAME']}/OneDriveConsumer"
+				# demo_node.vm.synced_folder "#{ENV['OneDriveCommercial']}",     "/home/#{ENV['USERNAME']}/OneDriveCommercial"
+				# demo_node.vm.synced_folder "#{ENV['OneDriveConsumer']}",       "/home/#{ENV['USERNAME']}/OneDriveConsumer"
 			end 
 			#
 			#
@@ -851,14 +851,14 @@ Vagrant.configure("2") do |config|
 			#	node.vm.network "private_network", ip: "192.168.56.220", netmask: "255.255.255.0"
 			#
 			# 	Adapter 3 Bridged
-			# 	node.vm.network "public_network", bridge: "VMware Virtual Ethernet Adapter for VMnet8"
-			# 	node.vm.network "public_network", bridge: "Ethernet"
+			# node.vm.network "public_network", bridge: "VMware Virtual Ethernet Adapter for VMnet8"
+			# node.vm.network "public_network", bridge: "Ethernet"
 			#
 			#	Port-Forwarding
 			#
 			winnode.vm.network :forwarded_port, guest: 3389, host: 53389, auto_correct: true
-			# 	node.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
-			# 	node.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
+			# node.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
+			# node.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
 			#
 			# ####################################################################
 			#
