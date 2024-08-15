@@ -36,8 +36,9 @@ exit
 ```
 Terminal must be closed to load the environment variables
 
-## [Step 4] Configuration (Windows/MACos)
+## [Step 4] Configuration
 
+### Windows 
 ```shell
 setx VAGRANT_VAGRANTFILE "Vagrantfile.rb"
 setx VAGRANT_EXPERIMENTAL "1"
@@ -46,6 +47,8 @@ setx VAGRANT_DEFAULT_PROVIDER "vmware_desktop"
 setx VAGRANT_VMWARE_CLONE_DIRECTORY "x:\Directory of your choice where virtual machines should be stored"
 exit
 ```
+
+More information at https://developer.hashicorp.com/vagrant/docs/other/environmental-variables
 
 ## [Step 5] Initialization (Windows/MACos)
 
@@ -82,6 +85,9 @@ vagrant box add gusztavvargadr/windows-server-2022-standard --clean --provider v
 vagrant box add gusztavvargadr/windows-11 --clean --provider vmware_desktop
 exit
 ```
+The Windows boxes use about 15 gigabyte of diskspace per box. 
+The Linux box uses about 4 gigabyte of diskspace.
+About 35 gigabytes of disk space is thus necessary for all boxes.
 
 ## Start the fun !
 
