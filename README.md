@@ -1,46 +1,74 @@
 # Vagrant Install
 
-Download Vagrant 2.4.0 from https://developer.hashicorp.com/vagrant/downloads
+
+
+## [Step 1] Download
+Download Vagrant 2.4.1 from https://developer.hashicorp.com/vagrant/downloads
 
 Download Vagrant VMware Plugin from https://developer.hashicorp.com/vagrant/downloads/vmware
 
-Installation steps:
-1. Install Vagrant 2.4.0 and reboot Windows or macOS. 
-2. Install Vagrant VMware Plugin 1.0.22 
-3. Go to Terminal
+## [Step 2] Installation
+
+Install Vagrant 2.4.1 and reboot your laptop or PC 
+
+Install Vagrant VMware Plugin 1.0.22 (reboot if needed) 
+
+## [Step 3] Activate Plugin
 
 ```shell
 vagrant plugin install vagrant-vmware-desktop
-vagrant plugin update vagrant-vmware-desktop
+exit
+```
+Terminal must be closed to load the environment variables
+
+## [Step 4] Configuration
+
+Windows
+
+```shell
+setx VAGRANT_VAGRANTFILE "Vagrantfile.rb"
+setx VAGRANT_EXPERIMENTAL "1"
+setx VAGRANT_SUPPRESS_GO_EXPERIMENTAL_WARNING "1"
+setx VAGRANT_DEFAULT_PROVIDER "vmware_desktop"
+setx VAGRANT_VMWARE_CLONE_DIRECTORY "x:\Directory of your choice where virtual machines should be stored"
 exit
 ```
 
-Terminal must be closed to load the environment variables
-
-4. Go to Terminal
+## [Step 5] Initialization
 
 ```shell
 vagrant init
 exit
 ```
 
-5. Download vagranfile and store this file in c:\users\[username\ for Windows.
+Download vagranfile and store this file in c:\users\[username\ for Windows.
+
+Download from https://github.com/jatutert/Vagrant/blob/main/Vagrantfile/VirtualBox-WorkstatPRO/Latest/Vagrantfile-latest.rb
 
 Replace the existing one with the downloaded !  
 
-6. Start the fun !
+
+## [Step 6] Adding the boxes 
+
+```shell
+vagrant box add gusztavvargadr/ubuntu-server-2404-lts --clean --provider vmware_desktop
+vagrant box add gusztavvargadr/windows-server-2022-standard --clean --provider vmware_desktop
+vagrant box add gusztavvargadr/windows-11 --clean --provider vmware_desktop
+exit
+```
+
+## Start the fun !
 
 For Example: 
 
 ```shell
-vagrant up pvd-uld-2204-GC-L
+vagrant up u24-lts-s-wsrv-001
 ```
 
-7. Shutting down
+## Shutting down
 
 ```shell
-exit
-vagrant halt pvd-uld-2204-GC-L
+vagrant halt u24-lts-s-wsrv-001
 ```
 
 ## More Info
