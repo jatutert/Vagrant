@@ -3,9 +3,18 @@
 
 
 ## [Step 1] Download
-Download Vagrant 2.4.1 from https://developer.hashicorp.com/vagrant/downloads
 
-Download Vagrant VMware Plugin from https://developer.hashicorp.com/vagrant/downloads/vmware
+### Windows 
+
+Download Vagrant 2.4.1 from https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_windows_amd64.msi
+
+Download Vagrant VMware Plugin from https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_windows_amd64.msi
+
+### MacOS
+
+Download Vagrant 2.4.1 from https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_darwin_amd64.dmg
+
+Download Vagrant VMware Plugin from https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_darwin_amd64.dmg
 
 ## [Step 2] Installation
 
