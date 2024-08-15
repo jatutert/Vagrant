@@ -101,7 +101,7 @@ vagrant halt u24-lts-s-wsrv-001
 
 ## More Info
 
-Vagrant configuration files go to https://developer.hashicorp.com/vagrant/docs) 
+Vagrant configuration files go to https://developer.hashicorp.com/vagrant/docs 
 
 ## License / Copyright / Trademarks 
 - Vagrant by Hashicorp Inc. (hashicorp.com) 
