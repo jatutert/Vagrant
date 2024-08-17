@@ -29,6 +29,8 @@ Install Vagrant 2.4.1 and reboot your laptop or PC (don't skip this reboot!]
 
 Install Vagrant VMware Plugin 1.0.22 (reboot if needed) 
 
+Just click Next, Next, Finish during the install. 
+
 ## [Step 3] Activate the installed plugin
 
 ```shell
