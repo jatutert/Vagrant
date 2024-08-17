@@ -12,7 +12,7 @@ VMware Workstation Pro and VMWare Fusion Pro is now free for personal use. So th
 
 ### Windows 
 
-Download Vagrant 2.4.1 from https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_windows_amd64.msi
+Download Vagrant 2.4.1 from [Here](https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_windows_amd64.msi)
 
 Download Vagrant VMware Plugin from https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_windows_amd64.msi
 
