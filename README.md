@@ -70,7 +70,7 @@ Download [My Custom](https://github.com/jatutert/Vagrant/blob/main/Vagrantfile/V
 del c:\users\[your username]\vagrantfil*.*
 exit
 ```
-Store the custom vagrantfile in *c:\users\[username\*
+Store the custom vagrantfile in c:\users\[username\
 
 ### MACos
 
@@ -78,7 +78,7 @@ Store the custom vagrantfile in *c:\users\[username\*
 del ~/vagrant.d/vagrantfil*.*
 exit
 ```
-Store the custom vagrantfile in *~/vagrant.d/*
+Store the custom vagrantfile in ~/vagrant.d/
 
 ## [Step 7] Adding the boxes (Windows/MACos)
 
