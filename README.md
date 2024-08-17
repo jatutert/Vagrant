@@ -19,9 +19,9 @@ Download Vagrant VMware Plugin using [this direct link](https://releases.hashico
 
 ### MacOS
 
-Download Vagrant 2.4.1 from https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_darwin_amd64.dmg
+Download Vagrant 2.4.1 using [this direct link](https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_darwin_amd64.dmg)
 
-Download Vagrant VMware Plugin from https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_darwin_amd64.dmg
+Download Vagrant VMware Plugin using [this direct link](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_darwin_amd64.dmg)
 
 ## [Step 2] Installation
 
@@ -49,7 +49,7 @@ setx VAGRANT_VMWARE_CLONE_DIRECTORY "x:\Directory of your choice where virtual m
 exit
 ```
 
-More information at https://developer.hashicorp.com/vagrant/docs/other/environmental-variables
+More information at [Vagrant Docs](https://developer.hashicorp.com/vagrant/docs/other/environmental-variables)
 
 ## [Step 5] Initialization (Windows/MACos)
 
@@ -60,7 +60,7 @@ exit
 
 ## [Step 6] Replace Vagrantfile
 
-Download custom Vagrantfile from https://github.com/jatutert/Vagrant/blob/main/Vagrantfile/VirtualBox-WorkstatPRO/Latest/Vagrantfile-latest.rb
+Download [My Custom](https://github.com/jatutert/Vagrant/blob/main/Vagrantfile/VirtualBox-WorkstatPRO/Latest/Vagrantfile-latest.rb) Vagrantfile.
 
 ### Windows 
 
@@ -108,7 +108,7 @@ vagrant halt u24-lts-s-wsrv-001
 
 ## More Info
 
-Vagrant configuration files go to https://developer.hashicorp.com/vagrant/docs 
+Vagrant configuration files go to [Vagrant docs](https://developer.hashicorp.com/vagrant/docs)
 
 ## License / Copyright / Trademarks 
 - Vagrant by Hashicorp Inc. (hashicorp.com) 
