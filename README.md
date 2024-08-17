@@ -118,7 +118,7 @@ Vagrant configuration files go to [Vagrant docs](https://developer.hashicorp.com
 - VMware by VMware Company (vmware.com) / Broadcom (broadcom.com) 
 - Windows by Microsoft Corporation (microsoft.com)
 
-Everything I describe is intended for personal or educational use. In my case, that is primarily educational use. 
+> Everything I describe is intended for personal or educational use. In my case, that is primarily educational use. 
 
 All references to and quotations from external sources are licensed and/or copyright the respective owners. 
 I make no claim to ownership of these sources. 
