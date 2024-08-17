@@ -88,9 +88,9 @@ vagrant box add gusztavvargadr/windows-server-2022-standard --clean --provider v
 vagrant box add gusztavvargadr/windows-11 --clean --provider vmware_desktop
 exit
 ```
-The Windows boxes use about 15 gigabyte of diskspace per box. 
-The Linux box uses about 4 gigabyte of diskspace.
-About 35 gigabytes of disk space is thus necessary for all boxes.
+> The Windows boxes use about 15 gigabyte of diskspace per box. 
+> The Linux box uses about 4 gigabyte of diskspace.
+> About 35 gigabytes of disk space is thus necessary for all boxes.
 
 ## Start the fun !
 
@@ -118,7 +118,7 @@ Vagrant configuration files go to [Vagrant docs](https://developer.hashicorp.com
 - VMware by VMware Company (vmware.com) / Broadcom (broadcom.com) 
 - Windows by Microsoft Corporation (microsoft.com)
 
-> Everything I describe is intended for personal or educational use. In my case, that is primarily educational use. 
+Everything I describe is intended for personal or educational use. In my case, that is primarily educational use. 
 
 All references to and quotations from external sources are licensed and/or copyright the respective owners. 
 I make no claim to ownership of these sources. 
