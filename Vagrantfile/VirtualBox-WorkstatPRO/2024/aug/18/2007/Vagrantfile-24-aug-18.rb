@@ -76,7 +76,7 @@ K	=	Kubernetes
 # ############################################ [Vullen Variabelen] ##########################################
 #
 #	Variable versie Vagrantfile 
-versie_vagrantfile = "2024-08-18"
+versie_vagrantfile = "2024-08-12"
 #
 #
 #	Variabele huidige datum
@@ -317,6 +317,7 @@ linux_machines=[
 	#
 	#	Introductie Infrastructuren 
 	#
+	#
 	#	DBMS
 	#
 	{
@@ -430,27 +431,27 @@ windows_machines=[
 	#	##############
 	#
 	#
-	#	{
-		#	:hostname => 		"W10-ENT-D-EVAL-VB1",
-		#	:weergavenaam => 	"W10-ENT-D-EVAL-VB1",
-        #	:box => 			"gusztavvargadr/windows-10",
-		#	:os => 				"windows",
-		#	:osedition => 		"desktop",
-		#	:osversie => 		10, 
-		#	:aanbieder => 		"Oracle",
-		#	:ram => 			8192,
-		#	:cpu =>	 			2,
-	#	},
 	{
-		:hostname => 		"W10-ENT-D-EVAL-BV1",
-		:weergavenaam => 	"W10-ENT-D-EVAL-BV1",
-		:box => 			"gusztavvargadr/windows-10",
+		:hostname => 		"W10-ENT-D-EVAL-VB1",
+		:weergavenaam => 	"W10-ENT-D-EVAL-VB1",
+        :box => 			"gusztavvargadr/windows-10",
+		:os => 				"windows",
+		:osedition => 		"desktop",
+		:osversie => 		10, 
+		:aanbieder => 		"Oracle",
+        :ram => 			8192,
+        :cpu =>	 			2,
+	},
+	{
+        :hostname => 		"W10-ENT-D-EVAL-BV1",
+        :weergavenaam => 	"W10-ENT-D-EVAL-BV1",
+        :box => 			"gusztavvargadr/windows-10",
 		:os => 				"windows",
 		:osedition => 		"desktop",
 		:osversie => 		10, 
 		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+        :ram => 			8192,
+        :cpu => 			2,
 	},
 	#
 	#
@@ -464,28 +465,28 @@ windows_machines=[
 	#	##############
 	#
 	#
-	#	{
-		#	:hostname => 		"W19-STD-S-EVAL-VB1",
-		#	:weergavenaam => 	"W19-STD-S-EVAL-VB1",
-		#	:box => 			"gusztavvargadr/windows-server-2019-standard",
-		#	:os => 				"windows",
-		#	:osedition => 		"server",
-		#	:osversie => 		19, 
-		#	:aanbieder => 		"Oracle",
-		#	:ram => 			8192,
-		#	:cpu => 			2,
-	#	},
 	{
-		:hostname => 		"W19-STD-S-EVAL-BV1",
-		:weergavenaam => 	"W19-STD-S-EVAL-BV1",
-		:box => 			"gusztavvargadr/windows-server-2019-standard",
+		:hostname => 		"W19-STD-S-EVAL-VB1",
+		:weergavenaam => 	"W19-STD-S-EVAL-VB1",
+        :box => 			"gusztavvargadr/windows-server-2019-standard",
+		:os => 				"windows",
+		:osedition => 		"server",
+		:osversie => 		19, 
+		:aanbieder => 		"Oracle",
+        :ram => 			8192,
+        :cpu => 			2,
+	},
+	{
+        :hostname => 		"W19-STD-S-EVAL-BV1",
+        :weergavenaam => 	"W19-STD-S-EVAL-BV1",
+        :box => 			"gusztavvargadr/windows-server-2019-standard",
 		:os => 				"windows",
 		:osedition => 		"server",
 		:osversie => 		19, 
 		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
-	},
+        :ram => 			8192,
+        :cpu => 			2,
+	},	
 	#
 	#
 	#	################################
@@ -498,42 +499,27 @@ windows_machines=[
 	#	##############
 	#
 	#
-	#	{
-		#	:hostname => 		"W11-ENT-D-EVAL-VB1",
-		#	:weergavenaam => 	"W11-ENT-D-EVAL-VB1",
-		#	:box => 			"gusztavvargadr/windows-11",
-		#	:os => 				"windows",
-		#	:osedition => 		"desktop",
-		#	:osversie => 		11, 
-		#	:aanbieder => 		"Oracle",
-		#	:ram => 			8192,
-		#	:cpu => 			2,
-	#	},
 	{
-		:hostname => 		"W11-ENT-D-EVAL-BV1",
-		:weergavenaam => 	"W11-ENT-D-EVAL-BV1",
-		:box => 			"gusztavvargadr/windows-11",
+		:hostname => 		"W11-ENT-D-EVAL-VB1",
+		:weergavenaam => 	"W11-ENT-D-EVAL-VB1",
+        :box => 			"gusztavvargadr/windows-11",
 		:os => 				"windows",
 		:osedition => 		"desktop",
 		:osversie => 		11, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:aanbieder => 		"Oracle",
+        :ram => 			8192,
+        :cpu => 			2,
 	},
-	#
-	#	Introductie Infrastucturen
-	#	Windows 11 Client
-	#
 	{
-		:hostname => 		"W11-ENT-D-OSTKT-CLNT",
-		:weergavenaam => 	"W11-ENT-D-OSTKT-CLNT",
-		:box => 			"gusztavvargadr/windows-11",
+        :hostname => 		"W11-ENT-D-EVAL-BV1",
+        :weergavenaam => 	"W11-ENT-D-EVAL-BV1",
+        :box => 			"gusztavvargadr/windows-11",
 		:os => 				"windows",
 		:osedition => 		"desktop",
 		:osversie => 		11, 
 		:aanbieder => 		"VMware",
-		:ram => 			4096,
-		:cpu => 			2,
+        :ram => 			8192,
+        :cpu => 			2,
 	},
 	#
 	#
@@ -547,43 +533,28 @@ windows_machines=[
 	#	##############
 	#
 	#
-	#	{
-		#	:hostname => 		"W22-STD-S-EVAL-VB1",
-		#	:weergavenaam => 	"W22-STD-S-EVAL-VB1",
-		#	:box => 			"gusztavvargadr/windows-server-2022-standard",
-		#	:os => 				"windows",
-		#	:osedition => 		"server",
-		#	:osversie => 		22, 
-		#	:aanbieder => 		"Oracle",
-		#	:ram => 			8192,
-		#	:cpu => 			2,
-	#	},
 	{
-		:hostname => 		"W22-STD-S-EVAL-BV1",
-		:weergavenaam => 	"W22-STD-S-EVAL-BV1",
-		:box => 			"gusztavvargadr/windows-server-2022-standard",
+		:hostname => 		"W22-STD-S-EVAL-VB1",
+		:weergavenaam => 	"W22-STD-S-EVAL-VB1",
+        :box => 			"gusztavvargadr/windows-server-2022-standard",
 		:os => 				"windows",
 		:osedition => 		"server",
 		:osversie => 		22, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:aanbieder => 		"Oracle",
+        :ram => 			8192,
+        :cpu => 			2,
 	},
-	#
-	#	Introductie Infrastructuren
-	#	Windows Server 2022 Router 
-	#
 	{
-		:hostname => 		"W22-STD-S-OSTKT-RTR",
-		:weergavenaam => 	"W22-STD-S-OSTKT-RTR",
-		:box => 			"gusztavvargadr/windows-server-2022-standard",
+        :hostname => 		"W22-STD-S-EVAL-BV1",
+        :weergavenaam => 	"W22-STD-S-EVAL-BV1",
+        :box => 			"gusztavvargadr/windows-server-2022-standard",
 		:os => 				"windows",
 		:osedition => 		"server",
 		:osversie => 		22, 
 		:aanbieder => 		"VMware",
-		:ram => 			4096,
-		:cpu => 			2,
-	}
+        :ram => 			8192,
+        :cpu => 			2,
+	}		
 	#
 	#
 	#
@@ -742,7 +713,7 @@ Vagrant.configure("2") do |config|
 			#
 			# ####################################################################
 			#
-			ulxnode.vm.post_up_message = "// ETH0 is NAT // ETH1 is Host-Only // Verdere config in /home/vagrant/netplan"
+			ulxnode.vm.post_up_message = "// ETH0 is NAT // ETH1 is Host-Only // Gebruik ETH1 voor Ansible"
 			#
 			# ####################################################################
 			#
@@ -963,7 +934,7 @@ Vagrant.configure("2") do |config|
 		config.vm.define machine[:hostname] do |winnode|
 			#
 			winnode.vm.box 				= 	machine[:box]
-			winnode.vm.box_check_update = 	false
+			winnode.vm.box_check_update = 	true
 			#
 			winnode.vm.hostname 		= 	"Vagrant-#{machine[:hostname]}"
 			winnode.vm.guest 			= 	:windows
@@ -985,10 +956,7 @@ Vagrant.configure("2") do |config|
 			#
 			#	Port-Forwarding
 			#
-			#	Remote Desktop Protocol (RDP) 	[uitgezet 18 augustus 2024]
-			#	winnode.vm.network :forwarded_port, guest: 3389, host: 53389, auto_correct: true
-			#
-			#	Naslag
+			winnode.vm.network :forwarded_port, guest: 3389, host: 53389, auto_correct: true
 			# 	node.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
 			# 	node.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
 			#
@@ -1058,7 +1026,7 @@ Vagrant.configure("2") do |config|
 			#
 			if machine[:os] == "windows" && machine[:osedition] == "desktop"
 				#	Installatie WinGET
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/asheroto-412-winget-install.ps1"
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-ConfInig/main/Powershell/asheroto-412-winget-install.ps1"
 				#	Stoppen en disabelen services
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V002.ps1"
 			end
