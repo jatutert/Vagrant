@@ -12,6 +12,9 @@ vagrant box remove gusztavvargadr/windows-11 --all --all-providers
 ::	vagrant box add generic/alpine319 --clean --provider virtualbox
 ::	vagrant box add generic/alpine319 --clean --provider vmware_desktop
 ::
+::	vagrant box add generic/debian12 --clean --provider virtualbox
+::	vagrant box add generic/debian12 --clean --provider vmware_desktop
+::
 ::	vagrant box add generic/ubuntu2204 --clean --provider vmware_desktop
 ::	vagrant box add generic/ubuntu2204 --clean --provider virtualbox
 ::
