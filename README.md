@@ -8,20 +8,24 @@ I myself work with Vagrant within Windows. Hopefully I have described all steps 
 I make the assumption that VMware Workstation Pro or VMware Fusion Pro is installed. If not, this should be done first. 
 VMware Workstation Pro and VMWare Fusion Pro is now free for personal use. So that shouldn't be a problem. 
 
+VMWare Workstation 17 Pro for Windows [Download] (https://softwareupdate.vmware.com/cds/vmw-desktop/ws/17.5.2/23775571/windows/core/VMware-workstation-17.5.2-23775571.exe.tar)
+VMware Workstation 17 Pro for Linux [Download] (https://softwareupdate.vmware.com/cds/vmw-desktop/ws/17.5.2/23775571/linux/core/VMware-Workstation-17.5.2-23775571.x86_64.bundle.tar)
+VMware Fusion 13 Pro for MACos [Download] (https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/13.5.2/23775688/universal/core/com.vmware.fusion.zip.tar)
+Extract the TAR-files with e.g. 7-ZIP and install (Next, Next, Finish) 
+
 ## [Step 1] Downloading the software
 
 ### Windows 
 
-Download Vagrant 2.4.1 using [this direct link](https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_windows_amd64.msi)
+Download Vagrant 2.4.1 [Download](https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_windows_amd64.msi)
 
-Download Vagrant VMware Plugin using [this direct link](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_windows_amd64.msi)
-
+Download Vagrant VMware Plugin [Download](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_windows_amd64.msi)
 
 ### MacOS
 
-Download Vagrant 2.4.1 using [this direct link](https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_darwin_amd64.dmg)
+Download Vagrant 2.4.1 [Download](https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_darwin_amd64.dmg)
 
-Download Vagrant VMware Plugin using [this direct link](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_darwin_amd64.dmg)
+Download Vagrant VMware Plugin [Download](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_darwin_amd64.dmg)
 
 ## [Step 2] Installation
 
@@ -29,7 +33,7 @@ Install Vagrant 2.4.1 and reboot your laptop or PC (**don't skip reboot!**]
 
 Install Vagrant VMware Plugin 1.0.22 (reboot if needed) 
 
-Just click Next, Next, Finish during the install. 
+Just click Next, Next, Finish during the installation. 
 
 ## [Step 3] Activate the installed plugin
 
@@ -41,15 +45,18 @@ Terminal must be closed to load the environment variables
 
 ## [Step 4] Configuration
 
+Start Terminal 
+
 ### Windows 
 ```shell
-setx VAGRANT_VAGRANTFILE "Vagrantfile.rb"
+setx VAGRANT_VAGRANTFILE "Vagrantfile-latest.rb"
 setx VAGRANT_EXPERIMENTAL "1"
 setx VAGRANT_SUPPRESS_GO_EXPERIMENTAL_WARNING "1"
 setx VAGRANT_DEFAULT_PROVIDER "vmware_desktop"
 setx VAGRANT_VMWARE_CLONE_DIRECTORY "x:\Directory of your choice where virtual machines should be stored"
 exit
 ```
+It is very important to close the terminal. Otherwise the settings are not loaded ! 
 
 More information at [Vagrant Docs](https://developer.hashicorp.com/vagrant/docs/other/environmental-variables)
 
@@ -70,7 +77,8 @@ Download [My Custom](https://github.com/jatutert/Vagrant/blob/main/Vagrantfile/V
 del c:\users\[your username]\vagrantfil*.*
 exit
 ```
-Store the custom vagrantfile in c:\users\[username\
+! DON'T FORGET ! 
+Store the custom vagrantfile (Vagrantfile-latest.rb) in c:\users\[username\
 
 ### MACos
 
@@ -78,9 +86,12 @@ Store the custom vagrantfile in c:\users\[username\
 del ~/vagrant.d/vagrantfil*.*
 exit
 ```
-Store the custom vagrantfile in ~/vagrant.d/
+! DON'T FORGET ! 
+Store the custom vagrantfile (Vagrantfile-latest.rb) in ~/vagrant.d/
 
 ## [Step 7] Adding the boxes (Windows/MACos)
+
+Start terminal 
 
 ```shell
 vagrant box add gusztavvargadr/ubuntu-server-2404-lts --clean --provider vmware_desktop
@@ -93,6 +104,9 @@ The Linux box uses about 4 gigabyte of diskspace.
 About 35 gigabytes of disk space is thus necessary for all boxes.
 
 ## Start the fun !
+
+That was it then. You're all set with the installation and configuration of the environment. 
+Let's start the fun ! 
 
 For Example: 
 
@@ -110,7 +124,7 @@ vagrant halt u24-lts-s-wsrv-001
 
 ## More Info
 
-Vagrant configuration files go to [Vagrant docs](https://developer.hashicorp.com/vagrant/docs)
+More information on Vagrant configuration files can be found on [Vagrant docs](https://developer.hashicorp.com/vagrant/docs)
 
 ## License / Copyright / Trademarks 
 > - Vagrant by Hashicorp Inc. (hashicorp.com) 
