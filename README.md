@@ -74,14 +74,19 @@ exit
 
 Download [My Custom](https://github.com/jatutert/Vagrant/blob/main/Vagrantfile/VirtualBox-WorkstatPRO/Latest/Vagrantfile-latest.rb) Vagrantfile.
 
+Put this file in the folder Downloads (Windows). 
+
 ### Windows 
 
 ```shell
-del c:\users\[your username]\vagrantfil*.*
+del %HOMEDRIVE%\vagrantfil*.*
 exit
 ```
-! DON'T FORGET ! 
-Store the custom vagrantfile (Vagrantfile-latest.rb) in c:\users\[username\
+
+```shell
+copy %HOMEDRIVE%\Downloads\Vagrantfile-latest.rb %HOMEDRIVE%
+exit
+```
 
 ### MACos
 
