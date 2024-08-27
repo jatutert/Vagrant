@@ -118,8 +118,16 @@ Let's start the fun !
 
 For Example: 
 
+Starting the Introduction Infrastructures Webserver small edition (uses 2 GB RAM)
+
 ```shell
-vagrant up u24-lts-s-wsrv-001
+vagrant up U24-LTS-S-WSRV-S-001
+```
+
+Starting the Introduction Infrastructures Webserver extra large edition (uses 8 GB RAM)
+
+```shell
+vagrant up U24-LTS-S-WSRV-XL-001
 ```
 
 ## Shutting down
@@ -127,7 +135,7 @@ vagrant up u24-lts-s-wsrv-001
 For Example: 
 
 ```shell
-vagrant halt u24-lts-s-wsrv-001
+vagrant halt U24-LTS-S-WSRV-S-001
 ```
 
 ## More Info
