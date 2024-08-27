@@ -61,7 +61,7 @@ GC 	= 	Generic Box
 GR 	= 	Gusztavvargadr Box
 MN 	= 	Maroskukan Box
 
-S		Small			2 GB	
+S		Small			2 GB
 M		Medium			4 GB
 L		Large			8 GB
 XL		Extra Large		16 GB
@@ -76,7 +76,7 @@ K	=	Kubernetes
 # ############################################ [Vullen Variabelen] ##########################################
 #
 #	Variable versie Vagrantfile 
-versie_vagrantfile = "2024-08-18"
+versie_vagrantfile = "2024-08-27"
 #
 #
 #	Variabele huidige datum
@@ -315,13 +315,24 @@ linux_machines=[
 	},
 	#
 	#
-	#	Introductie Infrastructuren 
+	#	Introduction to Infrastructures 
 	#
 	#	DBMS
 	#
 	{
-		:hostname => 		"U24-LTS-S-DBMS-001",
-		:weergavenaam => 	"U24-LTS-S-DBMS-001",
+		:hostname => 		"U24-LTS-S-DBMS-S-001",
+		:weergavenaam => 	"U24-LTS-S-DBMS-S-001",
+		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
+		:os => 				"ubuntu",
+		:osedition => 		"server",
+		:osversie => 		2404, 
+		:aanbieder => 		"VMware",
+		:ram => 			2048,
+		:cpu => 			2,
+	},
+	{
+		:hostname => 		"U24-LTS-S-DBMS-L-001",
+		:weergavenaam => 	"U24-LTS-S-DBMS-L-001",
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
@@ -329,13 +340,35 @@ linux_machines=[
 		:aanbieder => 		"VMware",
 		:ram => 			4096,
 		:cpu => 			2,
-    },
+	},
+	{
+		:hostname => 		"U24-LTS-S-DBMS-XL-001",
+		:weergavenaam => 	"U24-LTS-S-DBMS-XL-001",
+		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
+		:os => 				"ubuntu",
+		:osedition => 		"server",
+		:osversie => 		2404, 
+		:aanbieder => 		"VMware",
+		:ram => 			8192,
+		:cpu => 			2,
+	},
 	#
 	#	WEBServer
 	#
 	{
-		:hostname => 		"U24-LTS-S-WSRV-001",
-		:weergavenaam => 	"U24-LTS-S-WSRV-001",
+		:hostname => 		"U24-LTS-S-WSRV-S-001",
+		:weergavenaam => 	"U24-LTS-S-WSRV-S-001",
+		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
+		:os => 				"ubuntu",
+		:osedition => 		"server",
+		:osversie => 		2404, 
+		:aanbieder => 		"VMware",
+		:ram => 			2048,
+		:cpu => 			2,
+	},
+	{
+		:hostname => 		"U24-LTS-S-WSRV-L-001",
+		:weergavenaam => 	"U24-LTS-S-WSRV-L-001",
 		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
@@ -343,7 +376,18 @@ linux_machines=[
 		:aanbieder => 		"VMware",
 		:ram => 			4096,
 		:cpu => 			2,
-    },
+	},
+	{
+		:hostname => 		"U24-LTS-S-WSRV-XL-001",
+		:weergavenaam => 	"U24-LTS-S-WSRV-XL-001",
+		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
+		:os => 				"ubuntu",
+		:osedition => 		"server",
+		:osversie => 		2404, 
+		:aanbieder => 		"VMware",
+		:ram => 			8192,
+		:cpu => 			2,
+	},
 	#
 	#
 	#	DOCKER DEMO
@@ -359,7 +403,7 @@ linux_machines=[
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
-    },
+	},
 	#
 	#
 	#	MiniKube DEMO
@@ -375,7 +419,7 @@ linux_machines=[
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
-    },
+	},
 	#
 	#
 	#	ANSIBLE DEMO
@@ -394,7 +438,7 @@ linux_machines=[
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
-    },
+	},
 	#
 	#	SLAVE
 	#
@@ -408,7 +452,7 @@ linux_machines=[
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
-    }	
+	}
 	#
 	#
 	#
