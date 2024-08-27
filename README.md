@@ -8,9 +8,12 @@ I myself work with Vagrant within Windows. Hopefully I have described all steps 
 I make the assumption that VMware Workstation Pro or VMware Fusion Pro is installed. If not, this should be done first. 
 VMware Workstation Pro and VMWare Fusion Pro is now free for personal use. So that shouldn't be a problem. 
 
-VMWare Workstation 17 Pro for Windows [Download](https://softwareupdate.vmware.com/cds/vmw-desktop/ws/17.5.2/23775571/windows/core/VMware-workstation-17.5.2-23775571.exe.tar)
-VMware Workstation 17 Pro for Linux [Download](https://softwareupdate.vmware.com/cds/vmw-desktop/ws/17.5.2/23775571/linux/core/VMware-Workstation-17.5.2-23775571.x86_64.bundle.tar)
-VMware Fusion 13 Pro for MACos [Download](https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/13.5.2/23775688/universal/core/com.vmware.fusion.zip.tar)
+VMWare Workstation 17 Pro for Windows [Download](https://softwareupdate.vmware.com/cds/vmw-desktop/ws/17.5.2/23775571/windows/core/VMware-workstation-17.5.2-23775571.exe.tar).
+
+VMware Workstation 17 Pro for Linux [Download](https://softwareupdate.vmware.com/cds/vmw-desktop/ws/17.5.2/23775571/linux/core/VMware-Workstation-17.5.2-23775571.x86_64.bundle.tar).
+
+VMware Fusion 13 Pro for MACos [Download](https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/13.5.2/23775688/universal/core/com.vmware.fusion.zip.tar).
+
 Extract the TAR-files with e.g. 7-ZIP and install (Next, Next, Finish) 
 
 ## [Step 1] Downloading the software
