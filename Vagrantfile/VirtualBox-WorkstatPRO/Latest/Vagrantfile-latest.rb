@@ -497,6 +497,21 @@ windows_machines=[
 		:cpu => 			2,
 	},
 	#
+	#	Introductie Infrastucturen
+	#	Windows 10 Client
+	#
+	{
+		:hostname => 		"W10-ENT-D-OSTKT-CLNT",
+		:weergavenaam => 	"W10-ENT-D-OSTKT-CLNT",
+		:box => 			"gusztavvargadr/windows-10",
+		:os => 				"windows",
+		:osedition => 		"desktop",
+		:osversie => 		10, 
+		:aanbieder => 		"VMware",
+		:ram => 			4096,
+		:cpu => 			2,
+	},
+	#
 	#
 	#	################################
 	#	Windows Server 2019 DataCenter Evaluation
@@ -873,13 +888,15 @@ Vagrant.configure("2") do |config|
 					#
 					#	Aanpassen VMX naar juist VMNet 
 					#
-					if machine[:hostname] == "U24-LTS-S-DBMS-001"
+					if machine[:hostname].include? "U24-LTS-S-DBMS"
+					#	if machine[:hostname] == "U24-LTS-S-DBMS-001"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end 
 					#
-					if machine[:hostname] == "U24-LTS-S-WSRV-001"
+					if machine[:hostname].include? "U24-LTS-S-WSRV"
+					#	if machine[:hostname] == "U24-LTS-S-WSRV-001"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"

@@ -888,15 +888,13 @@ Vagrant.configure("2") do |config|
 					#
 					#	Aanpassen VMX naar juist VMNet 
 					#
-					if machine[:hostname].include? "U24-LTS-S-DBMS"
-					#	if machine[:hostname] == "U24-LTS-S-DBMS-001"
+					if machine[:hostname] == "U24-LTS-S-DBMS-001"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end 
 					#
-					if machine[:hostname].include? "U24-LTS-S-WSRV"
-					#	if machine[:hostname] == "U24-LTS-S-WSRV-001"
+					if machine[:hostname] == "U24-LTS-S-WSRV-001"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
