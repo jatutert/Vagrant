@@ -1,0 +1,1176 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+#
+#
+#
+=begin
+
+Vagrant Configuratie voor Oracle Virtualbox en VMware Workstation/Fusion PRO hypervisors
+Vagrant is copyrighted by Hashicorp (www.vagrantup.com)
+(C) Copyright 2023 JA Tutert
+
+This configuration may only be used for private use or education use. Business/commercial use is prohibited. 
+It is intended for use with virtual machines on a hypervisor and thus not for configuration of bare-metal or cloud machines.
+
+
+Versie: 4.0.0.2
+Build 20230811
+
+
+Naslag versie 4: 
+
+
+https://stackoverflow.com/questions/24072916/multi-vm-in-one-vagrantfile-could-i-set-different-memory-size-for-each-of-them
+
+http://sysadm.pp.ua/linux/sistemy-virtualizacii/vagrantfile.html
+
+https://ctrlnotes.com/vagrant-advanced-examples/#-insert-custom-ssh-public-key-to-the-vm
+
+
+To do:
+
+- node binnen linux vm naar bijvoorbeeld ulxnode zetten om te voorkomen dat ook windows scripts draait
+- node binnen windows naar bijvoorbeeld winnode zetten
+- Scripts Manasse weer opnemen bij Ubuntu 20.04
+
+
+
+
+
+Changes: 
+- ssh username / password vgu2204
+- Kubernetes install script
+- VMware Windows 10/11 gezamenlijke definitie 
+- gezamelijke defintie vmware generic ubuntu
+
+
+Legenda Boxes:
+
+v = VMware provider
+o = Oracle provider
+g = generic
+gr = gusztavvargadr
+m = maroskukan
+u = Ubuntu
+S/L/M = RAM
+
+
+=end
+#
+#
+#
+#
+require 'date'
+cur_date = Date.today
+#
+#
+puts "The used Vagrantfile is for private or educational use only !"
+#
+#
+# ############################################ [Declaratie Virtuele Machines] ##########################################
+#
+#
+#
+#
+ubuntu_machines=[
+	#
+	#
+	#	#######
+	#	GENERIC
+	#	#######
+	#
+	#
+	#	Ubuntu 20.04.x LTS Focal Fossa (release 23 april 2020) (EOS April 2025) (EOL April 2030) 
+	# 	https://wiki.ubuntu.com/Releases
+	#
+	{
+		:hostname => "ogu2004S",
+        :box => "generic/ubuntu2004",
+		:aanbieder => "Oracle",
+        :ram => 2048,
+        :cpu => 2
+	},
+	{
+        :hostname => "vgu2004S",
+        :box => "generic/ubuntu2004",
+		:aanbieder => "VMware",
+        :ram => 2048,
+        :cpu => 2
+	},
+	{
+        :hostname => "ogu2004M",
+        :box => "generic/ubuntu2004",
+		:aanbieder => "Oracle",
+        :ram => 4096,
+        :cpu => 2
+    },
+    {
+        :hostname => "vgu2004M",
+        :box => "generic/ubuntu2004",
+		:aanbieder => "VMware",
+        :ram => 4096,
+        :cpu => 2
+    },
+	{
+       :hostname => "ogu2004L",
+       :box => "generic/ubuntu2004",
+	   :aanbieder => "Oracle",
+       :ram => 8192,
+       :cpu => 2
+    },
+	{
+       :hostname => "vgu2004L",
+       :box => "generic/ubuntu2004",
+	   :aanbieder => "VMware",
+       :ram => 8192,
+       :cpu => 2
+    },
+		#
+		#	Ubuntu 22.04.2 LTS Jammy Jellyfish (release 23 februari 2023) (EOS April 2027) (EOL April 2032) 
+		# 	https://wiki.ubuntu.com/Releases
+		#
+    {
+        :hostname => "ogu2204S",
+        :box => "generic/ubuntu2204",
+		:aanbieder => "Oracle",
+        :ram => 2048,
+        :cpu => 2
+    },      
+	{
+        :hostname => "vgu2204S",
+        :box => "generic/ubuntu2204",
+		:aanbieder => "VMware",
+        :ram => 2048,
+        :cpu => 2
+    },
+    {
+        :hostname => "ogu2204M",
+        :box => "generic/ubuntu2204",
+		:aanbieder => "Oracle",
+        :ram => 4096,
+        :cpu => 2
+    },	  
+    {
+        :hostname => "vgu2204M",
+        :box => "generic/ubuntu2204",
+		:aanbieder => "VMware",
+        :ram => 4096,
+        :cpu => 2
+    },
+	{
+       :hostname => "ogu2204L",
+       :box => "generic/ubuntu2204",
+	   :aanbieder => "Oracle",
+       :ram => 8192,
+       :cpu => 2
+    },	  
+	{
+       :hostname => "vgu2204L",
+       :box => "generic/ubuntu2204",
+	   :aanbieder => "VMware",
+       :ram => 8192,
+       :cpu => 2
+    },
+		#
+		#	Ubuntu 22.10 Kinetec Kundu (interim release 20 oktober 2022)
+		# 	https://wiki.ubuntu.com/Releases
+		#
+    {
+        :hostname => "ogu2210S",
+        :box => "generic/ubuntu2210",
+		:aanbieder => "Oracle",
+        :ram => 2048,
+        :cpu => 2
+    },		
+    {
+        :hostname => "vgu2210S",
+        :box => "generic/ubuntu2210",
+		:aanbieder => "VMware",
+        :ram => 2048,
+        :cpu => 2
+    },
+    {
+        :hostname => "ogu2210M",
+        :box => "generic/ubuntu2210",
+		:aanbieder => "Oracle",
+        :ram => 4096,
+        :cpu => 2
+    },	  
+    {
+        :hostname => "vgu2210M",
+        :box => "generic/ubuntu2210",
+		:aanbieder => "VMWare",
+        :ram => 4096,
+        :cpu => 2
+    },
+	{
+       :hostname => "ogu2210L",
+       :box => "generic/ubuntu2210",
+	   :aanbieder => "Oracle",
+       :ram => 8192,
+       :cpu => 2
+    },	  
+	{
+       :hostname => "vgu2210L",
+       :box => "generic/ubuntu2210",
+	   :aanbieder => "VMware",
+       :ram => 8192,
+       :cpu => 2
+    },
+	#
+	#
+	#	##########
+	#	Maroskukan
+	#	##########
+	#
+	#
+	#	Maroskukan Ubuntu 22.10 Kinetec Kundu (interim release 20 oktober 2022)
+	# 	https://wiki.ubuntu.com/Releases
+	#
+	{
+       :hostname => "omu2210S",
+       :box => "maroskukan/ubuntu2210",
+	   :aanbieder => "Oracle",
+       :ram => 2048,
+       :cpu => 2
+    },
+	{
+       :hostname => "vmu2210S",
+       :box => "maroskukan/ubuntu2210",
+	   :aanbieder => "VMware",
+       :ram => 2048,
+       :cpu => 2
+    },
+	{
+       :hostname => "omu2210M",
+       :box => "maroskukan/ubuntu2210",
+	   :aanbieder => "Oracle",
+       :ram => 4096,
+       :cpu => 2
+    },
+	{
+       :hostname => "vmu2210M",
+       :box => "maroskukan/ubuntu2210",
+	   :aanbieder => "VMware",
+       :ram => 4096,
+       :cpu => 2
+    },
+	{
+       :hostname => "omu2210L",
+       :box => "maroskukan/ubuntu2210",
+	   :aanbieder => "Oracle",
+       :ram => 8192,
+       :cpu => 2
+    },
+	{
+       :hostname => "vmu2210L",
+       :box => "maroskukan/ubuntu2210",
+	   :aanbieder => "VMware",
+       :ram => 8192,
+       :cpu => 2
+    },
+	#
+	#	Maroskukan Ubuntu 23.04 (Lunar Lobster) (release 20 april 2023) (EOS/EOL januari 2024) 
+	# 	https://wiki.ubuntu.com/Releases	
+	#
+	{
+       :hostname => "omu2304S",
+       :box => "maroskukan/ubuntu2304",
+	   :aanbieder => "Oracle",
+       :ram => 2048,
+       :cpu => 2
+    },
+	{
+       :hostname => "vmu2304S",
+       :box => "maroskukan/ubuntu2304",
+	   :aanbieder => "VMware",
+       :ram => 2048,
+       :cpu => 2
+    },
+	{
+       :hostname => "omu2304M",
+       :box => "maroskukan/ubuntu2304",
+	   :aanbieder => "Oracle",
+       :ram => 4096,
+       :cpu => 2
+    },
+	{
+       :hostname => "vmu2304M",
+       :box => "maroskukan/ubuntu2304",
+	   :aanbieder => "VMware",
+       :ram => 4096,
+       :cpu => 2
+    },
+	{
+       :hostname => "omu2304L",
+       :box => "maroskukan/ubuntu2304",
+	   :aanbieder => "Oracle",
+       :ram => 8192,
+       :cpu => 2
+    },
+	{
+       :hostname => "vmu2304L",
+       :box => "maroskukan/ubuntu2304",
+	   :aanbieder => "VMware",
+       :ram => 8192,
+       :cpu => 2
+    },
+	#
+	#
+	#	#########
+	#	Alvistack
+	#	#########
+	#
+	#
+	#	Alvistack Ubuntu 22.04 Jammy Jellyfish (release 23 februari 2023) (EOS April 2027) (EOL April 2032) 
+	# 	https://wiki.ubuntu.com/Releases
+	#
+	{
+       :hostname => "oau2204M",
+       :box => "alvistack/ubuntu-22.04",
+	   :aanbieder => "Oracle",
+       :ram => 4096,
+       :cpu => 2
+    },
+	#
+	#	Alvistack Ubuntu 22.10 Kinetec Kundu (interim release 20 oktober 2022)
+	# 	https://wiki.ubuntu.com/Releases
+	#
+	{
+       :hostname => "oau2210M",
+       :box => "alvistack/ubuntu-22.10",
+	   :aanbieder => "Oracle",
+       :ram => 4096,
+       :cpu => 2
+    },
+	#
+	#	Alvistack Ubuntu 23.04 (Lunar Lobster) (release 20 april 2023) (EOS/EOL januari 2024) 
+	# 	https://wiki.ubuntu.com/Releases
+	#
+	{
+       :hostname => "oau2304M",
+       :box => "alvistack/ubuntu-23.04",
+	   :aanbieder => "Oracle",
+       :ram => 4096,
+       :cpu => 2
+    },
+	#
+	#
+	#	##############
+	#	gusztavvargadr
+	#	##############
+	#
+	#
+	#	Gusztavvargadr Ubuntu Server 20.04.x LTS Focal Fossa (release 23 april 2020) (EOS April 2025) (EOL April 2030)  
+	# 	https://wiki.ubuntu.com/Releases
+	#
+	{
+       :hostname => "oau2204L",
+       :box => "gusztavvargadr/ubuntu-server",
+	   :aanbieder => "Oracle",
+       :ram => 8192,
+       :cpu => 2
+    }
+	#
+	#
+	#
+	#
+	#
+    ]
+#
+#
+#
+#
+windows_machines=[
+	#
+	#
+	#	################################
+	#	Windows 10 Enterprise Evaluation
+	#	################################
+	#
+	#
+	#	##############
+	#	gusztavvargadr
+	#	##############
+	#
+	#
+	{
+		:hostname => "ow10eval",
+        :box => "gusztavvargadr/windows-10",
+		:aanbieder => "Oracle",
+        :ram => 8192,
+        :cpu => 2
+	},
+	{
+        :hostname => "vw11eval",
+        :box => "gusztavvargadr/windows-11",
+		:aanbieder => "VMware",
+        :ram => 8192,
+        :cpu => 2
+	},
+	#
+	#
+	#	################################
+	#	Windows 11 Enterprise Evaluation
+	#	################################
+	#
+	#
+	#	##############
+	#	gusztavvargadr
+	#	##############
+	#
+	#
+	{
+		:hostname => "ow11eval",
+        :box => "gusztavvargadr/windows-11",
+		:aanbieder => "Oracle",
+        :ram => 8192,
+        :cpu => 2
+	},
+	{
+        :hostname => "vw11eval",
+        :box => "gusztavvargadr/windows-11",
+		:aanbieder => "VMware",
+        :ram => 8192,
+        :cpu => 2
+	}
+	#
+	#
+	#
+    ]
+#
+#
+# ############################################ [Declaratie Scripts] ##########################################
+#
+#
+# [1] LINUX
+#
+#
+# [1a] Configuratie Scripts. 
+#
+#
+# [1a-1] Datapacket Repo
+#
+#
+$datapacket_repo = <<SCRIPT
+	#!/bin/bash
+	#
+	# Reposity Nederland Datapacket toevoegen aan /etc/apt/sources.list bestand binnen Ubuntu Linux.   
+	#
+	sudo add-apt-repository "deb http://mirror.nl.datapacket.com/ubuntu $(lsb_release -sc) universe"
+	#
+	# [Vervangen standaard (mirros.edge.kernel.org) door nl.archive.ubuntu.com 
+	# [OPTIE] echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list" >> /directory/file
+	# [OPTIE] sudo sed 's@mirrors.edge.kernel.org@mirror.nl.datapacket.com@' -i /etc/apt/sources.list
+	#
+	sudo apt-get update
+	#
+SCRIPT
+#
+#
+# [1a-2] Docker Repo
+#
+#
+$docker_repo = <<SCRIPT
+	#!/bin/bash
+	#
+	# Repository toevoegen, zodat DOCKER-CE vervolgens geïnstalleerd kan worden m.b.t. commando binnen shell of via script. 
+	#
+	sudo apt-get install -y ca-certificates curl gnupg
+	sudo install -m 0755 -d /etc/apt/keyrings
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+	sudo chmod a+r /etc/apt/keyrings/docker.gpg
+	echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+SCRIPT
+#
+#
+# [1a-3] Ubuntu repo
+#
+#
+$ubuntu_repo = <<SCRIPT
+	#
+	# Aanmaken ubuntu_repo Script 
+	#
+	#!/bin/bash
+	echo '#!/bin/bash' 													 > /home/vagrant/ubuntu_repo.sh
+	echo '#' 															>> /home/vagrant/ubuntu_repo.sh
+	echo '# Ubuntu Reposiory nl.archive.ubuntu.com' 					>> /home/vagrant/ubuntu_repo.sh
+	echo '# (c) 2023 John Tutert' 										>> /home/vagrant/ubuntu_repo.sh
+	echo '#' 															>> /home/vagrant/ubuntu_repo.sh
+	echo '# Aanpassen sources.list' 									>> /home/vagrant/ubuntu_repo.sh
+	echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list" >> /home/vagrant/ubuntu_repo.sh
+	echo '# APT bijwerken' 												>> /home/vagrant/ubuntu_repo.sh
+	echo sudo apt update -qq -y 										>> /home/vagrant/ubuntu_repo.sh
+	chmod +x /home/vagrant/ubuntu_repo.sh
+SCRIPT
+#
+#
+# [1a-4] Docker rechten
+#
+#
+$docker_rechten = <<SCRIPT
+	#
+	# Aanmaken docker_rechten Script
+	#
+	#!/bin/bash
+	echo '#!/bin/bash' > /home/vagrant/docker-rechten.sh
+	echo '#' >> /home/vagrant/docker-rechten.sh
+	echo '# Docker Rechten Configuratie' >> /home/vagrant/docker-rechten.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/docker-rechten.sh
+	echo '#' >> /home/vagrant/docker-rechten.sh
+	# 
+	# ################################################################################################################
+	#
+	# usermod (https://linuxize.com/post/usermod-command-in-linux/) 
+	#
+	# sudo usermod -g GROUP USER
+	# To change a user’s primary group, invoke the usermod command with by the -g option followed the group’s name and the username:
+	#
+	# usermod -a -G GROUP USER
+	# To add an existing user to a secondary group, use the -a -G options followed the group’s name and the username
+	#
+	#
+	#
+	#
+	# C:\HashiCorp\Vagrant\embedded\gems\gems\vagrant-2.3.7\plugins\provisioners\docker\cap\linux\docker_configure_vagrant_user.rb
+	# Commando in dit bestand: sudo usermod -a -G docker 
+	# 
+	# ################################################################################################################
+	#
+	#
+	# Bestaande gebruiker Vagrant toevoegen aan een Secondary Group
+	echo sudo usermod -a -G docker vagrant >> /home/vagrant/docker-rechten.sh
+	#
+	#
+	echo '# Melding' >> /home/vagrant/docker-rechten.sh
+	echo echo Doe eventueel een reboot via shutdown -r now of logout om rechten actief te maken >> /home/vagrant/docker-rechten.sh
+	#
+	chmod +x /home/vagrant/docker-rechten.sh
+SCRIPT
+#
+#
+# [1b] Installatie scripts 
+#
+#
+# [1b-1] Ubuntu upgrade script
+#
+#
+$ubuntu_upgrade = <<SCRIPT
+	#
+	# Aanmaken ubuntu_upgrade Script 
+	#
+	#!/bin/bash
+	echo '#!/bin/bash'                        > /home/vagrant/ubuntu_upgrade.sh
+	echo '#'                                 >> /home/vagrant/ubuntu_upgrade.sh
+	echo '# Ubuntu UPGRADE'                  >> /home/vagrant/ubuntu_upgrade.sh
+	echo '# (c) 2023 John Tutert'            >> /home/vagrant/ubuntu_upgrade.sh
+	echo '#'                                 >> /home/vagrant/ubuntu_upgrade.sh
+	echo '# Package Manager updaten'         >> /home/vagrant/ubuntu_upgrade.sh
+	echo sudo apt update -qq -y              >> /home/vagrant/ubuntu_upgrade.sh
+	echo '# Ubuntu upgraden'                 >> /home/vagrant/ubuntu_upgrade.sh
+	echo sudo apt upgrade -y                 >> /home/vagrant/ubuntu_upgrade.sh
+	echo sudo apt autoremove -qq -y          >> /home/vagrant/ubuntu_upgrade.sh
+	chmod +x /home/vagrant/ubuntu_upgrade.sh
+SCRIPT
+#
+#
+# [1b-2] Ubuntu_Utils
+#
+#
+# Midnight Commander (MC en MCedit) 
+# Screenfetch
+# Open-VM-Tools (VMware Tools) 
+# WGet
+#
+#
+$ubuntu_utils_install = <<SCRIPT
+#
+# Aanmaken ubuntu_config Script 
+#
+#!/bin/bash
+echo '#!/bin/bash'                        > /home/vagrant/ubuntu_utils_install.sh
+echo '#'                                 >> /home/vagrant/ubuntu_utils_install.sh
+echo '# Ubuntu Installatie Utils'        >> /home/vagrant/ubuntu_utils_install.sh
+echo '# (c) 2023 John Tutert'            >> /home/vagrant/ubuntu_utils_install.sh
+echo '#'                                 >> /home/vagrant/ubuntu_utils_install.sh
+echo '# Midnight Commander'              >> /home/vagrant/ubuntu_utils_install.sh
+echo sudo apt install -y mc              >> /home/vagrant/ubuntu_utils_install.sh
+echo '# Screenfetch'                     >> /home/vagrant/ubuntu_utils_install.sh
+echo sudo apt install -y screenfetch     >> /home/vagrant/ubuntu_utils_install.sh
+echo '# Open-VM-Tools'                   >> /home/vagrant/ubuntu_utils_install.sh
+echo sudo apt install -y open-vm-tools   >> /home/vagrant/ubuntu_utils_install.sh
+echo '# WGet'                            >> /home/vagrant/ubuntu_utils_install.sh
+echo sudo apt install -y wget            >> /home/vagrant/ubuntu_utils_install.sh
+# echo sudo apt install -y mc screenfetch open-vm-tools wget >> /home/vagrant/ubuntu_utils_install.sh
+chmod +x /home/vagrant/ubuntu_utils_install.sh
+SCRIPT
+#
+#
+# [1b-3] Docker_installatie [alleen voor Ubuntu 22.10]
+#
+#
+$docker_installatie = <<SCRIPT
+#
+# Aanmaken docker_installatie Script
+#
+#!/bin/bash
+echo '#!/bin/bash'                        	 	    	 > /home/vagrant/docker_installatie.sh
+echo '#'                                 				>> /home/vagrant/docker_installatie.sh
+echo '# Vagrant Docker-CE Installatie'   				>> /home/vagrant/docker_installatie.sh
+echo '# (c) 2023 John Tutert'            				>> /home/vagrant/docker_installatie.sh
+echo '#'                                 				>> /home/vagrant/docker_installatie.sh
+echo sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> /home/vagrant/docker_installatie.sh
+echo '#'                                 				>> /home/vagrant/docker_installatie.sh
+echo '# Gebruiker Vagrant toevoegen aan groep docker' 	>> /home/vagrant/docker_installatie.sh
+echo sudo usermod -a -G docker vagrant 					>> /home/vagrant/docker_installatie.sh
+chmod +x /home/vagrant/docker_installatie.sh
+SCRIPT
+#
+#
+# [1b-4] Docker_install [HashiCorp Vagrant] 
+#
+# C:\HashiCorp\Vagrant\embedded\gems\gems\vagrant-2.3.7\plugins\provisioners\docker\cap\debian\docker_install.rb
+#
+#
+$docker_hashicorp_install = <<SCRIPT
+#
+# Aanmaken docker_installatie Script
+#
+#!/bin/bash
+echo '#!/bin/bash'                        	 	    				 > /home/vagrant/docker_hashicorp_install.sh
+echo '#'                                 							>> /home/vagrant/docker_hashicorp_install.sh
+echo '# Vagrant Docker-CE Installatie'   							>> /home/vagrant/docker_hashicorp_install.sh
+echo '# HashiCorp'            										>> /home/vagrant/docker_hashicorp_install.sh
+echo '#'                                 							>> /home/vagrant/docker_hashicorp_install.sh
+echo apt-get update -qq -y 											>> /home/vagrant/docker_hashicorp_install.sh
+echo apt-get install -qq -y --force-yes curl apt-transport-https 	>> /home/vagrant/docker_hashicorp_install.sh
+echo apt-get purge -qq -y lxc-docker* || true 						>> /home/vagrant/docker_hashicorp_install.sh
+echo curl -sSL https://get.docker.com/ | sh 						>> /home/vagrant/docker_hashicorp_install.sh
+echo service docker start											>> /home/vagrant/docker_hashicorp_install.sh
+echo '#'                                 							>> /home/vagrant/docker_hashicorp_install.sh
+echo sudo usermod -a -G docker vagrant 								>> /home/vagrant/docker_hashicorp_install.sh
+chmod +x /home/vagrant/docker_hashicorp_install.sh
+SCRIPT
+#
+#
+# [1b-5] Minikube_installatie (Kubernetes) 
+#
+#
+$minikube_installatie = <<SCRIPT
+#
+# Aanmaken minikube installatie Script
+# Provider = Docker 
+#
+#!/bin/bash
+echo '#!/bin/bash'                            > /home/vagrant/minikube_installatie.sh
+echo '#'                                     >> /home/vagrant/minikube_installatie.sh
+echo '# Installatie Minikube'                >> /home/vagrant/minikube_installatie.sh
+echo '# (c) 2023 John Tutert'                >> /home/vagrant/minikube_installatie.sh
+echo '#'                                     >> /home/vagrant/minikube_installatie.sh
+echo wget https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb >> /home/vagrant/minikube_installatie.sh
+echo sudo dpkg -i minikube_latest_amd64.deb  >> /home/vagrant/minikube_installatie.sh
+# Minikube Driver Docker = Default
+echo minikube config set driver docker       >> /home/vagrant/minikube_installatie.sh
+# Installatie kubectl
+echo sudo snap install kubectl --classic     >> /home/vagrant/minikube_installatie.sh
+chmod +x /home/vagrant/minikube_installatie.sh
+SCRIPT
+#
+#
+# [1b-6] minio_installatie [native install minio / niet voor minikube of kubernetes ] 
+#
+#
+$minio_installatie = <<SCRIPT
+#
+# Installatie MinIO script
+# Niet gebruiken voor Kubernetes
+#
+#!/bin/bash
+echo '#!/bin/bash'                                    > /home/vagrant/minio-installatie.sh
+echo '#'                                             >> /home/vagrant/minio-installatie.sh
+echo '# MinIO Native Installatie'                    >> /home/vagrant/minio-installatie.sh
+echo '# (c) 2023 John Tutert'                        >> /home/vagrant/minio-installatie.sh
+echo '#'                                             >> /home/vagrant/minio-installatie.sh
+echo '# Toevoegen Repository'                        >> /home/vagrant/minio-installatie.sh
+# [MinIO Server Installatie]
+echo wget https://dl.min.io/server/minio/release/linux-amd64/minio_20230718174940.0.0_amd64.deb >> /home/vagrant/minio-installatie.sh
+echo sudo dpkg -i minio_20230718174940.0.0_amd64.deb >> /home/vagrant/minio-installatie.sh
+# [MinIO Groepen/Gebruikers]
+echo sudo groupadd -r minio-user                     >> /home/vagrant/minio-installatie.sh
+echo sudo useradd -M -r -g minio-user minio-user     >> /home/vagrant/minio-installatie.sh
+# [MinIO Storage Folder]
+echo sudo mkdir /mnt/data                            >> /home/vagrant/minio-installatie.sh
+echo sudo chown minio-user:minio-user /mnt/data      >> /home/vagrant/minio-installatie.sh
+# [MinIO Configuratie]
+echo 'echo MINIO_VOLUMES="/mnt/data" >> /etc/default/minio' 		>> /home/vagrant/minio-installatie.sh
+echo 'echo MINIO_OPTS="--certs-dir /home/vagrant/.minio/certs --console-address :9001" >> /etc/default/minio' >> /home/vagrant/minio-installatie.sh
+echo 'echo MINIO_ROOT_USER=minioadmin >> /etc/default/minio' 		>> /home/vagrant/minio-installatie.sh
+echo 'echo MINIO_ROOT_PASSWORD=minioadmin >> /etc/default/minio' 	>> /home/vagrant/minio-installatie.sh
+# [MinIO UFW poorten openzetten]
+echo sudo ufw allow 9000:9001/tcp                    				>> /home/vagrant/minio-installatie.sh
+# [Starten MinIO Server]
+echo sudo systemctl start minio                      				>> /home/vagrant/minio-installatie.sh
+echo sudo systemctl enable minio                     				>> /home/vagrant/minio-installatie.sh
+# [MinIO Client Installatie]
+echo wget https://dl.min.io/client/mc/release/linux-amd64/mcli_20230718210538.0.0_amd64.deb >> /home/vagrant/minio-installatie.sh
+echo sudo dpkg -i mcli_20230718210538.0.0_amd64.deb  				>> /home/vagrant/minio-installatie.sh
+# [KubeCTL MinIO Plugin]
+# https://min.io/docs/minio/kubernetes/upstream/reference/kubectl-minio-plugin.html
+# https://www.origo.io/info/stabiledocs/guides/minio-object-storage-service/
+echo wget https://github.com/minio/operator/releases/download/v5.0.6/kubectl-minio_5.0.6_linux_amd64 -O kubectl-minio >> /home/vagrant/minio-installatie.sh
+echo chmod +x kubectl-minio >> /home/vagrant/minio-installatie.sh
+echo sudo mv kubectl-minio /usr/local/bin/ >> /home/vagrant/minio-installatie.sh
+#
+# https://www.olivercoding.com/2021-03-01-kubernetes-minio-init/
+# 
+# echo kubectl create namespace minio-operator       				>> /home/vagrant/minio-installatie.sh
+# echo kubectl minio init --namespace minio-operator 				>> /home/vagrant/minio-installatie.sh
+#
+chmod +x /home/vagrant/minio-installatie.sh
+SCRIPT
+#
+#
+# [1b-7] ansible_installatie 
+#
+#
+$ansible_installatie = <<SCRIPT
+#
+# Aanmaken Ansible installatie Script
+#
+#!/bin/bash
+echo '#!/bin/bash' 									 > /home/vagrant/Ansible-installatie.sh
+echo '#' 											>> /home/vagrant/Ansible-installatie.sh
+echo '# ANSIBLE Installatie' 						>> /home/vagrant/Ansible-installatie.sh
+echo '# (c) 2023 John Tutert' 						>> /home/vagrant/Ansible-installatie.sh
+echo '#' 											>> /home/vagrant/Ansible-installatie.sh
+echo '# Toevoegen Repository' 						>> /home/vagrant/Ansible-installatie.sh
+echo sudo apt-add-repository ppa:ansible/ansible 	>> /home/vagrant/Ansible-installatie.sh
+echo '# Bijwerken Repository' 						>> /home/vagrant/Ansible-installatie.sh
+echo sudo apt update 								>> /home/vagrant/Ansible-installatie.sh
+echo '# Ansible Install' 							>> /home/vagrant/Ansible-installatie.sh
+echo sudo apt install -y ansible 					>> /home/vagrant/Ansible-installatie.sh
+chmod +x /home/vagrant/Ansible-installatie.sh
+SCRIPT
+#
+#
+# [1b-8] Kubernetes_installatie 
+#
+#
+$kubernetes_installatie = <<SCRIPT
+#
+# Aanmaken Kubernetes installatie Script
+# https://www.nakivo.com/blog/install-kubernetes-ubuntu/
+#
+#!/bin/bash
+#
+# swap
+#
+sudo swapoff -a
+sudo sed -i ‘/ swap / s/^\(.*\)$/#\1/g’ /etc/fstab
+sudo echo “vm.swappiness=0” | sudo tee –append /etc/sysctl.conf
+sudo sysctl -p
+#
+# Installatie
+#
+echo ‘deb http://apt.kubernetes.io/ kubernetes-xenial main’ | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+#
+#
+#
+sudo apt-get install keepalived
+sudo systemctl enable keepalived && systemctl start keepalived
+# kubeadm init –pod-network-cidr=10.244.0.0/16 –apiserver-advertise-address=192.168.101.21
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl get nodes
+# chmod +x /home/vagrant/kubernetes_installatie.sh
+SCRIPT
+#
+#
+# [1d] Applicatie Scripts 
+#
+# [1d-1] Minio_docker [Minio als Docker containers] 
+#
+# https://blog.knoldus.com/how-to-run-minio-as-a-docker-container/
+#
+$minio_docker = <<SCRIPT
+	#!/bin/bash
+	echo '#!/bin/bash' 								 > /home/vagrant/minio-docker-run.sh
+	echo '#' 										>> /home/vagrant/minio-docker-run.sh
+	echo '# Minio Object Storage on Docker' 		>> /home/vagrant/minio-docker-run.sh
+	echo 'docker run -d -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=minio99" -e "MINIO_ROOT_PASSWORD=minio123" quay.io/minio/minio server /data --console-address ":9001"' >/home/vagrant/minio-docker-run.sh
+	chmod +x /home/vagrant/minio-docker-run.sh
+SCRIPT
+#
+#
+# [2] WINDOWS
+#
+# [2a] Scripts die ALTIJD uitgevoerd worden bij eerste start van VM
+#
+#
+# [2a-1] Installatie WinGET
+#
+#
+$winget_installatie = <<SCRIPT
+	# REM powershell -ExecutionPolicy Unrestricted 
+	# REM powershell -file ps-winget.ps1
+SCRIPT
+#
+# [2b] Scripts die aangemaakt worden, maar later handmatig gestart moeten worden
+#
+$win_script_aanmaak = <<SCRIPT
+	# REM powershell -ExecutionPolicy Unrestricted 
+	# REM powershell -file ps-winget.ps1
+SCRIPT
+#
+#
+#
+#
+#
+# ############################################ [Virtuele Machines] ##########################################
+#
+#
+#
+#
+Vagrant.configure("2") do |config|
+	#
+	#
+	#
+	# Melding komt elke keer in beeld bij commando met Vagrant ervoor
+	# puts "tekst tekst tekst tekst"
+	#
+	#
+	# ############################################ [Oracle / VMware] ##########################################
+	#
+	#
+	#
+	#	
+	#
+	# ####################################
+	#              UBUNTU
+	# ####################################
+	#
+	#
+	#
+	#
+	ubuntu_machines.each do |machine|
+		config.vm.define machine[:hostname] do |node|
+			#
+			node.vm.box = machine[:box]
+			node.vm.box_check_update = true
+			node.vm.hostname = "Vagrant-#{machine[:hostname]}"
+			#
+			node.ssh.username = "vagrant"
+			node.ssh.password = "vagrant"
+			#
+			#
+			# ####################################################################	
+			#
+			#	Network
+			#
+			#	Adapters
+			#
+			#	Adapter 2 Host-Only	
+			node.vm.network "private_network", type: "dhcp"
+			#	node.vm.network "private_network", ip: "192.168.56.220", netmask: "255.255.255.0"
+			#
+			# 	Adapter 3 Bridged
+			# 	node.vm.network "public_network", bridge: "VMware Virtual Ethernet Adapter for VMnet8"
+			# 	node.vm.network "public_network", bridge: "Ethernet"
+			#
+			#	Port Forwarding
+			#	node.vm.network :forwarded_port, guest: 3389, host: 53389, auto_correct: true
+			#
+			# ####################################################################
+			#
+			# ####################################################################		
+			# https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage
+			#
+			# 	Windows
+			# 	https://ss64.com/nt/syntax-variables.html
+			#
+			if #{ENV['OS']} == "Windows_NT" 
+				node.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+				node.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+				node.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+			end 
+			#
+			# 	macOS
+			#	https://ss64.com/osx/syntax-env_vars.html
+			#
+			# 	node.vm.synced_folder "#{ENV['HOME']}", "/home/#{ENV['USER']}"
+			# 	node.vm.synced_folder "#{ENV['TMPDIR']}", "/home/vagrant/downloads"
+			# 	node.vm.synced_folder "#{ENV['HOME']}", "/home/vagrant/documents"
+			#
+			# ####################################################################
+			#
+			node.vm.post_up_message = "Start scripts in /home/vagrant voor verdere configuratie"
+			#
+			# ####################################################################
+			# Installatie Docker-CE en Compose plugin
+			# Eventueel pull images
+			#
+			# https://developer.hashicorp.com/vagrant/docs/provisioning/docker
+			#
+			# C:\HashiCorp\Vagrant\embedded\gems\gems\vagrant-2.3.7\plugins\provisioners\docker\cap\debian
+			#		
+			if machine[:ram] >= 4096
+				#	https://www.rubyguides.com/ruby-tutorial/ruby-if-else/
+				node.vm.provision "docker" do |d|
+					d.pull_images "hello-world"				# 	13.3 KB
+					d.pull_images "alpine"					# 	7.33 MB
+					d.pull_images "debian"					#	116 MB
+					d.pull_images "registry"				# 	24 MB
+				end
+			end
+			#
+			if machine[:ram] >= 8192
+				#	https://www.rubyguides.com/ruby-tutorial/ruby-if-else/
+				node.vm.provision "docker" do |d|
+					d.pull_images "quay.io/minio/minio"		#	277 MB
+				end
+			end
+			#
+			# ####################################################################
+			# Installatie Ansible + uitvoeren playbook.yml
+			#
+			# node.vm.provision "ansible_local" do |ansible|
+			#	ansible.playbook = "playbook.yml"
+			# end
+			#
+			# ####################################################################
+			#
+			#
+			#	Oracle Virtualbox
+			#
+			#
+			if machine[:aanbieder] == "Oracle"
+				#
+				# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+				#
+				node.vm.provider "virtualbox" do |ovbvm|
+					#
+					ovbvm.gui = true
+					ovbvm.linked_clone = false
+					#
+					ovbvm.cpus = "#{machine[:cpu]}"
+					ovbvm.memory = "#{machine[:ram]}"
+					ovbvm.name = "Vagrant-#{machine[:hostname]}"
+					#
+					ovbvm.customize ["modifyvm", :id, "--vram", "128"]
+					ovbvm.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+					ovbvm.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+					ovbvm.customize ["modifyvm", :id, "--description", "Vagrant |0D|0A#{machine[:box]} |0D|0ACreated #{cur_date} |0D|0AUsername/Password = vagrant"] 
+					#
+				end
+			end	
+			#
+			#
+			#	VMware Workstation / Fusion PRO
+			#
+			#
+			if machine[:aanbieder] == "VMware"
+				#
+				# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+				#			
+				node.vm.provider "vmware_desktop" do |vmwvm|
+					#
+					vmwvm.gui = true
+					vmwvm.linked_clone = false
+					#
+					vmwvm.cpus = "#{machine[:cpu]}"
+					vmwvm.memory = "#{machine[:ram]}"
+					# vmwvm.nat_device = "VMnet8"
+					#
+					vmwvm.vmx["tools.syncTime"] = "TRUE"
+					vmwvm.vmx["displayName"] = "Vagrant-#{machine[:hostname]}"
+					vmwvm.vmx["annotation"] = "Vagrant |0D|0A#{machine[:box]} |0D|0ACreated #{cur_date} |0D|0AUsername/Password = vagrant"
+				end
+			end	
+			#
+			# Provision SHELL
+			#
+			node.vm.provision "shell", inline: <<-SHELL
+				#
+				#
+				#
+				#
+			SHELL
+			node.vm.provision "shell", inline: $ubuntu_repo
+			node.vm.provision "shell", inline: $ubuntu_upgrade  
+			node.vm.provision "shell", inline: $ubuntu_utils_install
+			#
+			if machine[:ram] >= 4096 
+				node.vm.provision "shell", inline: $minikube_installatie
+				node.vm.provision "shell", inline: $minio_docker
+				node.vm.provision "shell", inline: $ansible_installatie
+			end
+			#
+			if machine[:ram] >= 8192 
+				node.vm.provision "shell", inline: $minio_installatie
+			end
+			#
+			# Always SHELL
+			#
+			node.vm.provision "shell", run: "always", inline: <<-SHELL
+				#
+				# bijvoorbeeld sudo systemctl start nginx
+				#
+				#
+			SHELL
+			node.vm.provision "shell", run: "always", inline: $ubuntu_repo
+			node.vm.provision "shell", run: "always", inline: $ubuntu_upgrade  
+			node.vm.provision "shell", run: "always", inline: $ubuntu_utils_install
+		end
+	end
+	#
+	#
+	#
+	#
+	#
+	# #########################################
+	# ###             Windows               ###
+	# #########################################
+	# 
+	#
+	#
+	#
+	windows_machines.each do |machine|
+		config.vm.define machine[:hostname] do |node|
+			#
+			node.vm.box = machine[:box]
+			node.vm.box_check_update = true
+			#
+			node.vm.hostname = "Vagrant-#{machine[:hostname]}"
+			node.vm.guest = :windows
+			node.vm.boot_timeout = 18000
+			#
+			node.winssh.shell = "cmd" 		# The shell to use when executing SSH commands from Vagrant. By default this is powershell. Valid values are "cmd" or "powershell".		
+			node.ssh.username = "vagrant"
+			node.ssh.password = "vagrant"
+			#
+			# ####################################################################	
+			#
+			#	Network
+			#
+			#	Adapters
+			#
+			#	Adapter 2 Host-Only	
+			node.vm.network "private_network", type: "dhcp"
+			#	node.vm.network "private_network", ip: "192.168.56.220", netmask: "255.255.255.0"
+			#
+			# 	Adapter 3 Bridged
+			# node.vm.network "public_network", bridge: "VMware Virtual Ethernet Adapter for VMnet8"
+			# node.vm.network "public_network", bridge: "Ethernet"
+			#
+			#	Port-Forwarding
+			#
+			node.vm.network :forwarded_port, guest: 3389, host: 53389, auto_correct: true
+			# node.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
+			# node.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
+			#
+			# ####################################################################
+			#
+			#
+			# ####################################################################	
+			#	WinRM
+			#
+			node.vm.communicator = "winrm" 	# standaard is ssh windows moet naar winrm
+			# vw1Xeval.winrm.username = "IEUser"
+			# vw1Xeval.winrm.password = "Passw0rd!"
+			# vw1Xeval.winrm.host = "localhost"  	# The hostname or IP to connect to the WinRM service
+			node.winrm.max_tries = 300 			# The maximum number of times to retry opening a shell after failure. This defaults to 20.
+			node.winrm.retry_delay = 2 			# The amount of time to wait between retries and defaults to 2 seconds.
+			#
+			#
+			# ####################################################################	
+			#
+			#
+			node.vm.post_up_message = "Start scripts in /home/vagrant voor verdere configuratie"
+			#	
+			#
+			#	Oracle Virtualbox
+			#
+			#
+			if machine[:aanbieder] == "Oracle"
+				#
+				# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+				#
+				node.vm.provider "virtualbox" do |ovbvm|
+					#
+					ovbvm.gui = true
+					ovbvm.linked_clone = false
+					#
+					ovbvm.cpus = "#{machine[:cpu]}"
+					ovbvm.memory = "#{machine[:ram]}"
+					ovbvm.name = "Vagrant-#{machine[:hostname]}"
+					#
+					ovbvm.customize ["modifyvm", :id, "--vram", "128"]
+					ovbvm.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+					ovbvm.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+					ovbvm.customize ["modifyvm", :id, "--description", "Ubuntu 22.04 LTS Gebruiker en Password: vagrant"] 
+					#
+				end
+			end	
+			#
+			#
+			#	VMware Workstation / Fusion PRO
+			#
+			#
+			if machine[:aanbieder] == "VMware"
+				#
+				# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+				#			
+				node.vm.provider "vmware_desktop" do |vmwvm|
+					#
+					vmwvm.gui = true
+					vmwvm.linked_clone = false
+					#
+					vmwvm.cpus = "#{machine[:cpu]}"
+					vmwvm.memory = "#{machine[:ram]}"
+					# vmwvm.nat_device = "VMnet8"
+					#
+					vmwvm.vmx["tools.syncTime"] = "TRUE"
+					vmwvm.vmx["displayName"] = "Vagrant-#{machine[:hostname]}"
+					vmwvm.vmx["annotation"] = "Vagrant-#{machine[:hostname]} |0D|0AUbuntu 22.04.02 LTS |0D|0A |0D|0AUsername/Password = vagrant"
+				end
+			end	
+			#
+			node.vm.provision "shell", privileged: "true", inline: <<-SHELL
+				#
+				#
+				#
+				#
+			SHELL
+		end
+	end
+	#
+	#
+	#
+	#
+	#
+	# ############################################ [VMware Workstation/Fusion PRO] ##########################################
+	#
+	#
+	#
+	#	Geen specifieke boxes aanwezig
+	#
+	#
+	#
+	# 
+	# ############################################ [Oracle Virtualbox] ######################################################
+	#
+	#
+	#
+	#	Geen specifieke boxes aanwezig
+	#
+	#
+	#
+	#
+	# ############################################ [Einde Boxes] ######################################################	
+	#
+	#
+end

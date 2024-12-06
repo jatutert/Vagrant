@@ -1,0 +1,14 @@
+vagrant plugin install --plugin-clean-sources --plugin-source https://rubygems.org vagrant-reload vagrant-vbguest winrm winrm-elevated
+
+drop https://curl.se/ca/cacert.pem in "C:\HashiCorp\Vagrant\embedded"
+handmatig doen
+
+vagrant plugin install vagrant-vmware-desktop
+vagrant plugin update vagrant-vmware-desktop
+net.exe start vagrant-vmware-utility
+
+websites:
+
+https://gist.github.com/1eedaegon/6a5a2ab64f09b0800eadf3f84dad96f8
+
+https://github.com/hashicorp/vagrant/issues/13156

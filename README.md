@@ -30,15 +30,17 @@ Download Vagrant 2.4.1 [Download](https://releases.hashicorp.com/vagrant/2.4.1/v
 
 Download Vagrant VMware Plugin [Download](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_darwin_amd64.dmg)
 
-## [Step 2] Installation
+## [Step 2a] Installation of Vagrant
 
-Install Vagrant 2.4.1 and reboot your laptop or PC (**don't skip reboot!**] 
+Install Vagrant 2.4.1 and reboot your laptop or PC (**don't skip the reboot!**] 
+
+Just click Next, Next, Finish during the installation.
+
+## [Step 3] Installation of VMware Plugin
 
 Install Vagrant VMware Plugin 1.0.22 (reboot if needed) 
 
 Just click Next, Next, Finish during the installation. 
-
-## [Step 3] Activate the installed plugin
 
 ```shell
 vagrant plugin install vagrant-vmware-desktop
@@ -52,13 +54,23 @@ Start Terminal
 
 ### Windows 
 ```shell
-setx VAGRANT_VAGRANTFILE "Vagrantfile-latest.rb"
-setx VAGRANT_EXPERIMENTAL "1"
-setx VAGRANT_SUPPRESS_GO_EXPERIMENTAL_WARNING "1"
-setx VAGRANT_DEFAULT_PROVIDER "vmware_desktop"
+setx /M VAGRANT_DEFAULT_PROVIDER "vmware_desktop"
+setx /M VAGRANT_EXPERIMENTAL "1"
+setx /M VAGRANT_SUPPRESS_GO_EXPERIMENTAL_WARNING "1"
+setx /M VAGRANT_VAGRANTFILE "Vagrantfile-latest.rb"
+exit
+```
+
+### Windows 
+```shell
+setx VAGRANT_CWD "C:\Users\ [your username]  "
 setx VAGRANT_VMWARE_CLONE_DIRECTORY "x:\Directory of your choice where virtual machines should be stored"
 exit
 ```
+Examples:
+setx VAGRANT_CWD "C:\Users\John"
+setx VAGRANT_VMWARE_CLONE_DIRECTORY "D:\VirtualMachines\Vagrant"
+
 It is very important to close the terminal. Otherwise the settings are not loaded ! 
 
 More information at [Vagrant Docs](https://developer.hashicorp.com/vagrant/docs/other/environmental-variables)
