@@ -9,7 +9,7 @@
 Vagrant Configuratie for Oracle Virtualbox and VMware Workstation/Fusion PRO hypervisors
 Vagrant is copyrighted by Hashicorp (www.vagrantup.com)
 
-(C) Copyright 2023,2024 JA Tutert
+(C) Copyright 2023/2024/2025 JA Tutert
 
 This configuration may only be used for private use or education use. Business/commercial use is prohibited. 
 It is intended for use with virtual machines on a hypervisor and thus not for configuration of bare-metal or cloud machines.
@@ -55,16 +55,17 @@ PDR		provider	Docker
 PMH		provider	Microsoft Hyper-V
 
 
-
 AS	=	Alvistack Box
 GC 	= 	Generic Box
 GR 	= 	Gusztavvargadr Box
 MN 	= 	Maroskukan Box
 
+
 S		Small			2 GB
 M		Medium			4 GB
 L		Large			8 GB
 XL		Extra Large		16 GB
+
 
 A	=	Ansible
 D	=	Docker-CE en Docker Compose 
@@ -76,7 +77,7 @@ K	=	Kubernetes
 # ############################################ [Vullen Variabelen] ##########################################
 #
 #	Variable versie Vagrantfile 
-versie_vagrantfile = "2024-08-27"
+versie_vagrantfile = "2025-04-11"
 #
 #
 #	Variabele huidige datum
@@ -111,27 +112,27 @@ linux_machines=[
 	#	Provider: VMware
 	#
 	{
-        :hostname => "U20-LTS-S-BCV-S-001",
-        :weergavenaam => "U20-LTS-S-BCV-S-001",
+		:hostname => "U20-LTS-S-BCV-S-001",
+		:weergavenaam => "U20-LTS-S-BCV-S-001",
 		:box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
 		:osversie => 2004, 
 		:aanbieder => "VMware",
-        :ram => 2048,
-        :cpu => 2,
+		:ram => 2048,
+		:cpu => 2,
 	},
 	{
-        :hostname => "U20-LTS-S-BCV-M-001",
+		:hostname => "U20-LTS-S-BCV-M-001",
 		:weergavenaam => "U20-LTS-S-BCV-M-001",
-        :box => "generic/ubuntu2004",
+		:box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
 		:osversie => 2004, 
 		:aanbieder => "VMware",
 		:ram => 4096,
-        :cpu => 2,
-    },
+		:cpu => 2,
+	},
 	{
 		:hostname => "U20-LTS-S-BCV-L-001",
 		:weergavenaam => "U20-LTS-S-BCV-L-001",
@@ -142,7 +143,7 @@ linux_machines=[
 		:aanbieder => "VMware",
 		:ram => 8192,
 		:cpu => 2,
-    },
+	},
 	{
 		:hostname => "U20-LTS-S-BCV-XL-001",
 		:weergavenaam => "U20-LTS-S-BCV-XL-001",
@@ -153,34 +154,34 @@ linux_machines=[
 		:aanbieder => "VMware",
 		:ram => 16384,
 		:cpu => 2,
-    },
+	},
 	#
 	#	Ubuntu 22.04.x LTS Jammy Jellyfish (release 23 februari 2023) (EOS April 2027) (EOL April 2032) 
 	#
 	#	Provider VMware
 	#
-    {
-        :hostname => "U22-LTS-S-BCV-S-001",
-		:weergavenaam => "U22-LTS-S-BCV-S-001",
-        :box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-        :ram => 2048,
-        :cpu => 2,
-    },
 	{
-        :hostname => "U22-LTS-S-BCV-M-001",
-		:weergavenaam => "U22-LTS-S-BCV-M-001",
-        :box => "generic/ubuntu2204",
+		:hostname => "U22-LTS-S-BCV-S-001",
+		:weergavenaam => "U22-LTS-S-BCV-S-001",
+		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "server",
 		:osversie => 2204, 
 		:aanbieder => "VMware",
-        :ram => 4096,
-        :cpu => 2,
-    },	
+		:ram => 2048,
+		:cpu => 2,
+	},
+	{
+		:hostname => "U22-LTS-S-BCV-M-001",
+		:weergavenaam => "U22-LTS-S-BCV-M-001",
+		:box => "generic/ubuntu2204",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2204, 
+		:aanbieder => "VMware",
+		:ram => 4096,
+		:cpu => 2,
+	},	
 	{
 		:hostname => "U22-LTS-S-BCV-L-001",
 		:weergavenaam => "U22-LTS-S-BCV-L-001",
@@ -191,7 +192,7 @@ linux_machines=[
 		:aanbieder => "VMware",
 		:ram => 8192,
 		:cpu => 2,
-    },
+	},
 	{
 		:hostname => "U22-LTS-S-BCV-XL-001",
 		:weergavenaam => "U22-LTS-S-BCV-XL-001",
@@ -246,7 +247,7 @@ linux_machines=[
 		:aanbieder => "VMware",
 		:ram => 8192,
 		:cpu => 2,
-    },
+	},
 	#
 	#	Slave #1 (010)
 	#
@@ -280,28 +281,28 @@ linux_machines=[
 	#
 	#	Provider VMware
 	#
-    {
-        :hostname => 		"U24-LTS-S-BCV-S-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-S-001",
-        :box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-        :ram => 			2048,
-        :cpu => 			2,
-    },
 	{
-        :hostname => 		"U24-LTS-S-BCV-M-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-M-001",
-        :box => 			"gusztavvargadr/ubuntu-server-2404-lts",
+		:hostname => 		"U24-LTS-S-BCV-S-001",
+		:weergavenaam => 	"U24-LTS-S-BCV-S-001",
+		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
 		:os => 				"ubuntu",
 		:osedition => 		"server",
 		:osversie => 		2404, 
 		:aanbieder => 		"VMware",
-        :ram => 			4096,
-        :cpu => 			2,
-    },	
+		:ram => 			2048,
+		:cpu => 			2,
+	},
+	{
+		:hostname => 		"U24-LTS-S-BCV-M-001",
+		:weergavenaam => 	"U24-LTS-S-BCV-M-001",
+		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
+		:os => 				"ubuntu",
+		:osedition => 		"server",
+		:osversie => 		2404, 
+		:aanbieder => 		"VMware",
+		:ram => 			4096,
+		:cpu => 			2,
+	},
 	{
 		:hostname => 		"U24-LTS-S-BCV-L-001",
 		:weergavenaam => 	"U24-LTS-S-BCV-L-001",
@@ -312,7 +313,7 @@ linux_machines=[
 		:aanbieder => 		"VMware",
 		:ram => 			8192,
 		:cpu => 			2,
-    },
+	},
 	{
 		:hostname => 		"U24-LTS-S-BCV-XL-001",
 		:weergavenaam => 	"U24-LTS-S-BCV-XL-001",
@@ -405,15 +406,15 @@ linux_machines=[
 	#
 	#
 	{
-		:hostname => 		"U24-LTS-S-DCKR-001",
-		:weergavenaam => 	"U24-LTS-S-DCKR-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname 		=> "U24-LTS-S-DCKR-001",
+		:weergavenaam 	=> "U24-LTS-S-DCKR-001",
+		:box 			=> "gusztavvargadr/ubuntu-server-2404-lts",
+		:os 			=> "ubuntu",
+		:osedition 		=> "server",
+		:osversie 		=> 2404, 
+		:aanbieder 		=> "VMware",
+		:ram 			=> 8192,
+		:cpu 			=> 2,
 	},
 	#
 	#
@@ -488,7 +489,7 @@ windows_machines=[
 	#	{
 		#	:hostname => 		"W10-ENT-D-EVAL-VB1",
 		#	:weergavenaam => 	"W10-ENT-D-EVAL-VB1",
-        #	:box => 			"gusztavvargadr/windows-10",
+		#	:box => 			"gusztavvargadr/windows-10",
 		#	:os => 				"windows",
 		#	:osedition => 		"desktop",
 		#	:osversie => 		10, 
@@ -497,15 +498,15 @@ windows_machines=[
 		#	:cpu =>	 			2,
 	#	},
 	{
-		:hostname => 		"W10-ENT-D-EVAL-BV1",
-		:weergavenaam => 	"W10-ENT-D-EVAL-BV1",
-		:box => 			"gusztavvargadr/windows-10",
-		:os => 				"windows",
-		:osedition => 		"desktop",
-		:osversie => 		10, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname 		=> "W10-ENT-D-EVAL-BV1",
+		:weergavenaam 	=> "W10-ENT-D-EVAL-BV1",
+		:box 			=> "gusztavvargadr/windows-10",
+		:os 			=> "windows",
+		:osedition 		=> "desktop",
+		:osversie 		=> 10, 
+		:aanbieder 		=> "VMware",
+		:ram 			=> 8192,
+		:cpu 			=> 2,
 	},
 	#
 	#	Introductie Infrastucturen
@@ -580,15 +581,15 @@ windows_machines=[
 		#	:cpu => 			2,
 	#	},
 	{
-		:hostname => 		"W11-ENT-D-EVAL-BV1",
-		:weergavenaam => 	"W11-ENT-D-EVAL-BV1",
-		:box => 			"gusztavvargadr/windows-11",
-		:os => 				"windows",
-		:osedition => 		"desktop",
-		:osversie => 		11, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname 		=> "W11-ENT-D-EVAL-BV1",
+		:weergavenaam 	=> "W11-ENT-D-EVAL-BV1",
+		:box 			=> "gusztavvargadr/windows-11",
+		:os 			=> "windows",
+		:osedition 		=> "desktop",
+		:osversie 		=> 11, 
+		:aanbieder 		=> "VMware",
+		:ram 			=> 8192,
+		:cpu 			=> 2,
 	},
 	#
 	#	Introductie Infrastucturen
