@@ -66,7 +66,9 @@ setx VAGRANT_VMWARE_CLONE_DIRECTORY "x:\Directory of your choice where virtual m
 exit
 ```
 Examples:
+
 setx VAGRANT_CWD "C:\Users\John"
+
 setx VAGRANT_VMWARE_CLONE_DIRECTORY "D:\VirtualMachines\Vagrant"
 
 It is very important to close the terminal. Otherwise the settings are not loaded ! 
