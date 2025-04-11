@@ -8,7 +8,7 @@ I myself work with Vagrant within Windows. Hopefully I have described all steps 
 I make the assumption that VMware Workstation Pro or VMware Fusion Pro is installed. If not, this should be done first. 
 VMware Workstation Pro and VMWare Fusion Pro is now free for personal use. So that shouldn't be a problem. 
 
-VMWare Workstation 17.6 Pro for Windows [Download](https://edu.nl/3h6mp) [Download](https://www.fileeagle.com/software/download/21846/9c0583)
+VMWare Workstation 17.6 Pro for Windows [Download](https://edu.nl/3h6mp) [Download](https://www.fileeagle.com/software/download/21846/9c0583) [Download](https://fichiers.opti-one.fr/outils/VMware-workstation-full-17.6.3-24583834.exe) [Download](https://bajakan.id/VMware-workstation-full-17.6.3-24583834.exe)
 
 VMware Workstation 17.6 Pro for Linux [Download](https://edu.nl/98kdk) [Download](https://www.fileeagle.com/software/download/21847/e0e7c8)
 
