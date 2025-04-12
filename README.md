@@ -32,7 +32,7 @@ Download Vagrant VMware Plugin [Download](https://releases.hashicorp.com/vagrant
 
 Install Vagrant 2.4.1 and reboot your laptop or PC (**don't skip the reboot!**] 
 
-Just click Next, Next, Finish during the installation.
+Just click Next, Next, Finish during the installation (default settings). 
 
 ## [Step 3] Installation of VMware Plugin
 
@@ -58,6 +58,11 @@ setx /M VAGRANT_SUPPRESS_GO_EXPERIMENTAL_WARNING "1"
 setx /M VAGRANT_VAGRANTFILE "Vagrantfile-latest.rb"
 exit
 ```
+Configure VMWare Workstation PRO (or Fusion PRO) to be the default hypervisor for the virtual machines. 
+
+I want to use the latest options of Vagrant, so i set the Experimental settings to ON using 1. 
+
+The default name of the vagrantfile is set to Vagrantfile-latest.rb. 
 
 ### Windows 
 ```shell
@@ -65,11 +70,15 @@ setx VAGRANT_CWD "C:\Users\ [your username]  "
 setx VAGRANT_VMWARE_CLONE_DIRECTORY "x:\Directory of your choice where virtual machines should be stored"
 exit
 ```
+The VAGRANT_CWD is the location where VAGRANT searches for the vagrantfile (the configuration file for Vagrant). 
+
+The VAGRANT_VMWARE_CLONE_DIRECTORY is the location where VAGRANT stores the created virtual machines by Vagrant. 
+
 Examples:
 
-setx VAGRANT_CWD "C:\Users\John"
+setx VAGRANT_CWD "C:\Users\John" (I use my standard user directory for this)
 
-setx VAGRANT_VMWARE_CLONE_DIRECTORY "D:\VirtualMachines\Vagrant"
+setx VAGRANT_VMWARE_CLONE_DIRECTORY "D:\VirtualMachines\Vagrant" (I want to store the virtual machines on drive D:) 
 
 It is very important to close the terminal. Otherwise the settings are not loaded ! 
 
@@ -90,10 +99,14 @@ Put this file in the folder Downloads (Windows).
 
 ### Windows 
 
+Remove the default vagrantfile
+
 ```shell
 del %HOMEDRIVE%\vagrantfil*.*
 exit
 ```
+
+Replace the default vagrantfile with the one i created
 
 ```shell
 copy %HOMEDRIVE%\Downloads\Vagrantfile-latest.rb %HOMEDRIVE%
@@ -131,16 +144,27 @@ Let's start the fun !
 
 For Example: 
 
-Starting the Introduction Infrastructures Webserver small edition (uses 2 GB RAM)
+Starting the Ubuntu Server 24.04 LTS virtual machine with 16 GB of RAM (XL = 16 GB, L = 8 GB, M = 4 GB, S = 2 GB)
 
 ```shell
-vagrant up U24-LTS-S-WSRV-S-001
+vagrant up U24-LTS-S-BCV-XL-001
+```
+Starting the Ubuntu Server 24.04 LTS virtual machine with Docker
+
+```shell
+vagrant up U24-LTS-S-DCKR-001
 ```
 
-Starting the Introduction Infrastructures Webserver extra large edition (uses 8 GB RAM)
+Starting the Windows 10 Enterprise virtual machine (replace W10 with W11 for Windows 11) 
 
 ```shell
-vagrant up U24-LTS-S-WSRV-XL-001
+vagrant up W10-ENT-D-EVAL-BV1
+```
+
+Starting the Windows Server 2022 Standard virtual machine 
+
+```shell
+vagrant up W22-STD-S-EVAL-BV1
 ```
 
 ## Shutting down
@@ -148,7 +172,7 @@ vagrant up U24-LTS-S-WSRV-XL-001
 For Example: 
 
 ```shell
-vagrant halt U24-LTS-S-WSRV-S-001
+vagrant halt U24-LTS-S-DCKR-001
 ```
 
 ## More Info
