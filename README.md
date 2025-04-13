@@ -196,11 +196,15 @@ docker start portainer
 ip addr show eth0
 ```
 
-Start your webbrowser and go to https://xxx.xxx.xxx.xxx (ip address from ETH0:) : 9443
+The ubuntu-config-V3-latest.sh script does the installation of the latest version of Docker within the box. 
+
+Start your webbrowser and go to https://xxx.xxx.xxx.xxx:9443 (use the ip address from ETH0:)
+
 For the password use something simple like Password1234
 
+Use pwsh to start Microsoft Powershell 7.5.x within the box. 
 
-The ubuntu-config-V3-latest.sh script does the installation of the latest version of Docker within the box. 
+Want to use Cockpit ? The go to https://xxx.xxx.xxx.xxx:1234 (use the ip address from ETH0:)
 
 ### Starting the Windows 10 Enterprise virtual machine (replace W10 with W11 for Windows 11) 
 
