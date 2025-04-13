@@ -177,24 +177,38 @@ Let's start the fun !
 
 For Example: 
 
-Starting the Ubuntu Server 24.04 LTS virtual machine with 16 GB of RAM (XL = 16 GB, L = 8 GB, M = 4 GB, S = 2 GB)
+### Starting the Ubuntu Server 24.04 LTS virtual machine with 16 GB of RAM (XL = 16 GB, L = 8 GB, M = 4 GB, S = 2 GB)
 
 ```shell
 vagrant up U24-LTS-S-BCV-XL-001
 ```
-Starting the Ubuntu Server 24.04 LTS virtual machine with Docker
+
+### Starting the Ubuntu Server 24.04 LTS virtual machine with Docker
 
 ```shell
 vagrant up U24-LTS-S-DCKR-001
+vagrant ssh U24-LTS-S-DCKR-001
+sudo ~/ubuntu-config-V3-latest.sh docker
+exit
+vagrant ssh U24-LTS-S-DCKR-001
+docker stop portainer
+docker start portainer
+ip addr show eth0
 ```
 
-Starting the Windows 10 Enterprise virtual machine (replace W10 with W11 for Windows 11) 
+Start your webbrowser and go to https://xxx.xxx.xxx.xxx (ip address from ETH0:) : 9443
+For the password use something simple like Password1234
+
+
+The ubuntu-config-V3-latest.sh script does the installation of the latest version of Docker within the box. 
+
+### Starting the Windows 10 Enterprise virtual machine (replace W10 with W11 for Windows 11) 
 
 ```shell
 vagrant up W10-ENT-D-EVAL-BV1
 ```
 
-Starting the Windows Server 2022 Standard virtual machine 
+### Starting the Windows Server 2022 Standard virtual machine 
 
 ```shell
 vagrant up W22-STD-S-EVAL-BV1
