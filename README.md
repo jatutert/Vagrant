@@ -18,33 +18,27 @@ VMware Fusion 13.6 Pro for MACos [Download](https://support.broadcom.com/group/e
 
 ### Windows 
 
-Download Vagrant 2.4.1 [Download](https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_windows_amd64.msi)
+Download Vagrant 2.4.3 [Download](https://releases.hashicorp.com/vagrant/2.4.3/vagrant_2.4.3_windows_amd64.msi)
 
 Download Vagrant VMware Plugin [Download](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_windows_amd64.msi)
 
 ### MacOS
 
-Download Vagrant 2.4.1 [Download](https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_darwin_amd64.dmg)
+Download Vagrant 2.4.3 [Download](https://releases.hashicorp.com/vagrant/2.4.3/vagrant_2.4.3_darwin_amd64.dmg)
 
 Download Vagrant VMware Plugin [Download](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.23/vagrant-vmware-utility_1.0.23_darwin_amd64.dmg)
 
 ## [Step 2a] Installation of Vagrant
 
-Install Vagrant 2.4.1 and reboot your laptop or PC (**don't skip the reboot!**] 
+Install Vagrant 2.4.3 and reboot your laptop or PC (**don't skip the reboot!**] 
 
 Just click Next, Next, Finish during the installation (default settings). 
 
 ## [Step 3] Installation of VMware Plugin
 
-Install Vagrant VMware Plugin 1.0.22 (reboot if needed) 
+Install Vagrant VMware Plugin (this time no reboot is needed !)  
 
 Just click Next, Next, Finish during the installation. 
-
-```shell
-vagrant plugin install vagrant-vmware-desktop
-exit
-```
-Terminal must be closed to load the environment variables
 
 ## [Step 4] Configuration
 
@@ -64,10 +58,13 @@ I want to use the latest options of Vagrant, so i set the Experimental settings 
 
 The default name of the vagrantfile is set to Vagrantfile-latest.rb. 
 
+It is very important to close the terminal. Otherwise the settings are not loaded !
+
 ### Windows 
 ```shell
 setx VAGRANT_CWD "C:\Users\ [your username]  "
 setx VAGRANT_VMWARE_CLONE_DIRECTORY "x:\Directory of your choice where virtual machines should be stored"
+setx VAGRANT_HOME "x:\Directory of your choice where Vagrant stores the settings and downloaded boxes"
 exit
 ```
 The VAGRANT_CWD is the location where VAGRANT searches for the vagrantfile (the configuration file for Vagrant). 
@@ -87,11 +84,21 @@ More information at [Vagrant Docs](https://developer.hashicorp.com/vagrant/docs/
 ## [Step 5] Initialization (Windows/MACos)
 
 ```shell
+del %userprofile%\Vagrantfile-latest.rb
 vagrant init
 exit
 ```
 
-## [Step 6] Replace Vagrantfile
+## [Step 6] VMware Desktop Plugin installation (Windows/MACos)
+
+```shell
+vagrant plugin install vagrant-vmware-desktop
+exit
+```
+Terminal must be closed to load the environment variables
+
+
+## [Step 7] Replace Vagrantfile
 
 Download [My Custom](https://github.com/jatutert/Vagrant/blob/main/Vagrantfile/VirtualBox-WorkstatPRO/Latest/Vagrantfile-latest.rb) Vagrantfile.
 
@@ -122,20 +129,46 @@ exit
 ! DON'T FORGET ! 
 Store the custom vagrantfile (Vagrantfile-latest.rb) in ~/vagrant.d/
 
-## [Step 7] Adding the boxes (Windows/MACos)
+## [Step 8] Check Vagrant
+
+```shell
+vagrant global-status
+exit
+```
+The message should be: 
+
+There are no active Vagrant environments on this computer! Or,
+
+you haven't destroyed and recreated Vagrant environments that were
+
+started with an older version of Vagrant. 
+
+## [Step 9] Adding Linux boxes (Windows/MACos)
 
 Start terminal 
 
 ```shell
 vagrant box add gusztavvargadr/ubuntu-server-2404-lts --clean --provider vmware_desktop
+vagrant box add gusztavvargadr/ubuntu-desktop-2404-lts --clean --provider vmware_desktop
+exit
+```
+
+The Linux boxes use about 4 gigabyte of diskspace per box. 
+
+## [Step 10] Adding Windows boxes (Windows/MACos)
+
+Start terminal 
+
+```shell
 vagrant box add gusztavvargadr/windows-server-2022-standard --clean --provider vmware_desktop
 vagrant box add gusztavvargadr/windows-10 --clean --provider vmware_desktop
 vagrant box add gusztavvargadr/windows-11 --clean --provider vmware_desktop
 exit
 ```
+
+Each box takes about 5 to 10 minutes to download and install ! Time for a drink .. or snack .. or both ! 
+
 The Windows boxes use about 15 gigabyte of diskspace per box. 
-The Linux box uses about 4 gigabyte of diskspace.
-About 35 gigabytes of disk space is thus necessary for all boxes.
 
 ## Start the fun !
 
