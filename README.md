@@ -214,23 +214,40 @@ vagrant up W10-ENT-D-B-XV-L001
 
 Powershell 7 can be installed within this Windows 10 Enterprise virtual machine.
 
-Right click on the START button and select Powershell (Admin) 
+Go to VMWare Workstation and login with the user vagrant and password vagrant
+
+Right click on the START button and select Windows Powershell(Admin) 
 
 ```shell
 cmd
 winget update
 Y
 winget install Microsoft.PowerShell
+winget install Microsoft.DotNet.DesktopRuntime.8
 winget install Microsoft.WindowsTerminal
+winget install Microsoft.VisualStudio.Code
+winget install GNU.Nano
 exit
 exit
 ```
-
 
 ### Starting the Windows Server 2022 Standard virtual machine 
 
 ```shell
 vagrant up W22-STD-S-B-GR-L001
+```
+
+Powershell 7 can also be installed within the Windows Server 2022 Standard virtual machine. 
+
+Follow the instructions as described above under Windows 10.
+
+## SSH into the virtual macine 
+
+For Example: 
+
+```shell
+vagrant ssh W10-ENT-D-B-XV-L001
+vagrant ssh W22-STD-S-B-GR-L001
 ```
 
 ## Shutting down
@@ -240,6 +257,15 @@ For Example:
 ```shell
 vagrant halt W10-ENT-D-B-XV-L001
 vagrant halt W22-STD-S-B-GR-L001
+```
+
+## Remove Virtual machine 
+
+For Example: 
+
+```shell
+vagrant halt W10-ENT-D-B-XV-L001
+vagrant destroy W10-ENT-D-B-XV-L001 --force
 ```
 
 ## More Info
