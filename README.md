@@ -212,6 +212,21 @@ Want to use Cockpit ? The go to https://xxx.xxx.xxx.xxx:1234 (use the ip address
 vagrant up W10-ENT-D-B-XV-L001
 ```
 
+Powershell 7 can be installed within this Windows 10 Enterprise virtual machine.
+
+Right click on the START button and select Powershell (Admin) 
+
+```shell
+cmd
+winget update
+Y
+winget install Microsoft.PowerShell
+winget install Microsoft.WindowsTerminal
+exit
+exit
+```
+
+
 ### Starting the Windows Server 2022 Standard virtual machine 
 
 ```shell

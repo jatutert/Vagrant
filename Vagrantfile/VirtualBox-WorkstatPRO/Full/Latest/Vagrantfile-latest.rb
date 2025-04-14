@@ -1331,7 +1331,8 @@ Vagrant.configure("2") do |config|
 			#
 			if machine[:os] == "windows" && machine[:osedition] == "desktop"
 				#	Installatie WinGET
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/asheroto-412-winget-install.ps1"
+				#	winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/asheroto-412-winget-install.ps1"
+				winnode.vm.provision "shell", path: "https://github.com/asheroto/winget-install/releases/download/5.0.7/winget-install.ps1"
 				#	Stoppen en disabelen services
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V002.ps1"
 			end
