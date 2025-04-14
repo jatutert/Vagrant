@@ -160,9 +160,9 @@ The Linux boxes use about 4 gigabyte of diskspace per box.
 Start terminal 
 
 ```shell
-vagrant box add gusztavvargadr/windows-server-2022-standard --clean --provider vmware_desktop
-vagrant box add gusztavvargadr/windows-10 --clean --provider vmware_desktop
-vagrant box add gusztavvargadr/windows-11 --clean --provider vmware_desktop
+vagrant box add xenov/windows-10 --clean --architecture amd64 --provider vmware_desktop --box-version 2202.1740574724
+vagrant box add gusztavvargadr/windows-11 --clean --architecture amd64 --provider vmware_desktop
+vagrant box add gusztavvargadr/windows-server-2022-standard --clean --architecture amd64 --provider vmware_desktop --box-version 2102.0.2503
 exit
 ```
 
@@ -206,16 +206,16 @@ Use pwsh to start Microsoft Powershell 7.5.x within the box.
 
 Want to use Cockpit ? The go to https://xxx.xxx.xxx.xxx:1234 (use the ip address from ETH0:)
 
-### Starting the Windows 10 Enterprise virtual machine (replace W10 with W11 for Windows 11) 
+### Starting the Windows 10 Enterprise virtual machine
 
 ```shell
-vagrant up W10-ENT-D-EVAL-BV1
+vagrant up W10-ENT-D-B-XV-L001
 ```
 
 ### Starting the Windows Server 2022 Standard virtual machine 
 
 ```shell
-vagrant up W22-STD-S-EVAL-BV1
+vagrant up W22-STD-S-B-GR-L001
 ```
 
 ## Shutting down
@@ -223,7 +223,8 @@ vagrant up W22-STD-S-EVAL-BV1
 For Example: 
 
 ```shell
-vagrant halt U24-LTS-S-DCKR-001
+vagrant halt W10-ENT-D-B-XV-L001
+vagrant halt W22-STD-S-B-GR-L001
 ```
 
 ## More Info

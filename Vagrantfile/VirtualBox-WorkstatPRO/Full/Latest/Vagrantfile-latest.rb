@@ -20,21 +20,42 @@ Windows boxes only run with Vagrant version 2.4.0 (security error with Vagrant v
 Legenda Boxes:
 
 Linux
+=============================================================
 
-Distro / Versie / LTS
+ALPINE
+A19
+A22
+
+Debian
+D19
 
 Ubuntu
-U20-LTS		=	20.04 LTS
-U22-LTS		=	22.04 LTS
-U24-LTS		=	24.04 LTS
+U20			=	Ubuntu 20.04.x LTS
+U22			=	Ubuntu 22.04.x LTS
+U24			=	Ubuntu 24.04.x LTS
+
+Non-LTS		=	10
+LTS			=	LTS
 
 D			=	Desktop
 S			=	Server
+
+H		provider	Microsoft Hyper-V
+D		provider	Docker
+O		provider	Oracle Virtualbox
+B		provider	VMWare Workstation / Fusion PRO
+
+AS	=	Alvistack Box
+GC 	= 	Generic Box
+GR 	= 	Gusztavvargadr Box
+MN 	= 	Maroskukan Box
 
 DBMS		=	Database Management System (DBMS)
 WSRV		=	Webserver
 
 Windows
+==============================================================
+
 W10			=	Windows 10
 W11			=	Windows 11
 W19			=	Windows Server 2019
@@ -48,24 +69,23 @@ HME			=	Home
 PRO			=	PRO
 PED			=	PRO Education
 
+D			=	Desktop
+S			=	Server
 
-POV		provider	Oracle Virtualbox
-BCV		provider	VMWare Workstation / Fusion PRO
-PDR		provider	Docker
-PMH		provider	Microsoft Hyper-V
-
+H		provider	Microsoft Hyper-V
+D		provider	Docker
+O		provider	Oracle Virtualbox
+B		provider	VMWare Workstation / Fusion PRO
 
 AS	=	Alvistack Box
 GC 	= 	Generic Box
 GR 	= 	Gusztavvargadr Box
 MN 	= 	Maroskukan Box
 
-
 S		Small			2 GB
 M		Medium			4 GB
 L		Large			8 GB
 XL		Extra Large		16 GB
-
 
 A	=	Ansible
 D	=	Docker-CE en Docker Compose 
@@ -77,7 +97,7 @@ K	=	Kubernetes
 # ############################################ [Vullen Variabelen] ##########################################
 #
 #	Variable versie Vagrantfile 
-versie_vagrantfile = "2025-04-11"
+versie_vagrantfile = "2025-04-14"
 #
 #
 #	Variabele huidige datum
@@ -112,8 +132,8 @@ linux_machines=[
 	#	Provider: VMware
 	#
 	{
-		:hostname => "U20-LTS-S-BCV-S-001",
-		:weergavenaam => "U20-LTS-S-BCV-S-001",
+		:hostname =>		"U20-LTS-S-B-GC-S001",
+		:weergavenaam =>	"U20-LTS-S-B-GC-S001",
 		:box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -123,8 +143,8 @@ linux_machines=[
 		:cpu => 2,
 	},
 	{
-		:hostname => "U20-LTS-S-BCV-M-001",
-		:weergavenaam => "U20-LTS-S-BCV-M-001",
+		:hostname =>		"U20-LTS-S-B-GC-M001",
+		:weergavenaam =>	"U20-LTS-S-B-GC-M001",
 		:box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -134,8 +154,8 @@ linux_machines=[
 		:cpu => 2,
 	},
 	{
-		:hostname => "U20-LTS-S-BCV-L-001",
-		:weergavenaam => "U20-LTS-S-BCV-L-001",
+		:hostname =>		"U20-LTS-S-B-GC-L001",
+		:weergavenaam =>	"U20-LTS-S-B-GC-L001",
 		:box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -145,8 +165,8 @@ linux_machines=[
 		:cpu => 2,
 	},
 	{
-		:hostname => "U20-LTS-S-BCV-XL-001",
-		:weergavenaam => "U20-LTS-S-BCV-XL-001",
+		:hostname =>		"U20-LTS-S-B-GC-XL01",
+		:weergavenaam =>	"U20-LTS-S-B-GC-XL01",
 		:box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -161,8 +181,8 @@ linux_machines=[
 	#	Provider VMware
 	#
 	{
-		:hostname => "U22-LTS-S-BCV-S-001",
-		:weergavenaam => "U22-LTS-S-BCV-S-001",
+		:hostname =>		"U22-LTS-S-B-GC-S001",
+		:weergavenaam =>	"U22-LTS-S-B-GC-S001",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -172,8 +192,8 @@ linux_machines=[
 		:cpu => 2,
 	},
 	{
-		:hostname => "U22-LTS-S-BCV-M-001",
-		:weergavenaam => "U22-LTS-S-BCV-M-001",
+		:hostname =>		"U22-LTS-S-B-GC-M001",
+		:weergavenaam =>	"U22-LTS-S-B-GC-M001",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -183,8 +203,8 @@ linux_machines=[
 		:cpu => 2,
 	},	
 	{
-		:hostname => "U22-LTS-S-BCV-L-001",
-		:weergavenaam => "U22-LTS-S-BCV-L-001",
+		:hostname =>		"U22-LTS-S-B-GC-L001",
+		:weergavenaam =>	"U22-LTS-S-B-GC-L001",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -194,8 +214,8 @@ linux_machines=[
 		:cpu => 2,
 	},
 	{
-		:hostname => "U22-LTS-S-BCV-XL-001",
-		:weergavenaam => "U22-LTS-S-BCV-XL-001",
+		:hostname =>		"U22-LTS-S-B-GC-XL01",
+		:weergavenaam =>	"U22-LTS-S-B-GC-XL01",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "desktop",
@@ -208,8 +228,8 @@ linux_machines=[
 	#	Docker Demo 
 	#
 	{
-		:hostname => "ulx-s-2204-l-d-001",
-		:weergavenaam => "DEMO-Docker-CE",
+		:hostname =>		"U22-LTS-S-B-GC-LDD1",
+		:weergavenaam =>	"U22-LTS-S-B-GC-LDD1",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -222,8 +242,8 @@ linux_machines=[
 	# 	Kubernetes MiniKube K8S demo 
 	#
 	{
-		:hostname => "ulx-s-2204-xl-k-001",
-		:weergavenaam => "DEMO-K8S",
+		:hostname =>		"U22-LTS-S-B-GC-XLK1",
+		:weergavenaam => 	"U22-LTS-S-B-GC-XLK1",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -238,8 +258,8 @@ linux_machines=[
 	#	Controller 001
 	#
 	{
-		:hostname => "ulx-s-2204-l-a-001",
-		:weergavenaam => "DEMO-A-Controller",
+		:hostname =>		"U22-LTS-S-B-GC-LAC1",
+		:weergavenaam =>	"U22-LTS-S-B-GC-LAC1",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "desktop",
@@ -252,8 +272,8 @@ linux_machines=[
 	#	Slave #1 (010)
 	#
 	{
-		:hostname => "ulx-s-2204-l-a-010",
-		:weergavenaam => "DEMO-A-TARGET-001",
+		:hostname =>		"U22-LTS-S-B-GC-LAS1",
+		:weergavenaam =>	"U22-LTS-S-B-GC-LAS1",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "desktop",
@@ -266,8 +286,8 @@ linux_machines=[
 	#	Slave #2 (011) 
 	#
 	{
-		:hostname => "ulx-s-2204-l-a-011",
-		:weergavenaam => "DEMO-A-TARGET-002",
+		:hostname =>		"U22-LTS-S-B-GC-LAS2",
+		:weergavenaam =>	"U22-LTS-S-B-GC-LAS2",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "desktop",
@@ -282,48 +302,48 @@ linux_machines=[
 	#	Provider VMware
 	#
 	{
-		:hostname => 		"U24-LTS-S-BCV-S-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-S-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			2048,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-S001",
+		:weergavenaam => 	"U24-LTS-S-B-GR-S001",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 2048,
+		:cpu => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-BCV-M-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-M-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			4096,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-M001",
+		:weergavenaam => 	"U24-LTS-S-B-BR-M001",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 4096,
+		:cpu => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-BCV-L-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-L-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-L001",
+		:weergavenaam => 	"U24-LTS-S-B-GR-L001",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-BCV-XL-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-XL-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"desktop",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			16384,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-XL01",
+		:weergavenaam => 	"U24-LTS-S-B-GR-XL01",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "desktop",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 16384,
+		:cpu => 2,
 	},
 	#
 	#
@@ -332,73 +352,73 @@ linux_machines=[
 	#	DBMS
 	#
 	{
-		:hostname => 		"U24-LTS-S-DBMS-S-001",
-		:weergavenaam => 	"U24-LTS-S-DBMS-S-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			2048,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-SD01",
+		:weergavenaam => 	"U24-LTS-S-B-GR-SD01",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 2048,
+		:cpu => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-DBMS-L-001",
-		:weergavenaam => 	"U24-LTS-S-DBMS-L-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			4096,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-LD01",
+		:weergavenaam => 	"U24-LTS-S-B-GR-LD01",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 4096,
+		:cpu => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-DBMS-XL-001",
-		:weergavenaam => 	"U24-LTS-S-DBMS-XL-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-XLD1",
+		:weergavenaam => 	"U24-LTS-S-B-GR-XLD1",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	#
 	#	WEBServer
 	#
 	{
-		:hostname => 		"U24-LTS-S-WSRV-S-001",
-		:weergavenaam => 	"U24-LTS-S-WSRV-S-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			2048,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-SWS1",
+		:weergavenaam => 	"U24-LTS-S-B-GR-SWS1",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 2048,
+		:cpu => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-WSRV-L-001",
-		:weergavenaam => 	"U24-LTS-S-WSRV-L-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			4096,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-LWS1",
+		:weergavenaam => 	"U24-LTS-S-B-GR-LWS1",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 4096,
+		:cpu => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-WSRV-XL-001",
-		:weergavenaam => 	"U24-LTS-S-WSRV-XL-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-XLW1",
+		:weergavenaam => 	"U24-LTS-S-B-GR-XLW1",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	#
 	#
@@ -406,15 +426,15 @@ linux_machines=[
 	#
 	#
 	{
-		:hostname 		=> "U24-LTS-S-DCKR-001",
-		:weergavenaam 	=> "U24-LTS-S-DCKR-001",
-		:box 			=> "gusztavvargadr/ubuntu-server-2404-lts",
-		:os 			=> "ubuntu",
-		:osedition 		=> "server",
-		:osversie 		=> 2404, 
-		:aanbieder 		=> "VMware",
-		:ram 			=> 8192,
-		:cpu 			=> 2,
+		:hostname => 		"U24-LTS-S-B-GR-LDD1",
+		:weergavenaam => 	"U24-LTS-S-B-GR-LDD1",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	#
 	#
@@ -422,15 +442,15 @@ linux_machines=[
 	#
 	#
 	{
-		:hostname => 		"U24-LTS-S-MK8S-001",
-		:weergavenaam => 	"U24-LTS-S-MK8S-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-LMD1",
+		:weergavenaam => 	"U24-LTS-S-B-GR-LMD1",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	#
 	#
@@ -441,29 +461,40 @@ linux_machines=[
 	#
 	#
 	{
-		:hostname => 		"U24-LTS-S-IACAM-001",
-		:weergavenaam => 	"U24-LTS-S-IACAM-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-LAC1",
+		:weergavenaam => 	"U24-LTS-S-B-GR-LAC1",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	#
 	#	SLAVE
 	#
 	{
-		:hostname => 		"U24-LTS-S-IACAS-001",
-		:weergavenaam => 	"U24-LTS-S-IACAS-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2404, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname => 		"U24-LTS-S-B-GR-LAS1",
+		:weergavenaam => 	"U24-LTS-S-B-GR-LAS1",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
+	},
+	{
+		:hostname => 		"U24-LTS-S-B-GR-LAS2",
+		:weergavenaam => 	"U24-LTS-S-B-GR-LAS2",
+		:box => "gusztavvargadr/ubuntu-server-2404-lts",
+		:os => "ubuntu",
+		:osedition => "server",
+		:osversie => 2404, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	}
 	#
 	#
@@ -477,7 +508,7 @@ windows_machines=[
 	#
 	#
 	#	################################
-	#	Windows 10 Enterprise Evaluation
+	#	Windows 10
 	#	################################
 	#
 	#
@@ -485,6 +516,8 @@ windows_machines=[
 	#	gusztavvargadr
 	#	##############
 	#
+	#
+	#	Windows 10 Enterprise (Evaluation) 
 	#
 	#	{
 		#	:hostname => 		"W10-ENT-D-EVAL-VB1",
@@ -498,35 +531,76 @@ windows_machines=[
 		#	:cpu =>	 			2,
 	#	},
 	{
-		:hostname 		=> "W10-ENT-D-EVAL-BV1",
-		:weergavenaam 	=> "W10-ENT-D-EVAL-BV1",
-		:box 			=> "gusztavvargadr/windows-10",
-		:os 			=> "windows",
-		:osedition 		=> "desktop",
-		:osversie 		=> 10, 
-		:aanbieder 		=> "VMware",
-		:ram 			=> 8192,
-		:cpu 			=> 2,
+		:hostname 		=> "W10-ENT-D-B-GR-0001",
+		:weergavenaam 	=> "W10-ENT-D-B-GR-0001",
+		:box => "gusztavvargadr/windows-10",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 10, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	#
+	#	Windows 10 Enterprise (Evaluation)
 	#	Introductie Infrastucturen
-	#	Windows 10 Client
 	#
 	{
-		:hostname => 		"W10-ENT-D-OSTKT-CLNT",
-		:weergavenaam => 	"W10-ENT-D-OSTKT-CLNT",
-		:box => 			"gusztavvargadr/windows-10",
-		:os => 				"windows",
-		:osedition => 		"desktop",
-		:osversie => 		10, 
-		:aanbieder => 		"VMware",
-		:ram => 			4096,
-		:cpu => 			2,
+		:hostname => 		"W10-ENT-D-B-GR-OST1",
+		:weergavenaam => 	"W10-ENT-D-B-GR-OST1",
+		:box => "gusztavvargadr/windows-10",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 10, 
+		:aanbieder => "VMware",
+		:ram => 4096,
+		:cpu => 2,
+	},
+	#
+	#
+	#	##############
+	#	Xenov
+	#	##############
+	#
+	#
+	#	Windows 10 Enterprise (Evaluation)
+	#
+	#
+	#
+	#	box-version 2202.1740574724
+	#	TEST 14/04/2025
+	#	PASS
+	#
+	{
+		:hostname 		=> "W10-ENT-D-B-XV-L001",
+		:weergavenaam 	=> "W10-ENT-D-B-XV-L001",
+		:box => "xenov/windows-10",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 10, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
+	},
+	#
+	#	Windows 10 Enterprise (Evaluation)
+	#	Introductie Infrastucturen
+	#
+	{
+		:hostname => 		"W10-ENT-D-B-XV-OST1",
+		:weergavenaam => 	"W10-ENT-D-B-XV-OST1",
+		:box => "xenov/windows-10",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 10, 
+		:aanbieder => "VMware",
+		:ram => 4096,
+		:cpu => 2,
 	},
 	#
 	#
 	#	################################
-	#	Windows Server 2019 DataCenter Evaluation
+	#	Windows Server 2019
 	#	################################
 	#
 	#
@@ -534,6 +608,8 @@ windows_machines=[
 	#	gusztavvargadr
 	#	##############
 	#
+	#
+	#	Windows Server 2019 Standard Edition
 	#
 	#	{
 		#	:hostname => 		"W19-STD-S-EVAL-VB1",
@@ -547,20 +623,20 @@ windows_machines=[
 		#	:cpu => 			2,
 	#	},
 	{
-		:hostname => 		"W19-STD-S-EVAL-BV1",
-		:weergavenaam => 	"W19-STD-S-EVAL-BV1",
-		:box => 			"gusztavvargadr/windows-server-2019-standard",
-		:os => 				"windows",
-		:osedition => 		"server",
-		:osversie => 		19, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname => 		"W19-STD-S-B-GR-0001",
+		:weergavenaam => 	"W19-STD-S-B-GR-0001",
+		:box => "gusztavvargadr/windows-server-2019-standard",
+		:os => "windows",
+		:osedition => "server",
+		:osversie => 19, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	#
 	#
 	#	################################
-	#	Windows 11 Enterprise Evaluation
+	#	Windows 11
 	#	################################
 	#
 	#
@@ -568,6 +644,8 @@ windows_machines=[
 	#	gusztavvargadr
 	#	##############
 	#
+	#
+	#	Windows 11 Enterprise
 	#
 	#	{
 		#	:hostname => 		"W11-ENT-D-EVAL-VB1",
@@ -581,35 +659,35 @@ windows_machines=[
 		#	:cpu => 			2,
 	#	},
 	{
-		:hostname 		=> "W11-ENT-D-EVAL-BV1",
-		:weergavenaam 	=> "W11-ENT-D-EVAL-BV1",
-		:box 			=> "gusztavvargadr/windows-11",
-		:os 			=> "windows",
-		:osedition 		=> "desktop",
-		:osversie 		=> 11, 
-		:aanbieder 		=> "VMware",
-		:ram 			=> 8192,
-		:cpu 			=> 2,
+		:hostname 		=> "W11-ENT-D-B-GR-0001",
+		:weergavenaam 	=> "W11-ENT-D-B-GR-0001",
+		:box => "gusztavvargadr/windows-11",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 11, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	#
+	#	Windows 11 Enterprise
 	#	Introductie Infrastucturen
-	#	Windows 11 Client
 	#
 	{
-		:hostname => 		"W11-ENT-D-OSTKT-CLNT",
-		:weergavenaam => 	"W11-ENT-D-OSTKT-CLNT",
-		:box => 			"gusztavvargadr/windows-11",
-		:os => 				"windows",
-		:osedition => 		"desktop",
-		:osversie => 		11, 
-		:aanbieder => 		"VMware",
-		:ram => 			4096,
-		:cpu => 			2,
+		:hostname => 		"W11-ENT-D-B-GR-OST1",
+		:weergavenaam => 	"W11-ENT-D-B-GR-OST1",
+		:box => "gusztavvargadr/windows-11",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 11, 
+		:aanbieder => "VMware",
+		:ram => 4096,
+		:cpu => 2,
 	},
 	#
 	#
 	#	################################
-	#	Windows Server 2022 Standard Evaluation
+	#	Windows Server 2022
 	#	################################
 	#
 	#
@@ -617,6 +695,8 @@ windows_machines=[
 	#	gusztavvargadr
 	#	##############
 	#
+	#
+	#	Windows Server 2022 Standard Edition
 	#
 	#	{
 		#	:hostname => 		"W22-STD-S-EVAL-VB1",
@@ -629,31 +709,68 @@ windows_machines=[
 		#	:ram => 			8192,
 		#	:cpu => 			2,
 	#	},
+		#
+		#
+		#	box-version 2102.0.2503
+		#
+		#	TEST 14/04/2025
+		#	FAIL
+		#	WinGET Installation stopped / VM is working !
+		#
+		#	TEST 14/04/2025
+		#	Script update naar versie 5.0.7 
+		#	PASS
+		#
 	{
-		:hostname => 		"W22-STD-S-EVAL-BV1",
-		:weergavenaam => 	"W22-STD-S-EVAL-BV1",
-		:box => 			"gusztavvargadr/windows-server-2022-standard",
-		:os => 				"windows",
-		:osedition => 		"server",
-		:osversie => 		22, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
+		:hostname => 		"W22-STD-S-B-GR-L001",
+		:weergavenaam => 	"W22-STD-S-B-GR-L001",
+		:box => "gusztavvargadr/windows-server-2022-standard",
+		:os => "windows",
+		:osedition => "server",
+		:osversie => 22, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	},
 	#
+	#	Windows Server 2022 Standard Edition
 	#	Introductie Infrastructuren
-	#	Windows Server 2022 Router 
 	#
 	{
-		:hostname => 		"W22-STD-S-OSTKT-RTR",
-		:weergavenaam => 	"W22-STD-S-OSTKT-RTR",
-		:box => 			"gusztavvargadr/windows-server-2022-standard",
-		:os => 				"windows",
-		:osedition => 		"server",
-		:osversie => 		22, 
-		:aanbieder => 		"VMware",
-		:ram => 			4096,
-		:cpu => 			2,
+		:hostname => 		"W22-STD-S-B-GR-MRT1",
+		:weergavenaam => 	"W22-STD-S-B-GR-MRT1",
+		:box => "gusztavvargadr/windows-server-2022-standard",
+		:os => "windows",
+		:osedition => "server",
+		:osversie => 22, 
+		:aanbieder => "VMware",
+		:ram => 4096,
+		:cpu => 2,
+	},
+	#
+	#
+	#	##############
+	#	Xenov
+	#	##############
+	#
+	#
+	#	Windows Server 2022
+	#
+	#	Box-version 2022.1740574721
+	#	TEST 14/04/2025
+	#	FAIL
+	#	WinRM error message 
+	#
+	{
+		:hostname => 		"W22-STD-S-B-XV-L001",
+		:weergavenaam => 	"W22-STD-S-B-XV-L001",
+		:box => "xenov/windows-server-2022",
+		:os => "windows",
+		:osedition => "server",
+		:osversie => 22, 
+		:aanbieder => "VMware",
+		:ram => 8192,
+		:cpu => 2,
 	}
 	#
 	#
@@ -846,73 +963,156 @@ Vagrant.configure("2") do |config|
 			if machine[:aanbieder] == "VMware"
 				ulxnode.vm.provider "vmware_desktop" do |ulxnode_pvd_vmwvm|
 					#
+					#	[1]	Algemene settings aanpassen 
+					#
 					ulxnode_pvd_vmwvm.gui = true
 					ulxnode_pvd_vmwvm.linked_clone = false
 					#
 					ulxnode_pvd_vmwvm.cpus = "#{machine[:cpu]}"
 					ulxnode_pvd_vmwvm.memory = "#{machine[:ram]}"
-					# vmwvm.nat_device 	= "VMnet8"
 					#
-					# Aanpassen VMware Workstation/Fusion Pro VMX 
+					#	Buiten gebruik
+					#	vmwvm.nat_device 	= "VMnet8"
+					#
+					#
+					# 	[2]	Aanpassen VMware Workstation/Fusion Pro VMX 
+					#
 					#
 					ulxnode_pvd_vmwvm.vmx["tools.syncTime"]	= "TRUE"
 					ulxnode_pvd_vmwvm.vmx["displayName"]	= "#{machine[:hostname]}"
 					ulxnode_pvd_vmwvm.vmx["annotation"]		= "#{machine[:os]} #{machine[:osversie]} |0D|0AUsed box is #{machine[:box]} |0D|0ACreated on #{cur_date} by Vagrant |0D|0AUsername/Password = vagrant |0D|0AUse VAGRANT up #{machine[:hostname]} to boot this virtual machine"
 					#
-					# Ansible Demo
 					#
-					# Aanpassen VMX naar juiste VMNet
+					#	[3]	Aanpassen VMX naar juiste VMNet
 					#
-					if machine[:hostname] == "U24-LTS-S-IACAM-001"
+					#
+					# 	[3a]	Ansible Demo
+					#
+					if machine[:hostname] == "U22-LTS-S-B-GC-LAC1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
+					end 
+					if machine[:hostname] == "U22-LTS-S-B-GC-LAS1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
+					end 
+					if machine[:hostname] == "U22-LTS-S-B-GC-LAS2"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
+					end 
+					if machine[:hostname] == "U24-LTS-S-B-GC-LAC1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
+					end 
+					if machine[:hostname] == "U24-LTS-S-B-GC-LAS1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
+					end 
+					if machine[:hostname] == "U24-LTS-S-B-GC-LAS2"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
 					end 
 					#
-					if machine[:hostname] == "U24-LTS-S-IACAS-001"
+					#	[3b]	DOCKER Demo
+					#
+					if machine[:hostname] == "U22-LTS-S-B-GR-LDD1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
+					end 
+					if machine[:hostname] == "U24-LTS-S-B-GR-LDD1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
 					end 
 					#
-					# DOCKER Demo
+					#	[3c]	MiniKube Demo
 					#
-					# Aanpassen VMX naar juiste VMNet
-					#
-					if machine[:hostname] == "U24-LTS-S-DCKR-001"
+					if machine[:hostname] == "U22-LTS-S-B-GR-LMD1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
+					end 
+					if machine[:hostname] == "U24-LTS-S-B-GR-LMD1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
 					end 
 					#
+					#	[3d]	Introductie Intrastructuren
 					#
-					# MiniKube Demo
+					#	[3d1]	DBMS
 					#
-					# Aanpassen VMX naar juiste VMNet
-					#
-					if machine[:hostname] == "U24-LTS-S-MK8S-001"
+					if machine[:hostname].include? "U22-LTS-S-B-GR-SD01"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end 
-					#
-					#	Introductie Intrastructuren
-					#
-					#	Aanpassen VMX naar juist VMNet 
-					#
-					if machine[:hostname].include? "U24-LTS-S-DBMS"
-					#	if machine[:hostname] == "U24-LTS-S-DBMS-001"
+					if machine[:hostname].include? "U22-LTS-S-B-GR-LD01"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
+					end 
+					if machine[:hostname].include? "U22-LTS-S-B-GR-XLD1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
+					end 
+					if machine[:hostname].include? "U24-LTS-S-B-GR-SD01"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
+					end 
+					if machine[:hostname].include? "U24-LTS-S-B-GR-LD01"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
+					end
+					if machine[:hostname].include? "U24-LTS-S-B-GR-XLD1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end 
 					#
-					if machine[:hostname].include? "U24-LTS-S-WSRV"
-					#	if machine[:hostname] == "U24-LTS-S-WSRV-001"
+					#	[3d2]	WebServer
+					#
+					if machine[:hostname].include? "U22-LTS-S-B-GR-SWS1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end 
+					if machine[:hostname].include? "U22-LTS-S-B-GR-LWS1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
+					end
+					if machine[:hostname].include? "U22-LTS-S-B-GR-XLW1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
+					end
+					if machine[:hostname].include? "U24-LTS-S-B-GR-SWS1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
+					end 
+					if machine[:hostname].include? "U24-LTS-S-B-GR-LWS1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
+					end 
+					if machine[:hostname].include? "U24-LTS-S-B-GR-XLW1"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
+						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
+					end 
+					#
 					#
 				end
 			end	
@@ -1140,7 +1340,11 @@ Vagrant.configure("2") do |config|
 			#
 			if machine[:os] == "windows" && machine[:osedition] == "server"
 				#	Installatie WinGET
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/asheroto-412-winget-install.ps1"
+				#
+				# 14/04/2025 Windows Server 2022 gusztavvargadr/windows-server-2022 geeft foutmelding installatie WinGET versie 4.12
+				# 14/04/2025 Link aangepast naar versie 5.0.7 / Nog niet getest
+				#
+				winnode.vm.provision "shell", path: "https://github.com/asheroto/winget-install/releases/download/5.0.7/winget-install.ps1"
 				#	Stoppen en disabelen services
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V002.ps1"
 			end
