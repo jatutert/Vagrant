@@ -1327,14 +1327,21 @@ Vagrant.configure("2") do |config|
 				end
 			end	
 			#
-			#	Windows Desktop initialisatie
+			#	Windows Desktop Out of the Box (OOBE) Scripts
 			#
 			if machine[:os] == "windows" && machine[:osedition] == "desktop"
-				#	Installatie WinGET
-				#	winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/asheroto-412-winget-install.ps1"
+				#	Windows Services Stoppen en disabelen (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V004.ps1"
+				#	Windows Policy en Registry Instellingen doen (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Registry-Policy-V001.ps1"
+				#	Windows SSH Client / SSH Server installatie (JT) 
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Config-SSH-V002.ps1"
+				#	Installatie WinGET (Asheroto) 
 				winnode.vm.provision "shell", path: "https://github.com/asheroto/winget-install/releases/download/5.0.7/winget-install.ps1"
-				#	Stoppen en disabelen services
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V002.ps1"
+				#	WinGET (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-V001.ps1"
+				#	Download Bestanden (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V001.ps1"
 			end
 			#
 			#	Windows Server initialisatie
