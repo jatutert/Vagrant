@@ -97,7 +97,7 @@ K	=	Kubernetes
 # ############################################ [Vullen Variabelen] ##########################################
 #
 #	Variable versie Vagrantfile 
-versie_vagrantfile = "2025-04-14"
+versie_vagrantfile = "2025-04-19"
 #
 #
 #	Variabele huidige datum
@@ -1354,9 +1354,16 @@ Vagrant.configure("2") do |config|
 				# 14/04/2025 Windows Server 2022 gusztavvargadr/windows-server-2022 geeft foutmelding installatie WinGET versie 4.12
 				# 14/04/2025 Link aangepast naar versie 5.0.7 / Nog niet getest
 				#
+				#	Windows Services Stoppen en disabelen (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V006.ps1"
+				#	Windows SSH Client / SSH Server installatie (JT) 
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Config-SSH-V003.ps1"
+				#	Installatie WinGET (Asheroto) 
 				winnode.vm.provision "shell", path: "https://github.com/asheroto/winget-install/releases/download/5.0.7/winget-install.ps1"
-				#	Stoppen en disabelen services
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V002.ps1"
+				#	WinGET Accept License Terms (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
+				#	Download Bestanden (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V001.ps1"
 			end
 			#
 			winnode.vm.provision "shell", privileged: "true", inline: <<-SHELL
