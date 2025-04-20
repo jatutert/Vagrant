@@ -97,8 +97,10 @@ K	=	Kubernetes
 # ############################################ [Vullen Variabelen] ##########################################
 #
 #	Variable versie Vagrantfile 
-versie_vagrantfile = "2025-04-19"
+versie_vagrantfile = "2025-04-20"
 #
+#	Variable auteur Vagrantfile 
+auteur_vagrantfile = "John Tutert"
 #
 #	Variabele huidige datum
 require 'date'
@@ -119,7 +121,7 @@ cur_date = Date.today
 #
 # ############################################ [Weergeven melding] ##########################################
 #
-puts "Using VAGRANTFILE version #{versie_vagrantfile} by John Tutert (for private or educational use only!)"
+puts "Using VAGRANTFILE version #{versie_vagrantfile} by #{auteur_vagrantfile} (for private or educational use only!)"
 #
 #
 # ############################################ [Declaratie Virtuele Machines] ##########################################
@@ -349,6 +351,8 @@ linux_machines=[
 	#
 	#	Introduction to Infrastructures 
 	#
+	#	Provider VMware
+	#
 	#	DBMS
 	#
 	{
@@ -424,6 +428,7 @@ linux_machines=[
 	#
 	#	DOCKER DEMO
 	#
+	#	Provider VMware
 	#
 	{
 		:hostname => 		"U24-LTS-S-B-GR-LDD1",
@@ -440,6 +445,7 @@ linux_machines=[
 	#
 	#	MiniKube DEMO
 	#
+	#	Provider VMware
 	#
 	{
 		:hostname => 		"U24-LTS-S-B-GR-LMD1",
@@ -456,6 +462,7 @@ linux_machines=[
 	#
 	#	ANSIBLE DEMO
 	#
+	#	Provider VMware
 	#
 	#	MASTER
 	#
@@ -519,6 +526,9 @@ windows_machines=[
 	#
 	#	Windows 10 Enterprise (Evaluation) 
 	#
+	#
+	#	Provider Oracle
+	#
 	#	{
 		#	:hostname => 		"W10-ENT-D-EVAL-VB1",
 		#	:weergavenaam => 	"W10-ENT-D-EVAL-VB1",
@@ -530,6 +540,9 @@ windows_machines=[
 		#	:ram => 			8192,
 		#	:cpu =>	 			2,
 	#	},
+	#
+	#	Provider VMware
+	#
 	{
 		:hostname 		=> "W10-ENT-D-B-GR-0001",
 		:weergavenaam 	=> "W10-ENT-D-B-GR-0001",
@@ -611,6 +624,9 @@ windows_machines=[
 	#
 	#	Windows Server 2019 Standard Edition
 	#
+	#
+	#	Provider Oracle
+	#
 	#	{
 		#	:hostname => 		"W19-STD-S-EVAL-VB1",
 		#	:weergavenaam => 	"W19-STD-S-EVAL-VB1",
@@ -622,6 +638,9 @@ windows_machines=[
 		#	:ram => 			8192,
 		#	:cpu => 			2,
 	#	},
+	#	
+	#	Provider VMware
+	#
 	{
 		:hostname => 		"W19-STD-S-B-GR-0001",
 		:weergavenaam => 	"W19-STD-S-B-GR-0001",
@@ -735,6 +754,7 @@ windows_machines=[
 	#
 	#	Windows Server 2022 Standard Edition
 	#	Introductie Infrastructuren
+	#	Router (RT)
 	#
 	{
 		:hostname => 		"W22-STD-S-B-GR-MRT1",
@@ -1336,14 +1356,16 @@ Vagrant.configure("2") do |config|
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Registry-Policy-V001.ps1"
 				#	Windows SSH Client / SSH Server installatie (JT) 
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Config-SSH-V003.ps1"
-				#	Installatie WinGET (Asheroto) 
-				winnode.vm.provision "shell", path: "https://github.com/asheroto/winget-install/releases/download/5.0.7/winget-install.ps1"
+				#	Installatie WinGET (Asheroto) versie 5.0.9 (17 april 2025) 
+				winnode.vm.provision "shell", path: "https://github.com/asheroto/winget-install/releases/download/5.0.9/winget-install.ps1"
 				#	WinGET Accept License Terms (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
 				#	WinGET Install Apps (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Winget-Install-APPS-V001.ps1"
 				#	Download Bestanden (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V001.ps1"
+				#	Installatie Applicaties (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Application-Install-V001.ps1"
 			end
 			#
 			#	Windows Server initialisatie
