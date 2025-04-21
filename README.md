@@ -175,15 +175,15 @@ The Windows boxes use about 15 gigabyte of diskspace per box.
 That was it then. You're all set with the installation and configuration of the environment. 
 Let's start the fun ! 
 
-### Ubuntu Linux
+### Ubuntu Server 24.04 LTS
 
-#### Starting the Ubuntu Server 24.04 LTS virtual machine with 16 GB of RAM (XL = 16 GB, L = 8 GB, M = 4 GB, S = 2 GB)
+#### Generic with 16 GB of RAM (XL = 16 GB, L = 8 GB, M = 4 GB, S = 2 GB)
 
 ```shell
 vagrant up U24-LTS-S-BCV-XL-001
 ```
 
-#### Starting the Ubuntu Server 24.04 LTS virtual machine with Docker
+#### Docker 
 
 ```shell
 vagrant up U24-LTS-S-DCKR-001
@@ -206,15 +206,13 @@ Use pwsh to start Microsoft Powershell 7.5.x within the box.
 
 Want to use Cockpit ? The go to https://xxx.xxx.xxx.xxx:1234 (use the ip address from ETH0:)
 
-### Windows
+### Windows 10 Enterprise
 
-#### Windows 10 Enterprise
+#### Generic with 8 GB of RAM (XL = 16 GB, L = 8 GB, M = 4 GB, S = 2 GB)
 
 ```shell
 vagrant up W10-ENT-D-B-XV-L001
 ```
-
-Powershell 7 can be installed within this Windows 10 Enterprise virtual machine.
 
 Go to VMWare Workstation and login with the user vagrant and password vagrant
 
@@ -234,6 +232,8 @@ exit
 ```
 
 ### Windows Server 2022 Standard
+
+#### Generic with 8 GB of RAM (XL = 16 GB, L = 8 GB, M = 4 GB, S = 2 GB)
 
 ```shell
 vagrant up W22-STD-S-B-GR-L001
