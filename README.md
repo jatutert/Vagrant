@@ -137,9 +137,9 @@ exit
 ```
 The message should be: 
 
-* There are no active Vagrant environments on this computer! 
+* There are no active Vagrant environments on this computer! *
 
-* Or, you haven't destroyed and recreated Vagrant environments that were started with an older version of Vagrant. 
+* Or, you haven't destroyed and recreated Vagrant environments that were started with an older version of Vagrant. * 
 
 ## [Step 9] Adding Linux boxes (Windows/MACos)
 
