@@ -126,7 +126,9 @@ exit
 del ~/vagrant.d/vagrantfil*.*
 exit
 ```
-! DON'T FORGET ! 
+
+**! DON'T FORGET !**
+
 Store the custom vagrantfile (Vagrantfile-latest.rb) in ~/vagrant.d/
 
 ## [Step 8] Check Vagrant
@@ -139,7 +141,7 @@ The message should be:
 
 *There are no active Vagrant environments on this computer!*
 
-Or, you haven't destroyed and recreated Vagrant environments that were started with an older version of Vagrant.
+*Or, you haven't destroyed and recreated Vagrant environments that were started with an older version of Vagrant.*
 
 ## [Step 9] Adding Linux boxes (Windows/MACos)
 
@@ -171,6 +173,7 @@ The Windows boxes use about 15 gigabyte of diskspace per box.
 ## Start the fun !
 
 That was it then. You're all set with the installation and configuration of the environment. 
+
 Let's start the fun ! 
 
 ### Ubuntu Server 24.04 LTS
