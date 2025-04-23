@@ -1362,9 +1362,9 @@ Vagrant.configure("2") do |config|
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
 				#	WinGET Install Apps (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Winget-Install-APPS-V001.ps1"
-				#	Download Bestanden (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V001.ps1"
-				#	Installatie Applicaties (JT)
+				#	Download Bestanden en CMD Scripts (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V002.ps1"
+				#	Installatie Applicaties (Powershell 7) (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Application-Install-V001.ps1"
 			end
 			#
@@ -1380,12 +1380,14 @@ Vagrant.configure("2") do |config|
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V006.ps1"
 				#	Windows SSH Client / SSH Server installatie (JT) 
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Config-SSH-V003.ps1"
-				#	Installatie WinGET (Asheroto) 
+				#	Installatie WinGET (Asheroto) versie 5.0.9 (17 april 2025) 
 				winnode.vm.provision "shell", path: "https://github.com/asheroto/winget-install/releases/download/5.0.7/winget-install.ps1"
 				#	WinGET Accept License Terms (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
 				#	Download Bestanden (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V001.ps1"
+				#	Installatie Applicaties (Powershell 7) (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Application-Install-V001.ps1"
 			end
 			#
 			winnode.vm.provision "shell", privileged: "true", inline: <<-SHELL
