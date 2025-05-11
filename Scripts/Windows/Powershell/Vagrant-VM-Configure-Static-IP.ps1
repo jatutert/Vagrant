@@ -10,7 +10,7 @@ $hostname = (Get-ComputerInfo).CsName
 if ($hostname -eq "DB01") {
     # Stel de netwerkadapter Ethernet1 in met een statisch IP-adres
     $interfaceAlias = "Ethernet1"
-    $ipAddress = "10.10.1.21"
+    $ipAddress = "10.1.10.21"
     $prefixLength = 24
     $defaultGateway = "10.1.10.1"
     $dnsServers = @("8.8.8.8", "8.8.4.4")
@@ -32,7 +32,7 @@ $hostname = (Get-ComputerInfo).CsName
 if ($hostname -eq "DC01") {
     # Stel de netwerkadapter Ethernet1 in met een statisch IP-adres
     $interfaceAlias = "Ethernet1"
-    $ipAddress = "10.10.1.11"
+    $ipAddress = "10.1.10.11"
     $prefixLength = 24
     $defaultGateway = "10.1.10.1"
     $dnsServers = @("8.8.8.8", "8.8.4.4")
