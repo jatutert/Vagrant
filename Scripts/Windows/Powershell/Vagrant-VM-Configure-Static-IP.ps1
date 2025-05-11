@@ -1,10 +1,21 @@
 #
+#	Vagrant Virtuele Windows Machine voorzien van Static IPV4 Adres voor Ethernet1 NetAdapter
+#	Created by John Tutert for TutSOFT
 #
-#	New-NetIPAddress -InterfaceAlias "Ethernet2" -IPAddress "192.168.1.100" -PrefixLength 24 -DefaultGateway "192.168.1.1"
+#	Datum 11 mei 2025
+#
+#	## LET OP ##
+#	VM heeft NetAdapter1 en NetAdapter2
+#	Alleen NetAdapter1 aanpassen naar Statisch IPv4 Adres
+#	NetAdapter2 NIET aanpassen anders werkt Vagrant WinRM Service niet meer
+#
+#	Changelog
+#
+#	V100	Basisversie
+#	V101	DB01 en DC01 
+#	V102	Opmerkingen NetAdapter1 en NetAdapter2
 #
 #
-
-
 # Controleer of de hostname gelijk is aan DB01
 $hostname = (Get-ComputerInfo).CsName
 if ($hostname -eq "DB01") {
