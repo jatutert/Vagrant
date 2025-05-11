@@ -94,13 +94,22 @@ K	=	Kubernetes
 =end
 #
 #
+=begin
+
+Changelog
+08/05/2025		Nieuwe structuur Vagrantfile
+10/05/2025		Nieuwe naamstructuur Variabelen + Netwerkconfigurie Netwerkkaart 2 van DC en DB Powershell
+
+=end
+#
+#
 # ############################################ [Vullen Variabelen] ##########################################
 #
 #	Variable versie Vagrantfile 
-versie_vagrantfile = "2025-04-20"
+VersieVagrantfile = "08-05-2025"
 #
 #	Variable auteur Vagrantfile 
-auteur_vagrantfile = "John Tutert"
+AuteurVagrantfile = "John Tutert"
 #
 #	Variabele huidige datum
 require 'date'
@@ -121,397 +130,590 @@ cur_date = Date.today
 #
 # ############################################ [Weergeven melding] ##########################################
 #
-puts "Using VAGRANTFILE version #{versie_vagrantfile} by #{auteur_vagrantfile} (for private or educational use only!)"
+puts "Using VAGRANTFILE version #{VersieVagrantfile} by #{AuteurVagrantfile} (for private or educational use only!)"
 #
 #
-# ############################################ [Declaratie Virtuele Machines] ##########################################
+#	#############################################################################################
+#	Declaratie Virtuele Machines
+#	#############################################################################################
+#
+#
+#	############################################
+#	Linux Virtuele Machines
+#	############################################
 #
 #
 linux_machines=[
 	#
+	#
+	#	############################################
+	#	Algemene Linux Virtuele Machines
+	#	############################################
+	#
+	#
+	#	############################################
+	#	Provider Oracle 
+	#	############################################
+	#
+	# 
+	#	########################################################################################
+	#	Ubuntu 24.04.x LTS Jammy Jellyfish (release xx xx 2024) (EOS April 2028) (EOL April 20xx) 
+	#	########################################################################################
+	#
+	#
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-S001",
+		:DisplayName => "U24-LTS-S-B-GR-S001",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "Oracle",
+		:MemoryVM => 2048,
+		:CPUCoresVM => 2,
+	},
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-M001",
+		:DisplayName => "U24-LTS-S-B-BR-M001",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "Oracle",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
+	},
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-L001",
+		:DisplayName => "U24-LTS-S-B-GR-L001",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "Oracle",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-XL01",
+		:DisplayName => "U24-LTS-S-B-GR-XL01",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "Oracle",
+		:MemoryVM => 16384,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	############################################
+	#	Provider Broadcom/VMWare
+	#	############################################
+	#
+	#
+	#	########################################################################################
 	#	Ubuntu 20.04.x LTS Focal Fossa (release 23 april 2020) (EOS April 2025) (EOL April 2030)
+	#	########################################################################################
 	#
-	#	Provider: VMware
-	#
-	{
-		:hostname =>		"U20-LTS-S-B-GC-S001",
-		:weergavenaam =>	"U20-LTS-S-B-GC-S001",
-		:box => "generic/ubuntu2004",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2004, 
-		:aanbieder => "VMware",
-		:ram => 2048,
-		:cpu => 2,
-	},
-	{
-		:hostname =>		"U20-LTS-S-B-GC-M001",
-		:weergavenaam =>	"U20-LTS-S-B-GC-M001",
-		:box => "generic/ubuntu2004",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2004, 
-		:aanbieder => "VMware",
-		:ram => 4096,
-		:cpu => 2,
-	},
-	{
-		:hostname =>		"U20-LTS-S-B-GC-L001",
-		:weergavenaam =>	"U20-LTS-S-B-GC-L001",
-		:box => "generic/ubuntu2004",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2004, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	{
-		:hostname =>		"U20-LTS-S-B-GC-XL01",
-		:weergavenaam =>	"U20-LTS-S-B-GC-XL01",
-		:box => "generic/ubuntu2004",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2004, 
-		:aanbieder => "VMware",
-		:ram => 16384,
-		:cpu => 2,
-	},
-	#
-	#	Ubuntu 22.04.x LTS Jammy Jellyfish (release 23 februari 2023) (EOS April 2027) (EOL April 2032) 
-	#
-	#	Provider VMware
 	#
 	{
-		:hostname =>		"U22-LTS-S-B-GC-S001",
-		:weergavenaam =>	"U22-LTS-S-B-GC-S001",
-		:box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-		:ram => 2048,
-		:cpu => 2,
+		:HostNameVM => "U20-LTS-S-B-GC-S001",
+		:DisplayName =>	"U20-LTS-S-B-GC-S001",
+		:VagrantBoxName => "generic/ubuntu2004",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2004, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 2048,
+		:CPUCoresVM => 2,
 	},
 	{
-		:hostname =>		"U22-LTS-S-B-GC-M001",
-		:weergavenaam =>	"U22-LTS-S-B-GC-M001",
-		:box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-		:ram => 4096,
-		:cpu => 2,
+		:HostNameVM => "U20-LTS-S-B-GC-M001",
+		:DisplayName =>	"U20-LTS-S-B-GC-M001",
+		:VagrantBoxName => "generic/ubuntu2004",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2004, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
+	},
+	{
+		:HostNameVM => "U20-LTS-S-B-GC-L001",
+		:DisplayName =>	"U20-LTS-S-B-GC-L001",
+		:VagrantBoxName => "generic/ubuntu2004",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2004, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	{
+		:HostNameVM => "U20-LTS-S-B-GC-XL01",
+		:DisplayName =>	"U20-LTS-S-B-GC-XL01",
+		:VagrantBoxName => "generic/ubuntu2004",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2004, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 16384,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	########################################################################################
+	#	Ubuntu 22.04.x LTS Jammy Jellyfish (release 23 februari 2023) (EOS April 2027) (EOL April 2032)
+	#	########################################################################################
+	#
+	#
+	{
+		:HostNameVM => "U22-LTS-S-B-GC-S001",
+		:DisplayName =>	"U22-LTS-S-B-GC-S001",
+		:VagrantBoxName => "generic/ubuntu2204",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2204, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 2048,
+		:CPUCoresVM => 2,
+	},
+	{
+		:HostNameVM => "U22-LTS-S-B-GC-M001",
+		:DisplayName =>	"U22-LTS-S-B-GC-M001",
+		:VagrantBoxName => "generic/ubuntu2204",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2204, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
 	},	
 	{
-		:hostname =>		"U22-LTS-S-B-GC-L001",
-		:weergavenaam =>	"U22-LTS-S-B-GC-L001",
-		:box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "U22-LTS-S-B-GC-L001",
+		:DisplayName =>	"U22-LTS-S-B-GC-L001",
+		:VagrantBoxName => "generic/ubuntu2204",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2204, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
 	},
 	{
-		:hostname =>		"U22-LTS-S-B-GC-XL01",
-		:weergavenaam =>	"U22-LTS-S-B-GC-XL01",
-		:box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "desktop",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-		:ram => 16384,
-		:cpu => 2,
+		:HostNameVM => "U22-LTS-S-B-GC-XL01",
+		:DisplayName =>	"U22-LTS-S-B-GC-XL01",
+		:VagrantBoxName => "generic/ubuntu2204",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 2204, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 16384,
+		:CPUCoresVM => 2,
 	},
 	#
+	#
+	#	########################################################################################
+	#	Ubuntu 24.04.x LTS Jammy Jellyfish (release xx xx 2024) (EOS April 2028) (EOL April 20xx) 
+	#	########################################################################################
+	#
+	#
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-S001",
+		:DisplayName => "U24-LTS-S-B-GR-S001",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 2048,
+		:CPUCoresVM => 2,
+	},
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-M001",
+		:DisplayName => "U24-LTS-S-B-BR-M001",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
+	},
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-L001",
+		:DisplayName => "U24-LTS-S-B-GR-L001",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-XL01",
+		:DisplayName => "U24-LTS-S-B-GR-XL01",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 16384,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	############################################
+	#	Demo Linux Virtuele Machines
+	#	############################################
+	#
+	#
+	#	############################################
+	#	Provider Oracle 
+	#	############################################
+	#
+	#
+	#	Geen Virtuele Machines
+	#
+	#
+	#	############################################
+	#	Provider Broadcom/VMWare
+	#	############################################
+	#
+	#
+	#	########################################################################################
+	#	Ubuntu 22.04.x LTS Jammy Jellyfish (release 23 februari 2023) (EOS April 2027) (EOL April 2032)
+	#	########################################################################################
+	#
+	#
+	#	############################################
 	#	Docker Demo 
+	#	############################################
+	#
 	#
 	{
-		:hostname =>		"U22-LTS-S-B-GC-LDD1",
-		:weergavenaam =>	"U22-LTS-S-B-GC-LDD1",
-		:box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "U22-LTS-S-B-GC-LDD1",
+		:DisplayName =>	"U22-LTS-S-B-GC-LDD1",
+		:VagrantBoxName => "generic/ubuntu2204",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2204, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
     },
 	#
-	# 	Kubernetes MiniKube K8S demo 
+	#
+	#	############################################
+	#	Kubernetes / K8S / Minikube demo
+	#	############################################
+	#
 	#
 	{
-		:hostname =>		"U22-LTS-S-B-GC-XLK1",
-		:weergavenaam => 	"U22-LTS-S-B-GC-XLK1",
-		:box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-		:ram => 16384,
-		:cpu => 2,
+		:HostNameVM => "U22-LTS-S-B-GC-XLK1",
+		:DisplayName => "U22-LTS-S-B-GC-XLK1",
+		:VagrantBoxName => "generic/ubuntu2204",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2204, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 16384,
+		:CPUCoresVM => 2,
     },
 	#
-	#	Ansible Demo 
+	#
+	#	############################################
+	#	Ansible demo
+	#	############################################
+	#
 	#
 	#	Controller 001
 	#
+	#
 	{
-		:hostname =>		"U22-LTS-S-B-GC-LAC1",
-		:weergavenaam =>	"U22-LTS-S-B-GC-LAC1",
-		:box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "desktop",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "U22-LTS-S-B-GC-LAC1",
+		:DisplayName =>	"U22-LTS-S-B-GC-LAC1",
+		:VagrantBoxName => "generic/ubuntu2204",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 2204, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
 	},
+	#
 	#
 	#	Slave #1 (010)
 	#
+	#
 	{
-		:hostname =>		"U22-LTS-S-B-GC-LAS1",
-		:weergavenaam =>	"U22-LTS-S-B-GC-LAS1",
-		:box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "desktop",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "U22-LTS-S-B-GC-LAS1",
+		:DisplayName =>	"U22-LTS-S-B-GC-LAS1",
+		:VagrantBoxName => "generic/ubuntu2204",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 2204, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
     },
+	#
 	#
 	#	Slave #2 (011) 
 	#
+	#
 	{
-		:hostname =>		"U22-LTS-S-B-GC-LAS2",
-		:weergavenaam =>	"U22-LTS-S-B-GC-LAS2",
-		:box => "generic/ubuntu2204",
-		:os => "ubuntu",
-		:osedition => "desktop",
-		:osversie => 2204, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "U22-LTS-S-B-GC-LAS2",
+		:DisplayName =>	"U22-LTS-S-B-GC-LAS2",
+		:VagrantBoxName => "generic/ubuntu2204",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 2204, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
     },	
 	#
+	#
+	#	########################################################################################
 	#	Ubuntu 24.04.x LTS Jammy Jellyfish (release xx xx 2024) (EOS April 2028) (EOL April 20xx) 
+	#	########################################################################################
 	#
-	#	Provider VMware
+	#
+	#	############################################
+	#	Docker Demo 
+	#	############################################
+	#
 	#
 	{
-		:hostname => 		"U24-LTS-S-B-GR-S001",
-		:weergavenaam => 	"U24-LTS-S-B-GR-S001",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 2048,
-		:cpu => 2,
-	},
-	{
-		:hostname => 		"U24-LTS-S-B-GR-M001",
-		:weergavenaam => 	"U24-LTS-S-B-BR-M001",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 4096,
-		:cpu => 2,
-	},
-	{
-		:hostname => 		"U24-LTS-S-B-GR-L001",
-		:weergavenaam => 	"U24-LTS-S-B-GR-L001",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	{
-		:hostname => 		"U24-LTS-S-B-GR-XL01",
-		:weergavenaam => 	"U24-LTS-S-B-GR-XL01",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "desktop",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 16384,
-		:cpu => 2,
+		:HostNameVM => "U24-LTS-S-B-GR-LDD1",
+		:DisplayName => "U24-LTS-S-B-GR-LDD1",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
 	},
 	#
 	#
-	#	Introduction to Infrastructures 
+	#	############################################
+	#	Kubernetes / K8S / Minikube demo
+	#	############################################
 	#
-	#	Provider VMware
-	#
-	#	DBMS
 	#
 	{
-		:hostname => 		"U24-LTS-S-B-GR-SD01",
-		:weergavenaam => 	"U24-LTS-S-B-GR-SD01",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 2048,
-		:cpu => 2,
+		:HostNameVM => "U24-LTS-S-B-GR-LMD1",
+		:DisplayName => "U24-LTS-S-B-GR-LMD1",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	############################################
+	#	Ansible demo
+	#	############################################
+	#
+	#
+	#	Controller 001
+	#
+	#
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-LAC1",
+		:DisplayName => "U24-LTS-S-B-GR-LAC1",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	Slave #1 (010)
+	#
+	#
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-LAS1",
+		:DisplayName => "U24-LTS-S-B-GR-LAS1",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	Slave #2 (011)
+	#
+	#
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-LAS2",
+		:DisplayName => "U24-LTS-S-B-GR-LAS2",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	############################################
+	#	Onderwijs Linux Virtuele Machines
+	#	############################################
+	#
+	#
+	#	############################################
+	#	Provider Oracle 
+	#	############################################
+	#
+	#
+	#	Geen virtuele machines
+	#
+	#
+	#	############################################
+	#	Provider Broadcom/VMWare
+	#	############################################
+	#
+	#
+	#	########################################################################################
+	#	Ubuntu 22.04.x LTS Jammy Jellyfish (release 23 februari 2023) (EOS April 2027) (EOL April 2032)
+	#	########################################################################################
+	#
+	#
+	#	Geen virtuele machines
+	#
+	#
+	#	########################################################################################
+	#	Ubuntu 24.04.x LTS Jammy Jellyfish (release xx xx 2024) (EOS April 2028) (EOL April 20xx) 
+	#	########################################################################################
+	#
+	#
+	#	############################################
+	#	Jaar 1
+	#	############################################
+	#
+	#
+	#	############################################
+	#	Introductie Infrastructuren 
+	#	############################################
+	#
+	#
+	#	Database Management Systeem (DBMS)
+	#
+	#
+	{
+		:HostNameVM => "U24-LTS-S-B-GR-SD01",
+		:DisplayName => "U24-LTS-S-B-GR-SD01",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 2048,
+		:CPUCoresVM => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-B-GR-LD01",
-		:weergavenaam => 	"U24-LTS-S-B-GR-LD01",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 4096,
-		:cpu => 2,
+		:HostNameVM => "U24-LTS-S-B-GR-LD01",
+		:DisplayName => "U24-LTS-S-B-GR-LD01",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-B-GR-XLD1",
-		:weergavenaam => 	"U24-LTS-S-B-GR-XLD1",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "U24-LTS-S-B-GR-XLD1",
+		:DisplayName => "U24-LTS-S-B-GR-XLD1",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
 	},
+	#
 	#
 	#	WEBServer
 	#
+	#
 	{
-		:hostname => 		"U24-LTS-S-B-GR-SWS1",
-		:weergavenaam => 	"U24-LTS-S-B-GR-SWS1",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 2048,
-		:cpu => 2,
+		:HostNameVM => "U24-LTS-S-B-GR-SWS1",
+		:DisplayName => "U24-LTS-S-B-GR-SWS1",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 2048,
+		:CPUCoresVM => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-B-GR-LWS1",
-		:weergavenaam => 	"U24-LTS-S-B-GR-LWS1",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 4096,
-		:cpu => 2,
+		:HostNameVM => "U24-LTS-S-B-GR-LWS1",
+		:DisplayName => "U24-LTS-S-B-GR-LWS1",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
 	},
 	{
-		:hostname => 		"U24-LTS-S-B-GR-XLW1",
-		:weergavenaam => 	"U24-LTS-S-B-GR-XLW1",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	#
-	#
-	#	DOCKER DEMO
-	#
-	#	Provider VMware
-	#
-	{
-		:hostname => 		"U24-LTS-S-B-GR-LDD1",
-		:weergavenaam => 	"U24-LTS-S-B-GR-LDD1",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	#
-	#
-	#	MiniKube DEMO
-	#
-	#	Provider VMware
-	#
-	{
-		:hostname => 		"U24-LTS-S-B-GR-LMD1",
-		:weergavenaam => 	"U24-LTS-S-B-GR-LMD1",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	#
-	#
-	#	ANSIBLE DEMO
-	#
-	#	Provider VMware
-	#
-	#	MASTER
-	#
-	#
-	{
-		:hostname => 		"U24-LTS-S-B-GR-LAC1",
-		:weergavenaam => 	"U24-LTS-S-B-GR-LAC1",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	#
-	#	SLAVE
-	#
-	{
-		:hostname => 		"U24-LTS-S-B-GR-LAS1",
-		:weergavenaam => 	"U24-LTS-S-B-GR-LAS1",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	{
-		:hostname => 		"U24-LTS-S-B-GR-LAS2",
-		:weergavenaam => 	"U24-LTS-S-B-GR-LAS2",
-		:box => "gusztavvargadr/ubuntu-server-2404-lts",
-		:os => "ubuntu",
-		:osedition => "server",
-		:osversie => 2404, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "U24-LTS-S-B-GR-XLW1",
+		:DisplayName => "U24-LTS-S-B-GR-XLW1",
+		:VagrantBoxName => "gusztavvargadr/ubuntu-server-2404-lts",
+		:VagrantBoxNameOSType => "ubuntu",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 2404, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
 	}
+	#
 	#
 	#
 	#
 ]
 #
 #
+#	############################################
+#	Windows Virtuele Machines
+#	############################################
 #
 #
 windows_machines=[
+	#
+	#
+	#	############################################
+	#	Algemene Windows Virtuele Machines
+	#	############################################
+	#
+	#
+	#	############################################
+	#	Provider Oracle 
+	#	############################################
+	#
+	#
+	#	##############
+	#	gusztavvargadr
+	#	##############
 	#
 	#
 	#	################################
@@ -519,138 +721,21 @@ windows_machines=[
 	#	################################
 	#
 	#
-	#	##############
-	#	gusztavvargadr
-	#	##############
-	#
-	#
-	#	Windows 10 Enterprise (Evaluation) 
-	#
-	#
-	#	Provider Oracle
-	#
-	#	{
-		#	:hostname => 		"W10-ENT-D-EVAL-VB1",
-		#	:weergavenaam => 	"W10-ENT-D-EVAL-VB1",
-		#	:box => 			"gusztavvargadr/windows-10",
-		#	:os => 				"windows",
-		#	:osedition => 		"desktop",
-		#	:osversie => 		10, 
-		#	:aanbieder => 		"Oracle",
-		#	:ram => 			8192,
-		#	:cpu =>	 			2,
-	#	},
-	#
-	#	Provider VMware
-	#
-	{
-		:hostname 		=> "W10-ENT-D-B-GR-0001",
-		:weergavenaam 	=> "W10-ENT-D-B-GR-0001",
-		:box => "gusztavvargadr/windows-10",
-		:os => "windows",
-		:osedition => "desktop",
-		:osversie => 10, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	#
-	#	Windows 10 Enterprise (Evaluation)
-	#	Introductie Infrastucturen
-	#
-	{
-		:hostname => 		"W10-ENT-D-B-GR-OST1",
-		:weergavenaam => 	"W10-ENT-D-B-GR-OST1",
-		:box => "gusztavvargadr/windows-10",
-		:os => "windows",
-		:osedition => "desktop",
-		:osversie => 10, 
-		:aanbieder => "VMware",
-		:ram => 4096,
-		:cpu => 2,
-	},
-	#
-	#
-	#	##############
-	#	Xenov
-	#	##############
-	#
-	#
-	#	Windows 10 Enterprise (Evaluation)
-	#
-	#
-	#
-	#	box-version 2202.1740574724
-	#	TEST 14/04/2025
-	#	PASS
-	#
-	{
-		:hostname 		=> "W10-ENT-D-B-XV-L001",
-		:weergavenaam 	=> "W10-ENT-D-B-XV-L001",
-		:box => "xenov/windows-10",
-		:os => "windows",
-		:osedition => "desktop",
-		:osversie => 10, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	#
-	#	Windows 10 Enterprise (Evaluation)
-	#	Introductie Infrastucturen
-	#
-	{
-		:hostname => 		"W10-ENT-D-B-XV-OST1",
-		:weergavenaam => 	"W10-ENT-D-B-XV-OST1",
-		:box => "xenov/windows-10",
-		:os => "windows",
-		:osedition => "desktop",
-		:osversie => 10, 
-		:aanbieder => "VMware",
-		:ram => 4096,
-		:cpu => 2,
-	},
-	#
-	#
 	#	################################
-	#	Windows Server 2019
-	#	################################
+	#	Windows 10 Enterprise (Evaluation)
+	#	################################ 
 	#
-	#
-	#	##############
-	#	gusztavvargadr
-	#	##############
-	#
-	#
-	#	Windows Server 2019 Standard Edition
-	#
-	#
-	#	Provider Oracle
-	#
-	#	{
-		#	:hostname => 		"W19-STD-S-EVAL-VB1",
-		#	:weergavenaam => 	"W19-STD-S-EVAL-VB1",
-		#	:box => 			"gusztavvargadr/windows-server-2019-standard",
-		#	:os => 				"windows",
-		#	:osedition => 		"server",
-		#	:osversie => 		19, 
-		#	:aanbieder => 		"Oracle",
-		#	:ram => 			8192,
-		#	:cpu => 			2,
-	#	},
-	#	
-	#	Provider VMware
 	#
 	{
-		:hostname => 		"W19-STD-S-B-GR-0001",
-		:weergavenaam => 	"W19-STD-S-B-GR-0001",
-		:box => "gusztavvargadr/windows-server-2019-standard",
-		:os => "windows",
-		:osedition => "server",
-		:osversie => 19, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "W10-ENT-D-EVAL-VB1",
+		:DisplayName => "W10-ENT-D-EVAL-VB1",
+		:VagrantBoxName => "gusztavvargadr/windows-10",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 10, 
+		:HypervisorVM => "Oracle",
+		:MemoryVM => 8192,
+		:CPUCoresVM =>	2,
 	},
 	#
 	#
@@ -659,49 +744,123 @@ windows_machines=[
 	#	################################
 	#
 	#
-	#	##############
-	#	gusztavvargadr
-	#	##############
+	#	################################
+	#	Windows 11 Enterprise (Evaluation)
+	#	################################ 
 	#
 	#
-	#	Windows 11 Enterprise
-	#
-	#	{
-		#	:hostname => 		"W11-ENT-D-EVAL-VB1",
-		#	:weergavenaam => 	"W11-ENT-D-EVAL-VB1",
-		#	:box => 			"gusztavvargadr/windows-11",
-		#	:os => 				"windows",
-		#	:osedition => 		"desktop",
-		#	:osversie => 		11, 
-		#	:aanbieder => 		"Oracle",
-		#	:ram => 			8192,
-		#	:cpu => 			2,
-	#	},
 	{
-		:hostname 		=> "W11-ENT-D-B-GR-0001",
-		:weergavenaam 	=> "W11-ENT-D-B-GR-0001",
-		:box => "gusztavvargadr/windows-11",
-		:os => "windows",
-		:osedition => "desktop",
-		:osversie => 11, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "W11-ENT-D-EVAL-VB1",
+		:DisplayName => "W11-ENT-D-EVAL-VB1",
+		:VagrantBoxName => "gusztavvargadr/windows-11",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 11, 
+		:HypervisorVM => "Oracle",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
 	},
 	#
-	#	Windows 11 Enterprise
-	#	Introductie Infrastucturen
+	#
+	#	################################
+	#	Windows Server 2019
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows Server 2019 (Evaluation)
+	#	################################ 
+	#
 	#
 	{
-		:hostname => 		"W11-ENT-D-B-GR-OST1",
-		:weergavenaam => 	"W11-ENT-D-B-GR-OST1",
-		:box => "gusztavvargadr/windows-11",
-		:os => "windows",
-		:osedition => "desktop",
-		:osversie => 11, 
-		:aanbieder => "VMware",
-		:ram => 4096,
-		:cpu => 2,
+		:HostNameVM => "W19-STD-S-EVAL-VB1",
+		:DisplayName => "W19-STD-S-EVAL-VB1",
+		:VagrantBoxName => "gusztavvargadr/windows-server-2019-standard",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 19, 
+		:HypervisorVM => "Oracle",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	}, 
+	#
+	#
+	#	############################################
+	#	Provider Broadcom/VMWare
+	#	############################################
+	#
+	#
+	#	################################
+	#	gusztavvargadr
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows 10
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows 10 Enterprise (Evaluation)
+	#	################################ 
+	#
+	#
+	{
+		:HostNameVM => "W10-ENT-D-B-GR-0001",
+		:DisplayName => "W10-ENT-D-B-GR-0001",
+		:VagrantBoxName => "gusztavvargadr/windows-10",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 10, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	################################
+	#	Windows 11
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows 11 Enterprise (Evaluation)
+	#	################################ 
+	#
+	#
+	{
+		:HostNameVM => "W11-ENT-D-B-GR-0001",
+		:DisplayName => "W11-ENT-D-B-GR-0001",
+		:VagrantBoxName => "gusztavvargadr/windows-11",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 11, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	################################
+	#	Windows Server 2019
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows Server 2019 (Evaluation)
+	#	################################ 
+	#
+	#
+	{
+		:HostNameVM => "W19-STD-S-B-GR-0001",
+		:DisplayName => "W19-STD-S-B-GR-0001",
+		:VagrantBoxName => "gusztavvargadr/windows-server-2019-standard",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 19, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
 	},
 	#
 	#
@@ -710,71 +869,66 @@ windows_machines=[
 	#	################################
 	#
 	#
-	#	##############
-	#	gusztavvargadr
-	#	##############
+	#	################################
+	#	Windows Server 2022 (Evaluation)
+	#	################################ 
 	#
-	#
-	#	Windows Server 2022 Standard Edition
-	#
-	#	{
-		#	:hostname => 		"W22-STD-S-EVAL-VB1",
-		#	:weergavenaam => 	"W22-STD-S-EVAL-VB1",
-		#	:box => 			"gusztavvargadr/windows-server-2022-standard",
-		#	:os => 				"windows",
-		#	:osedition => 		"server",
-		#	:osversie => 		22, 
-		#	:aanbieder => 		"Oracle",
-		#	:ram => 			8192,
-		#	:cpu => 			2,
-	#	},
-		#
-		#
-		#	box-version 2102.0.2503
-		#
-		#	TEST 14/04/2025
-		#	FAIL
-		#	WinGET Installation stopped / VM is working !
-		#
-		#	TEST 14/04/2025
-		#	Script update naar versie 5.0.7 
-		#	PASS
-		#
-	{
-		:hostname => 		"W22-STD-S-B-GR-L001",
-		:weergavenaam => 	"W22-STD-S-B-GR-L001",
-		:box => "gusztavvargadr/windows-server-2022-standard",
-		:os => "windows",
-		:osedition => "server",
-		:osversie => 22, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
-	},
-	#
-	#	Windows Server 2022 Standard Edition
-	#	Introductie Infrastructuren
-	#	Router (RT)
 	#
 	{
-		:hostname => 		"W22-STD-S-B-GR-MRT1",
-		:weergavenaam => 	"W22-STD-S-B-GR-MRT1",
-		:box => "gusztavvargadr/windows-server-2022-standard",
-		:os => "windows",
-		:osedition => "server",
-		:osversie => 22, 
-		:aanbieder => "VMware",
-		:ram => 4096,
-		:cpu => 2,
+		:HostNameVM => "W22-STD-S-B-GR-L001",
+		:DisplayName => "W22-STD-S-B-GR-L001",
+		:VagrantBoxName => "gusztavvargadr/windows-server-2022-standard",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 22, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
 	},
 	#
 	#
-	#	##############
+	#	################################
 	#	Xenov
-	#	##############
+	#	################################
 	#
 	#
+	#	################################
+	#	Windows 10
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows 10 Enterprise (Evaluation)
+	#	################################ 
+	#
+	#
+	#	box-version 2202.1740574724
+	#	TEST 14/04/2025
+	#	PASS
+	#
+	#	DEZE GEBRUIKEN / VOORKEURSBOX
+	#
+	{
+		:HostNameVM => "W10-ENT-D-B-XV-L001",
+		:DisplayName => "W10-ENT-D-B-XV-L001",
+		:VagrantBoxName => "xenov/windows-10",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 10, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	################################
 	#	Windows Server 2022
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows Server 2022 (Evaluation)
+	#	################################ 
 	#
 	#	Box-version 2022.1740574721
 	#	TEST 14/04/2025
@@ -782,16 +936,188 @@ windows_machines=[
 	#	WinRM error message 
 	#
 	{
-		:hostname => 		"W22-STD-S-B-XV-L001",
-		:weergavenaam => 	"W22-STD-S-B-XV-L001",
-		:box => "xenov/windows-server-2022",
-		:os => "windows",
-		:osedition => "server",
-		:osversie => 22, 
-		:aanbieder => "VMware",
-		:ram => 8192,
-		:cpu => 2,
+		:HostNameVM => "W22-STD-S-B-XV-L001",
+		:DisplayName => "W22-STD-S-B-XV-L001",
+		:VagrantBoxName => "xenov/windows-server-2022",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 22, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 8192,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	############################################
+	#	Onderwijs Windows Virtuele Machines
+	#	############################################
+	#
+	#
+	#	################################
+	#	gusztavvargadr
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows 10
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows 10 Enterprise (Evaluation)
+	#	################################ 
+	#
+	#
+	#	Introductie Infrastucturen
+	#
+	#
+	{
+		:HostNameVM => "W10-ENT-D-B-GR-OST1",
+		:DisplayName => "W10-ENT-D-B-GR-OST1",
+		:VagrantBoxName => "gusztavvargadr/windows-10",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 10, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	################################
+	#	Windows 11
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows 11 Enterprise (Evaluation)
+	#	################################ 
+	#
+	#
+	#	Introductie Infrastucturen
+	#
+	#
+	{
+		:HostNameVM => "W11-ENT-D-B-GR-OST1",
+		:DisplayName => "W11-ENT-D-B-GR-OST1",
+		:VagrantBoxName => "gusztavvargadr/windows-11",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 11, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	################################
+	#	Windows Server 2022
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows Server 2022 (Evaluation)
+	#	################################ 
+	#
+	#
+	#	Introductie Infrastucturen
+	#
+	#
+	{
+		:HostNameVM => "W22-STD-S-B-GR-MRT1",
+		:DisplayName => "W22-STD-S-B-GR-MRT1",
+		:VagrantBoxName => "gusztavvargadr/windows-server-2022-standard",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 22, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	Scripting met Powershell
+	#
+	#
+	#	Domain Controller DC01
+	#
+	#
+	{
+		:HostNameVM => "DC01",
+		:DisplayName => "W22-STD-S-B-GR-DC01",
+		:VagrantBoxName => "gusztavvargadr/windows-server-2022-standard",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 22, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	DBMS DB01
+	#
+	#
+	{
+		:HostNameVM => "DB01",
+		:DisplayName => "W22-STD-S-B-GR-DB01",
+		:VagrantBoxName => "gusztavvargadr/windows-server-2022-standard",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "server",
+		:VagrantBoxNameOSVersion => 22, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	################################
+	#	Xenov
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows 10
+	#	################################
+	#
+	#
+	#	################################
+	#	Windows 10 Enterprise (Evaluation)
+	#	################################ 
+	#
+	#
+	#	Introductie Infrastucturen
+	#
+	#
+	{
+		:HostNameVM => "W10-ENT-D-B-XV-OST1",
+		:DisplayName => "W10-ENT-D-B-XV-OST1",
+		:VagrantBoxName => "xenov/windows-10",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 10, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
+	},
+	#
+	#
+	#	Scripting met Powershell
+	#
+	#
+	{
+		:HostNameVM => "WS01",
+		:DisplayName => "W10-ENT-D-B-XV-WS01",
+		:VagrantBoxName => "xenov/windows-10",
+		:VagrantBoxNameOSType => "windows",
+		:VagrantBoxNameOSEdition => "desktop",
+		:VagrantBoxNameOSVersion => 10, 
+		:HypervisorVM => "VMware",
+		:MemoryVM => 4096,
+		:CPUCoresVM => 2,
 	}
+	#
+	#
 	#
 	#
 	#
@@ -874,11 +1200,11 @@ Vagrant.configure("2") do |config|
 	#
 	#
 	linux_machines.each do |machine|
-		config.vm.define machine[:hostname] do |ulxnode|
+		config.vm.define machine[:HostNameVM] do |ulxnode|
 			#
-			ulxnode.vm.box = machine[:box]
-			ulxnode.vm.box_check_update = false
-			ulxnode.vm.hostname = "#{machine[:hostname].downcase}"
+			ulxnode.vm.box 					= machine[:VagrantBoxName]
+			ulxnode.vm.box_check_update		= false
+			ulxnode.vm.hostname 			= "#{machine[:HostNameVM].downcase}"
 			#
 			#
 			# ####################################################################	
@@ -891,13 +1217,13 @@ Vagrant.configure("2") do |config|
 			#	Adapter 2 Host-Only | Oracle Virtualbox fixed IP-address
 			#
 			#
-			if machine[:aanbieder] == "Oracle"
+			if machine[:HypervisorVM] == "Oracle"
 				ulxnode.vm.network "private_network", ip: "#{machine[:ip]}", netmask: "255.255.255.0"
 			end
 			#
 			#	Adapter 2 Host-Only | VMware Workstation / Fusion PRO DHCP IP-address
 			#
-			if machine[:aanbieder] == "VMware"
+			if machine[:HypervisorVM] == "VMware"
 				ulxnode.vm.network "private_network", type: "dhcp"
 				# NIET private network met ip e.d. gebruiken. Dan start VM niet meer op ! 
 			end
@@ -960,36 +1286,36 @@ Vagrant.configure("2") do |config|
 			#
 			#	[P1] 	PROVIDER: ORACLE VIRTUALBOX
 			#
-			if machine[:aanbieder] == "Oracle"
+			if machine[:HypervisorVM] == "Oracle"
 				ulxnode.vm.provider "virtualbox" do |ulxnode_pvd_ovbvm|
 					#
 					ulxnode_pvd_ovbvm.gui = true
 					ulxnode_pvd_ovbvm.linked_clone = false
 					#
-					ulxnode_pvd_ovbvm.cpus = "#{machine[:cpu]}"
-					ulxnode_pvd_ovbvm.memory = "#{machine[:ram]}"
-					ulxnode_pvd_ovbvm.name = "#{machine[:hostname]}"
+					ulxnode_pvd_ovbvm.cpus =	"#{machine[:CPUCoresVM]}"
+					ulxnode_pvd_ovbvm.memory =	"#{machine[:MemoryVM]}"
+					ulxnode_pvd_ovbvm.name =	"#{machine[:HostNameVM]}"
 					#
-					ulxnode_pvd_ovbvm.customize ["modifyvm", :id, "--vram", "128"]
+					ulxnode_pvd_ovbvm.customize	["modifyvm", :id, "--vram", "128"]
 					ulxnode_pvd_ovbvm.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
 					ulxnode_pvd_ovbvm.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
-					ulxnode_pvd_ovbvm.customize ["modifyvm", :id, "--description", "#{machine[:os]} #{machine[:osversie]} \r\n Used box is #{machine[:box]} \r\n Created on #{cur_date} by Vagrant \r\n Username/Password = vagrant \r\n Use VAGRANT up #{machine[:hostname]} to boot this virtual machine"]
+					ulxnode_pvd_ovbvm.customize ["modifyvm", :id, "--description", "#{machine[:VagrantBoxNameOSType]} #{machine[:VagrantBoxNameOSVersion]} \r\n Used box is #{machine[:VagrantBoxName]} \r\n Created on #{cur_date} by Vagrant \r\n Username/Password = vagrant \r\n Use VAGRANT up #{machine[:HostNameVM]} to boot this virtual machine"]
 					#
 				end
 			end	
 			#
 			#	[P2] 	PROVIDER: VMware Workstation / Fusion PRO
 			#
-			if machine[:aanbieder] == "VMware"
+			if machine[:HypervisorVM] == "VMware"
 				ulxnode.vm.provider "vmware_desktop" do |ulxnode_pvd_vmwvm|
 					#
 					#	[1]	Algemene settings aanpassen 
 					#
-					ulxnode_pvd_vmwvm.gui = true
-					ulxnode_pvd_vmwvm.linked_clone = false
+					ulxnode_pvd_vmwvm.gui = 			true
+					ulxnode_pvd_vmwvm.linked_clone = 	false
 					#
-					ulxnode_pvd_vmwvm.cpus = "#{machine[:cpu]}"
-					ulxnode_pvd_vmwvm.memory = "#{machine[:ram]}"
+					ulxnode_pvd_vmwvm.cpus =	"#{machine[:CPUCoresVM]}"
+					ulxnode_pvd_vmwvm.memory =	"#{machine[:MemoryVM]}"
 					#
 					#	Buiten gebruik
 					#	vmwvm.nat_device 	= "VMnet8"
@@ -999,8 +1325,8 @@ Vagrant.configure("2") do |config|
 					#
 					#
 					ulxnode_pvd_vmwvm.vmx["tools.syncTime"]	= "TRUE"
-					ulxnode_pvd_vmwvm.vmx["displayName"]	= "#{machine[:hostname]}"
-					ulxnode_pvd_vmwvm.vmx["annotation"]		= "#{machine[:os]} #{machine[:osversie]} |0D|0AUsed box is #{machine[:box]} |0D|0ACreated on #{cur_date} by Vagrant |0D|0AUsername/Password = vagrant |0D|0AUse VAGRANT up #{machine[:hostname]} to boot this virtual machine"
+					ulxnode_pvd_vmwvm.vmx["displayName"]	= "#{machine[:DispleyName]}"
+					ulxnode_pvd_vmwvm.vmx["annotation"]		= "#{machine[:VagrantBoxNameOSType]} #{machine[:VagrantBoxNameOSVersion]} |0D|0AUsed box is #{machine[:VagrantBoxName]} |0D|0ACreated on #{cur_date} by Vagrant |0D|0AUsername/Password = vagrant |0D|0AUse VAGRANT up #{machine[:HostNameVM]} to boot this virtual machine"
 					#
 					#
 					#	[3]	Aanpassen VMX naar juiste VMNet
@@ -1008,93 +1334,52 @@ Vagrant.configure("2") do |config|
 					#
 					# 	[3a]	Ansible Demo
 					#
-					if machine[:hostname] == "U22-LTS-S-B-GC-LAC1"
+					#	Master/Controller
+					if machine[:HostNameVM].include? "LTS-S-B-GC-LAC"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
 					end 
-					if machine[:hostname] == "U22-LTS-S-B-GC-LAS1"
+					#	Slave
+					if machine[:HostNameVM].include? "LTS-S-B-GC-LAS"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
-					end 
-					if machine[:hostname] == "U22-LTS-S-B-GC-LAS2"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
-					end 
-					if machine[:hostname] == "U24-LTS-S-B-GC-LAC1"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
-					end 
-					if machine[:hostname] == "U24-LTS-S-B-GC-LAS1"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
-					end 
-					if machine[:hostname] == "U24-LTS-S-B-GC-LAS2"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
-					end 
+					end
 					#
 					#	[3b]	DOCKER Demo
 					#
-					if machine[:hostname] == "U22-LTS-S-B-GR-LDD1"
+					if machine[:HostNameVM].include? "LTS-S-B-GR-LDD1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
-					end 
-					if machine[:hostname] == "U24-LTS-S-B-GR-LDD1"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
-					end 
+					end
 					#
 					#	[3c]	MiniKube Demo
 					#
-					if machine[:hostname] == "U22-LTS-S-B-GR-LMD1"
+					if machine[:HostNameVM].include? "LTS-S-B-GR-LMD1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
-					end 
-					if machine[:hostname] == "U24-LTS-S-B-GR-LMD1"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet4"
-					end 
+					end
 					#
 					#	[3d]	Introductie Intrastructuren
 					#
 					#	[3d1]	DBMS
 					#
-					if machine[:hostname].include? "U22-LTS-S-B-GR-SD01"
+					#	include? doet check of string bepaalde tekens bevat
+					#
+					if machine[:HostNameVM].include? "LTS-S-B-GR-SD01"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end 
-					if machine[:hostname].include? "U22-LTS-S-B-GR-LD01"
+					if machine[:HostNameVM].include? "LTS-S-B-GR-LD01"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end 
-					if machine[:hostname].include? "U22-LTS-S-B-GR-XLD1"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
-					end 
-					if machine[:hostname].include? "U24-LTS-S-B-GR-SD01"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
-					end 
-					if machine[:hostname].include? "U24-LTS-S-B-GR-LD01"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
-					end
-					if machine[:hostname].include? "U24-LTS-S-B-GR-XLD1"
+					if machine[:HostNameVM].include? "LTS-S-B-GR-XLD1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
@@ -1102,36 +1387,21 @@ Vagrant.configure("2") do |config|
 					#
 					#	[3d2]	WebServer
 					#
-					if machine[:hostname].include? "U22-LTS-S-B-GR-SWS1"
+					if machine[:HostNameVM].include? "LTS-S-B-GR-SWS1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end 
-					if machine[:hostname].include? "U22-LTS-S-B-GR-LWS1"
+					if machine[:HostNameVM].include? "LTS-S-B-GR-LWS1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end
-					if machine[:hostname].include? "U22-LTS-S-B-GR-XLW1"
+					if machine[:HostNameVM].include? "LTS-S-B-GR-XLW1"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
 						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
 					end
-					if machine[:hostname].include? "U24-LTS-S-B-GR-SWS1"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
-					end 
-					if machine[:hostname].include? "U24-LTS-S-B-GR-LWS1"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
-					end 
-					if machine[:hostname].include? "U24-LTS-S-B-GR-XLW1"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet3"
-						ulxnode_pvd_vmwvm.vmx["ethernet1.displayName"]		= "VMnet3"
-					end 
 					#
 					#
 				end
@@ -1158,7 +1428,7 @@ Vagrant.configure("2") do |config|
 				VERSION_CODENAME=$(grep -oP '(?<=^VERSION_CODENAME=).+' /etc/os-release | tr -d '"')
 				#
 				echo 'Welcome to' $NAME $VERSION 'created' #{cur_date} 'by Vagrant' | sudo tee /etc/motd > /dev/null
-				# sudo echo "Welcome to #{machine[:os]} version #{machine[:osversie]} created #{cur_date}" | sudo tee /etc/motd
+				# sudo echo "Welcome to #{machine[:VagrantBoxNameOSType]} version #{machine[:VagrantBoxNameOSVersion]} created #{cur_date}" | sudo tee /etc/motd
 				#
 			SHELL
 			#
@@ -1176,10 +1446,10 @@ Vagrant.configure("2") do |config|
 			#
 			#
 			#
-			if machine[:os] == "ubuntu" 
+			if machine[:VagrantBoxNameOSType] == "ubuntu" 
 			#
 			#
-				if machine[:oseditie] == 2204
+				if machine[:VagrantBoxNameOSVersion] == 2204
 					#
 					#
 					ulxnode.vm.provision "shell", inline: <<-SHELL
@@ -1202,7 +1472,7 @@ Vagrant.configure("2") do |config|
 				end
 				#
 				#
-				if machine[:oseditie] == 2404
+				if machine[:VagrantBoxNameOSVersion] == 2404
 					#
 					#
 					ulxnode.vm.provision "shell", inline: <<-SHELL
@@ -1227,12 +1497,12 @@ Vagrant.configure("2") do |config|
 			# #############################################################
 			#
 			ulxnode.vm.provision "shell", inline: <<-SHELL
-				# 	Versie 1 (status: productie) 
-				sudo curl -s -o /home/vagrant/ubuntu-config-V1-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V1-latest.sh
-				sudo chmod +x /home/vagrant/ubuntu-config-V1-latest.sh
-				# 	Versie 2 (status: productie) 
-				sudo curl -s -o /home/vagrant/ubuntu-config-V2-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V2-latest.sh
-				sudo chmod +x /home/vagrant/ubuntu-config-V2-latest.sh
+				# 	# 	Versie 1 (status: productie) 
+				#	sudo curl -s -o /home/vagrant/ubuntu-config-V1-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V1-latest.sh
+				#	sudo chmod +x /home/vagrant/ubuntu-config-V1-latest.sh
+				# 	#	Versie 2 (status: productie) 
+				#	sudo curl -s -o /home/vagrant/ubuntu-config-V2-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V2-latest.sh
+				#	sudo chmod +x /home/vagrant/ubuntu-config-V2-latest.sh
 				#	Versie 3 (status ontwikkeling)
 				sudo curl -s -o /home/vagrant/ubuntu-config-V3-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V3-latest.sh				
 				sudo chmod +x /home/vagrant/ubuntu-config-V3-latest.sh
@@ -1253,12 +1523,12 @@ Vagrant.configure("2") do |config|
 	#
 	#
 	windows_machines.each do |machine|
-		config.vm.define machine[:hostname] do |winnode|
+		config.vm.define machine[:HostNameVM] do |winnode|
 			#
-			winnode.vm.box 				= 	machine[:box]
+			winnode.vm.box 				= 	machine[:VagrantBoxName]
 			winnode.vm.box_check_update = 	false
 			#
-			winnode.vm.hostname 		= 	"Vagrant-#{machine[:hostname]}"
+			winnode.vm.hostname 		= 	"Vagrant-#{machine[:HostNameVM]}"
 			winnode.vm.guest 			= 	:windows
 			winnode.winssh.shell 		= 	"powershell" 		# The shell to use when executing SSH commands from Vagrant. By default this is powershell. Valid values are "cmd" or "powershell".		
 			#
@@ -1270,6 +1540,23 @@ Vagrant.configure("2") do |config|
 			#
 			#	Adapter 2 Host-Only	
 			winnode.vm.network "private_network", type: "dhcp"
+			#
+			#
+			#	Adapter 3 Host-Only VMNet 4 10.1.10.0 Netwerk
+			if machine[:HostNameVM] == "DC01"
+				winnode.vm.network "private_network", ip: "10.1.10.11", :netmask => "255.255.255.0", 
+				auto_config: false
+			end
+			if machine[:HostNameVM] == "DB01"
+				winnode.vm.network "private_network", ip: "10.1.10.21", :netmask => "255.255.255.0",
+				auto_config: false
+			end
+			#
+			#
+			#	08 mei 2025 / CoPilot komt met 
+			#	winnode.vm.network "private_network", ip: "192.168.50.5", adapter: 2
+			#
+			#	2024 / Handmatig instellen
 			#	node.vm.network "private_network", ip: "192.168.56.220", netmask: "255.255.255.0"
 			#
 			# 	Adapter 3 Bridged
@@ -1297,13 +1584,13 @@ Vagrant.configure("2") do |config|
 			# ####################################################################	
 			#
 			#
-			winnode.vm.post_up_message = "Start scripts in /home/vagrant voor verdere configuratie"
+			winnode.vm.post_up_message = "Start scripts in Downloads in VM voor verdere configuratie"
 			#	
 			#
 			#	Oracle Virtualbox
 			#
 			#
-			if machine[:aanbieder] == "Oracle"
+			if machine[:HypervisorVM] == "Oracle"
 				#
 				# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
 				#
@@ -1312,9 +1599,9 @@ Vagrant.configure("2") do |config|
 					win_node_ovbvm.gui 				= 	true
 					win_node_ovbvm.linked_clone 	= 	false
 					#
-					win_node_ovbvm.cpus 			= 	"#{machine[:cpu]}"
-					win_node_ovbvm.memory 			= 	"#{machine[:ram]}"
-					win_node_ovbvm.name 			= 	"Vagrant-#{machine[:hostname]}"
+					win_node_ovbvm.cpus 			= 	"#{machine[:CPUCoresVM]}"
+					win_node_ovbvm.memory 			= 	"#{machine[:MemoryVM]}"
+					win_node_ovbvm.name 			= 	"Vagrant-#{machine[:HostNameVM]}"
 					#
 					win_node_ovbvm.customize ["modifyvm", :id, "--vram", "128"]
 					win_node_ovbvm.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
@@ -1328,7 +1615,7 @@ Vagrant.configure("2") do |config|
 			#	VMware Workstation / Fusion PRO
 			#
 			#
-			if machine[:aanbieder] == "VMware"
+			if machine[:HypervisorVM] == "VMware"
 				#
 				# https://developer.hashicorp.com/vagrant/docs/providers/vmware
 				#			
@@ -1337,27 +1624,27 @@ Vagrant.configure("2") do |config|
 					win_node_vmwvm.gui 						= 	true
 					win_node_vmwvm.linked_clone				= 	false
 					#
-					win_node_vmwvm.cpus 					= 	"#{machine[:cpu]}"
-					win_node_vmwvm.memory 					= 	"#{machine[:ram]}"
+					win_node_vmwvm.cpus 					= 	"#{machine[:CPUCoresVM]}"
+					win_node_vmwvm.memory 					= 	"#{machine[:MemoryVM]}"
 					# vmwvm.nat_device 	= "VMnet8"
 					#
 					win_node_vmwvm.vmx["tools.syncTime"]	= 	"TRUE"
-					win_node_vmwvm.vmx["displayName"] 		= 	"#{machine[:weergavenaam]}"
-					win_node_vmwvm.vmx["annotation"] 		= 	"#{machine[:os]} #{machine[:osversie]} |0D|0AUsed box is #{machine[:box]} |0D|0ACreated on #{cur_date} by Vagrant |0D|0AUsername/Password = vagrant |0D|0AUse VAGRANT up #{machine[:hostname]} to boot this virtual machine"
+					win_node_vmwvm.vmx["displayName"] 		= 	"#{machine[:DisplayName]}"
+					win_node_vmwvm.vmx["annotation"] 		= 	"#{machine[:VagrantBoxNameOSType]} #{machine[:VagrantBoxNameOSVersion]} |0D|0AUsed box is #{machine[:VagrantBoxName]} |0D|0ACreated on #{cur_date} by Vagrant |0D|0AUsername/Password = vagrant |0D|0AUse VAGRANT up #{machine[:HostNameVM]} to boot this virtual machine"
 				end
 			end	
 			#
 			#	Windows Desktop Out of the Box (OOBE) Scripts
 			#
-			if machine[:os] == "windows" && machine[:osedition] == "desktop"
+			if machine[:VagrantBoxNameOSType] == "windows" && machine[:VagrantBoxNameOSEdition] == "desktop"
 				#	Windows Services Stoppen en disabelen (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V006.ps1"
 				#	Windows Policy en Registry Instellingen doen (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Registry-Policy-V001.ps1"
 				#	Windows SSH Client / SSH Server installatie (JT) 
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Config-SSH-V003.ps1"
-				#	Installatie WinGET (Asheroto) versie 5.0.9 (17 april 2025) 
-				winnode.vm.provision "shell", path: "https://github.com/asheroto/winget-install/releases/download/5.0.9/winget-install.ps1"
+				#	Installatie WinGET (Asheroto) (steeds nieuwste versie van het script)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/asheroto/winget-install/master/winget-install.ps1"
 				#	WinGET Accept License Terms (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
 				#	WinGET Install Apps (JT)
@@ -1370,18 +1657,13 @@ Vagrant.configure("2") do |config|
 			#
 			#	Windows Server initialisatie
 			#
-			if machine[:os] == "windows" && machine[:osedition] == "server"
-				#	Installatie WinGET
-				#
-				# 14/04/2025 Windows Server 2022 gusztavvargadr/windows-server-2022 geeft foutmelding installatie WinGET versie 4.12
-				# 14/04/2025 Link aangepast naar versie 5.0.7 / Nog niet getest
-				#
+			if machine[:VagrantBoxNameOSType] == "windows" && machine[:VagrantBoxNameOSEdition] == "server"
 				#	Windows Services Stoppen en disabelen (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V006.ps1"
 				#	Windows SSH Client / SSH Server installatie (JT) 
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Config-SSH-V003.ps1"
-				#	Installatie WinGET (Asheroto) versie 5.0.9 (17 april 2025) 
-				winnode.vm.provision "shell", path: "https://github.com/asheroto/winget-install/releases/download/5.0.7/winget-install.ps1"
+				#	Installatie WinGET (Asheroto) (steeds nieuwste versie van het script)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/asheroto/winget-install/master/winget-install.ps1"
 				#	WinGET Accept License Terms (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
 				#	Download Bestanden (JT)

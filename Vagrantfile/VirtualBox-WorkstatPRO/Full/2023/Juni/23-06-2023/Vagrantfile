@@ -1,6 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #
+
+#
+#	Version 1.1
+#
+
+
 # Vagrant Configuratie Bestand voor UBUNTU 22.10 VM binnen VMware Workstation PRO
 # Gemaakt door John Tutert
 #

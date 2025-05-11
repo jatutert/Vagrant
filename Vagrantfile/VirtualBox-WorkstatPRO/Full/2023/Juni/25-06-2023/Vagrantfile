@@ -1,6 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #
+
+#
+#	Version 1.2
+#
+
 # Vagrant Configuratie Bestand voor Ubuntu/Docker (VMWare Workstation/VirtualBox) en Windows 10 Enterprise
 # Gemaakt door John Tutert
 # Datum 25 juni 2023
