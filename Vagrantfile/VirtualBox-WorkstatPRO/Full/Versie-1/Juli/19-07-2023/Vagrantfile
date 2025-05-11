@@ -1,0 +1,228 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+
+#
+#	Versie 1.05
+#
+
+# Vagrant Configuratie Bestand voor Virtualisatie omgevingen
+# Gemaakt door John Tutert
+# Datum 19 juli 2023
+#
+# https://www.thisprogrammingthing.com/20s15/multiple-vagrant-vms-in-one-vagrantfile/
+#
+Vagrant.configure("2") do |config|
+  # 
+  # =============================================== VMware Workstation/Fusion PRO ====================================================
+  #
+  # [1a] vdckr Omgeving (Ubuntu 22.10 LTS met Docker (inclusief Compose plugin))
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "vdckr" do |vdckr|
+    vdckr.vm.box = "generic/ubuntu2210"
+    vdckr.vm.hostname = "ulx-vdckr-001"
+    vdckr.vm.box_check_update = true
+    vdckr.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = false
+      vmw.cpus = "2"
+	  vmw.memory = "4096"
+	  vmw.nat_device = "VMnet8"
+    end 
+   vdckr.vm.provision "shell", inline: <<-SHELL
+    # ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	# [1] Bijwerken Ubuntu 22.10 LTS met de laatste updates voor installatie applicaties 
+	sudo apt-get update
+    sudo apt-get upgrade -y
+    # [2] Installeren Midnight Commander en Screenfetch
+	sudo apt-get install -y mc screenfetch open-vm-tools wget
+    # [3] Installeren Docker en Docker Compose zoals beschreven op https://docs.docker.com/engine/install/ubuntu/
+	sudo apt-get install -y ca-certificates curl gnupg
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	# [4] Bijwerken Ubuntu 22.10 LTS met de laatste updates
+	sudo apt-get update
+	sudo apt-get upgrade -y 
+	# [5] gebruiker vagrant toevoegen aan primary group docker
+	sudo usermod -g docker vagrant
+	# [6] gebruiker vagrant toevoegen aan secondary group root
+	sudo usermod -a -G root vagrant
+	SHELL
+  end 
+  #
+  # [1b] vminik Omgeving (Ubuntu 22.10 LTS met Docker (inclusief Compose plugin) + MiniKube + MinIO)
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "vminik" do |vminik|
+    vminik.vm.box = "generic/ubuntu2210"
+    vminik.vm.hostname = "ulx-vminik-001"
+    vminik.vm.box_check_update = true
+    vminik.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "6144"
+    end 
+   vminik.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	# [1] Bijwerken Ubuntu 22.10 LTS met de laatste updates voor installatie applicaties 
+	sudo apt-get update
+	sudo apt-get upgrade -y
+	# [2] Installeren Midnight Commander en Screenfetch
+	sudo apt-get install -y mc screenfetch open-vm-tools wget
+	# [3] Installeren Docker en Docker Compose zoals beschreven op https://docs.docker.com/engine/install/ubuntu/
+	sudo apt-get install -y ca-certificates curl gnupg
+	sudo install -m 0755 -d /etc/apt/keyrings
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	# [4] Bijwerken Ubuntu 22.10 LTS met de laatste updates
+	sudo apt-get update
+	sudo apt-get upgrade -y
+	# [5] gebruiker vagrant toevoegen aan primary group docker
+	sudo usermod -g docker vagrant
+	# [6] gebruiker vagrant toevoegen aan secondary group root
+	sudo usermod -a -G root vagrant
+    # [7] Installatie Minikube 1.x
+	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+	sudo dpkg -i minikube_latest_amd64.deb
+	# [8] Installatie MinIO
+	# https://blog.knoldus.com/how-to-run-minio-as-a-docker-container/
+	# docker run -p 9000:9000 -d -p 9001:9001 -e "MINIO_ROOT_USER=minio99" -e "MINIO_ROOT_PASSWORD=minio123" quay.io/minio/minio server /data --console-address ":9001"
+    # mc alias set myminio2 http://localhost:9000 minio99 minio123
+	SHELL
+  end 
+  # 
+  # [1c] wintien omgeving (Windows 10 Enterprise EVAL)
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "wintien" do |wintien|
+    wintien.vm.box = "gusztavvargadr/windows-10"
+	wintien.vm.box_check_update = true
+	wintien.vm.guest = :windows
+	wintien.vm.boot_timeout = 3600
+    wintien.vm.hostname = "WinTien"
+	wintien.vm.communicator = "winrm"
+	# wintien.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true
+    # wintien.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true
+    # wintien.winrm.host = "localhost"
+    wintien.vm.provider "vmware_desktop" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+    end
+   # wintien.vm.provision "shell", inline: <<-SHELL 
+    wintien.vm.provision "shell", privileged: "true", inline: <<-SHELL
+	 echo $ErrorActionPreference = 'Stop' >ps-winget.ps1
+	 echo $r = Invoke-RestMethod -Method Get -Uri https://api.github.com/repos/microsoft/winget-cli/releases/latest >>ps-winget.ps1
+	 echo $r.assets | ? { $_.name -match "\.msixbundle$" } | % { >>ps-winget.ps1
+	 echo     $downloadedFile = Join-Path $env:Temp $_.name >>ps-winget.ps1
+	 echo     if (Test-Path $downloadedFile) { >>ps-winget.ps1
+	 echo         Remove-Item $downloadedFile -Force >>ps-winget.ps1
+	 echo  } >>ps-winget.ps1
+	 REM powershell -ExecutionPolicy Unrestricted 
+	 REM powershell -file ps-winget.ps1
+    SHELL
+  end
+  # 
+  # =============================================== Oracle Virtuabox ====================================================
+  #
+  # [2a] odckr Omgeving (Ubuntu 22.10 LTS met Docker (inclusief Compose plugin))
+  #
+  # Naslag is te vinden op https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+  # 
+  config.vm.define "odckr" do |odckr|
+    odckr.vm.box = "generic/ubuntu2210"
+    odckr.vm.hostname = "ulx-odckr-001"
+    odckr.vm.box_check_update = true
+	odckr.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	odckr.vm.network "private_network", ip: "192.168.56.200", netmask: "255.255.255.0"
+	odckr.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+    end
+    odckr.vm.provision "shell", inline: <<-SHELL
+    # ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	# [1] Bijwerken Ubuntu 22.10 LTS met de laatste updates voor installatie applicaties 
+	sudo apt-get update
+    sudo apt-get upgrade -y
+    # [2] Installeren Midnight Commander en Screenfetch
+	sudo apt-get install -y mc screenfetch open-vm-tools wget
+    # [3] Installeren Docker en Docker Compose zoals beschreven op https://docs.docker.com/engine/install/ubuntu/
+	sudo apt-get install -y ca-certificates curl gnupg
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	# [4] Bijwerken Ubuntu 22.10 LTS met de laatste updates
+	sudo apt-get update
+	sudo apt-get upgrade -y
+	# [5] Gebruiker toevoegen aan Docker groep 
+	# sudo usermod -aG docker $USER && newgrp docker
+	sudo usermod -aG docker vagrant
+	SHELL
+  end
+  # Oracle VirtualBox | Ubuntu 22.10 | MiniKube
+  config.vm.define "ominik" do |ominik|
+    ominik.vm.box = "generic/ubuntu2210"
+    ominik.vm.hostname = "ulx-ominik-001"
+    ominik.vm.box_check_update = true
+	ominik.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	ominik.vm.network "private_network", ip: "192.168.56.201"
+	ominik.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+    end
+    ominik.vm.provision "shell", inline: <<-SHELL
+    # ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	# [1] Bijwerken Ubuntu 22.10 LTS met de laatste updates voor installatie applicaties 
+	sudo apt-get update
+    sudo apt-get upgrade -y
+    # [2] Installeren Midnight Commander en Screenfetch
+	sudo apt-get install -y mc screenfetch open-vm-tools wget
+    # [3] Installeren Docker en Docker Compose zoals beschreven op https://docs.docker.com/engine/install/ubuntu/
+	sudo apt-get install -y ca-certificates curl gnupg
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	# [4] Bijwerken Ubuntu 22.10 LTS met de laatste updates
+	sudo apt-get update
+	sudo apt-get upgrade -y
+    # [5] Installatie Minikube 1.x
+	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+	sudo dpkg -i minikube_latest_amd64.deb
+	# [6] Gebruiker toevoegen aan Docker groep 
+	# sudo usermod -aG docker $USER && newgrp docker"
+	sudo usermod -aG docker $USER
+	sudo newgrp docker
+	# https://blog.knoldus.com/how-to-run-minio-as-a-docker-container/
+	# docker run -p 9000:9000 -d -p 9001:9001 -e "MINIO_ROOT_USER=minio99" -e "MINIO_ROOT_PASSWORD=minio123" quay.io/minio/minio server /data --console-address ":9001"
+    # mc alias set myminio2 http://localhost:9000 minio99 minio123
+	SHELL
+  end
+end

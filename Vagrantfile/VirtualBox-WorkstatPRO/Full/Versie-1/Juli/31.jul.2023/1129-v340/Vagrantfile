@@ -1,0 +1,1251 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+
+#
+#	Versie 1.1.7
+#	
+
+
+#
+# Vagrant Configuratie voor Oracle Virtualbox en VMware Workstation/Fusion PRO hypervisors
+# (C) Copyright 2023 JA Tutert
+# 
+# This configuration may only be used for private use or education use. Business/commercial use is prohibited. 
+# It is intended for use with virtual machines on a hypervisor and thus not for configuration of bare-metal machines. 
+#
+# Vagrant is copyrighted by Hashicorp (www.vagrantup.com)
+#
+#
+# 
+# Build 20230730
+#
+#
+# ############################################ [Declaratie Scripts] ##########################################
+#
+#
+# [1] LINUX
+#
+#
+# [1a] Configuratie Scripts. 
+#
+#
+# [1a-1] Datapacket Repo
+#
+#
+$datapacket_repo = <<SCRIPT
+#!/bin/bash
+#
+# Reposity Nederland Datapacket toevoegen aan /etc/apt/sources.list bestand binnen Ubuntu Linux.   
+#
+sudo add-apt-repository "deb http://mirror.nl.datapacket.com/ubuntu $(lsb_release -sc) universe"
+#
+# [Vervangen standaard (mirros.edge.kernel.org) door nl.archive.ubuntu.com 
+# [OPTIE] echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list" >> /directory/file
+# [OPTIE] sudo sed 's@mirrors.edge.kernel.org@mirror.nl.datapacket.com@' -i /etc/apt/sources.list
+#
+sudo apt-get update
+#
+SCRIPT
+#
+#
+# [1a-2] Docker Repo
+#
+#
+$docker_repo = <<SCRIPT
+#!/bin/bash
+#
+# Repository toevoegen, zodat DOCKER-CE vervolgens geïnstalleerd kan worden m.b.t. commando binnen shell of via script. 
+#
+sudo apt-get install -y ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+SCRIPT
+#
+#
+# [1a-3] Ubuntu repo
+#
+#
+$ubuntu_repo = <<SCRIPT
+#
+# Aanmaken ubuntu_repo Script 
+#
+#!/bin/bash
+echo '#!/bin/bash'                               > /home/vagrant/ubuntu_repo.sh
+echo '#'                                        >> /home/vagrant/ubuntu_repo.sh
+echo '# Ubuntu Reposiory nl.archive.ubuntu.com' >> /home/vagrant/ubuntu_repo.sh
+echo '# (c) 2023 John Tutert'                   >> /home/vagrant/ubuntu_repo.sh
+echo '#'                                        >> /home/vagrant/ubuntu_repo.sh
+echo '# Aanpassen sources.list'                 >> /home/vagrant/ubuntu_repo.sh
+echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list" >> /home/vagrant/ubuntu_repo.sh
+echo '# APT bijwerken'                          >> /home/vagrant/ubuntu_repo.sh
+echo sudo apt update                            >> /home/vagrant/ubuntu_repo.sh
+chmod +x /home/vagrant/ubuntu_repo.sh
+SCRIPT
+#
+#
+# [1a-4] Docker rechten
+#
+#
+$docker_rechten = <<SCRIPT
+#
+# Aanmaken docker_rechten Script
+#
+#!/bin/bash
+echo '#!/bin/bash'                        > /home/vagrant/docker-rechten.sh
+echo '#'                                 >> /home/vagrant/docker-rechten.sh
+echo '# Docker Rechten Configuratie'     >> /home/vagrant/docker-rechten.sh
+echo '# (c) 2023 John Tutert'            >> /home/vagrant/docker-rechten.sh
+echo '#'                                 >> /home/vagrant/docker-rechten.sh
+echo sudo usermod -aG docker vagrant     >> /home/vagrant/docker-rechten.sh
+# echo sudo usermod -a -G docker vagrant >> /home/vagrant/docker-rechten.sh
+echo '# Reboot om actief te maken'       >> /home/vagrant/docker-rechten.sh
+echo shutdown -r now                     >> /home/vagrant/docker-rechten.sh
+chmod +x /home/vagrant/docker-rechten.sh
+SCRIPT
+#
+#
+# [1b] Installatie scripts 
+#
+#
+# [1b-1] Ubuntu upgrade script
+#
+#
+$ubuntu_upgrade = <<SCRIPT
+#
+# Aanmaken ubuntu_upgrade Script 
+#
+#!/bin/bash
+echo '#!/bin/bash'                        > /home/vagrant/ubuntu_upgrade.sh
+echo '#'                                 >> /home/vagrant/ubuntu_upgrade.sh
+echo '# Ubuntu UPGRADE'                  >> /home/vagrant/ubuntu_upgrade.sh
+echo '# (c) 2023 John Tutert'            >> /home/vagrant/ubuntu_upgrade.sh
+echo '#'                                 >> /home/vagrant/ubuntu_upgrade.sh
+echo '# Package Manager updaten'         >> /home/vagrant/ubuntu_upgrade.sh
+echo sudo apt update                     >> /home/vagrant/ubuntu_upgrade.sh
+echo '# Ubuntu upgraden'                 >> /home/vagrant/ubuntu_upgrade.sh
+echo sudo apt upgrade -y                 >> /home/vagrant/ubuntu_upgrade.sh
+echo sudo apt autoremove -y              >> /home/vagrant/ubuntu_upgrade.sh
+chmod +x /home/vagrant/ubuntu_upgrade.sh
+SCRIPT
+#
+#
+# [1b-2] Ubuntu_Utils
+#
+#
+# Midnight Commander (MC en MCedit) 
+# Screenfetch
+# Open-VM-Tools (VMware Tools) 
+# WGet
+#
+#
+$ubuntu_utils_install = <<SCRIPT
+#
+# Aanmaken ubuntu_config Script 
+#
+#!/bin/bash
+echo '#!/bin/bash'                        > /home/vagrant/ubuntu_utils_install.sh
+echo '#'                                 >> /home/vagrant/ubuntu_utils_install.sh
+echo '# Ubuntu Installatie Utils'        >> /home/vagrant/ubuntu_utils_install.sh
+echo '# (c) 2023 John Tutert'            >> /home/vagrant/ubuntu_utils_install.sh
+echo '#'                                 >> /home/vagrant/ubuntu_utils_install.sh
+echo '# Midnight Commander'              >> /home/vagrant/ubuntu_utils_install.sh
+echo sudo apt install -y mc              >> /home/vagrant/ubuntu_utils_install.sh
+echo '# Screenfetch'                     >> /home/vagrant/ubuntu_utils_install.sh
+echo sudo apt install -y screenfetch     >> /home/vagrant/ubuntu_utils_install.sh
+echo '# Open-VM-Tools'                   >> /home/vagrant/ubuntu_utils_install.sh
+echo sudo apt install -y open-vm-tools   >> /home/vagrant/ubuntu_utils_install.sh
+echo '# WGet'                            >> /home/vagrant/ubuntu_utils_install.sh
+echo sudo apt install -y wget            >> /home/vagrant/ubuntu_utils_install.sh
+# echo sudo apt install -y mc screenfetch open-vm-tools wget >> /home/vagrant/ubuntu_utils_install.sh
+chmod +x /home/vagrant/ubuntu_utils_install.sh
+SCRIPT
+#
+#
+# [1b-3] Docker_installatie [alleen voor Ubuntu 22.10]
+#
+#
+$docker_installatie = <<SCRIPT
+#
+# Aanmaken docker_installatie Script
+#
+#!/bin/bash
+echo '#!/bin/bash'                        > /home/vagrant/docker_installatie.sh
+echo '#'                                 >> /home/vagrant/docker_installatie.sh
+echo '# Vagrant Docker-CE Installatie'   >> /home/vagrant/docker_installatie.sh
+echo '# (c) 2023 John Tutert'            >> /home/vagrant/docker_installatie.sh
+echo '#'                                 >> /home/vagrant/docker_installatie.sh
+echo sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> /home/vagrant/docker_installatie.sh
+#
+# LET OP! Rechten staan nog niet goed ! 
+#
+chmod +x /home/vagrant/docker_installatie.sh
+SCRIPT
+#
+#
+# [1b-4] Minikube_installatie (Kubernetes) 
+#
+#
+$minikube_installatie = <<SCRIPT
+#
+# Aanmaken minikube installatie Script
+# Provider = Docker 
+#
+#!/bin/bash
+echo '#!/bin/bash'                            > /home/vagrant/minikube_installatie.sh
+echo '#'                                     >> /home/vagrant/minikube_installatie.sh
+echo '# Installatie Minikube'                >> /home/vagrant/minikube_installatie.sh
+echo '# (c) 2023 John Tutert'                >> /home/vagrant/minikube_installatie.sh
+echo '#'                                     >> /home/vagrant/minikube_installatie.sh
+echo wget https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb >> /home/vagrant/minikube_installatie.sh
+echo sudo dpkg -i minikube_latest_amd64.deb  >> /home/vagrant/minikube_installatie.sh
+# Minikube Driver Docker = Default
+echo minikube config set driver docker       >> /home/vagrant/minikube_installatie.sh
+# Installatie kubectl
+echo sudo snap install kubectl --classic     >> /home/vagrant/minikube_installatie.sh
+chmod +x /home/vagrant/minikube_installatie.sh
+SCRIPT
+#
+#
+# [1b-5] minio_installatie [native install minio / niet voor minikube of kubernetes ] 
+#
+#
+$minio_installatie = <<SCRIPT
+#
+# Installatie MinIO script
+# Niet gebruiken voor Kubernetes
+#
+#!/bin/bash
+echo '#!/bin/bash'                                    > /home/vagrant/minio-installatie.sh
+echo '#'                                             >> /home/vagrant/minio-installatie.sh
+echo '# MinIO Native Installatie'                    >> /home/vagrant/minio-installatie.sh
+echo '# (c) 2023 John Tutert'                        >> /home/vagrant/minio-installatie.sh
+echo '#'                                             >> /home/vagrant/minio-installatie.sh
+echo '# Toevoegen Repository'                        >> /home/vagrant/minio-installatie.sh
+# [MinIO Server Installatie]
+echo wget https://dl.min.io/server/minio/release/linux-amd64/minio_20230718174940.0.0_amd64.deb >> /home/vagrant/minio-installatie.sh
+echo sudo dpkg -i minio_20230718174940.0.0_amd64.deb >> /home/vagrant/minio-installatie.sh
+# [MinIO Groepen/Gebruikers]
+echo sudo groupadd -r minio-user                     >> /home/vagrant/minio-installatie.sh
+echo sudo useradd -M -r -g minio-user minio-user     >> /home/vagrant/minio-installatie.sh
+# [MinIO Storage Folder]
+echo sudo mkdir /mnt/data                            >> /home/vagrant/minio-installatie.sh
+echo sudo chown minio-user:minio-user /mnt/data      >> /home/vagrant/minio-installatie.sh
+# [MinIO Configuratie]
+echo 'echo MINIO_VOLUMES="/mnt/data" >> /etc/default/minio' >> /home/vagrant/minio-installatie.sh
+echo 'echo MINIO_OPTS="--certs-dir /home/vagrant/.minio/certs --console-address :9001" >> /etc/default/minio' >> /home/vagrant/minio-installatie.sh
+echo 'echo MINIO_ROOT_USER=minioadmin >> /etc/default/minio' >> /home/vagrant/minio-installatie.sh
+echo 'echo MINIO_ROOT_PASSWORD=minioadmin >> /etc/default/minio' >> /home/vagrant/minio-installatie.sh
+# [MinIO UFW poorten openzetten]
+echo sudo ufw allow 9000:9001/tcp                    >> /home/vagrant/minio-installatie.sh
+# [Starten MinIO Server]
+echo sudo systemctl start minio                      >> /home/vagrant/minio-installatie.sh
+echo sudo systemctl enable minio                     >> /home/vagrant/minio-installatie.sh
+# [MinIO Client Installatie]
+echo wget https://dl.min.io/client/mc/release/linux-amd64/mcli_20230718210538.0.0_amd64.deb >> /home/vagrant/minio-installatie.sh
+echo sudo dpkg -i mcli_20230718210538.0.0_amd64.deb  >> /home/vagrant/minio-installatie.sh
+# [KubeCTL MinIO Plugin]
+# https://min.io/docs/minio/kubernetes/upstream/reference/kubectl-minio-plugin.html
+# https://www.origo.io/info/stabiledocs/guides/minio-object-storage-service/
+echo wget https://github.com/minio/operator/releases/download/v5.0.6/kubectl-minio_5.0.6_linux_amd64 -O kubectl-minio >> /home/vagrant/minio-installatie.sh
+echo chmod +x kubectl-minio >> /home/vagrant/minio-installatie.sh
+echo sudo mv kubectl-minio /usr/local/bin/ >> /home/vagrant/minio-installatie.sh
+#
+# https://www.olivercoding.com/2021-03-01-kubernetes-minio-init/
+# 
+# echo kubectl create namespace minio-operator       >> /home/vagrant/minio-installatie.sh
+# echo kubectl minio init --namespace minio-operator >> /home/vagrant/minio-installatie.sh
+#
+chmod +x /home/vagrant/minio-installatie.sh
+SCRIPT
+#
+#
+# [1b-6] ansible_installatie 
+#
+#
+$ansible_installatie = <<SCRIPT
+#
+# Aanmaken Ansible installatie Script
+#
+#!/bin/bash
+echo '#!/bin/bash' > /home/vagrant/Ansible-installatie.sh
+echo '#' >> /home/vagrant/Ansible-installatie.sh
+echo '# ANSIBLE Installatie' >> /home/vagrant/Ansible-installatie.sh
+echo '# (c) 2023 John Tutert' >> /home/vagrant/Ansible-installatie.sh
+echo '#' >> /home/vagrant/Ansible-installatie.sh
+echo '# Toevoegen Repository' >> /home/vagrant/Ansible-installatie.sh
+echo sudo apt-add-repository ppa:ansible/ansible >> /home/vagrant/Ansible-installatie.sh
+echo '# Bijwerken Repository' >> /home/vagrant/Ansible-installatie.sh
+echo sudo apt update >> /home/vagrant/Ansible-installatie.sh
+echo '# Ansible Install' >> /home/vagrant/Ansible-installatie.sh
+echo sudo apt install -y ansible >> /home/vagrant/Ansible-installatie.sh
+chmod +x /home/vagrant/Ansible-installatie.sh
+SCRIPT
+#
+#
+# [1d] Applicatie Scripts 
+#
+# [1d-1] Minio_docker [Minio als Docker containers] 
+#
+# https://blog.knoldus.com/how-to-run-minio-as-a-docker-container/
+#
+$minio_docker = <<SCRIPT
+#!/bin/bash
+echo '#!/bin/bash' > /home/vagrant/minio-docker-run.sh
+echo '#' >> /home/vagrant/minio-docker-run.sh
+echo '# Minio Object Storage on Docker' >> /home/vagrant/minio-docker-run.sh
+echo 'docker run -d -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=minio99" -e "MINIO_ROOT_PASSWORD=minio123" quay.io/minio/minio server /data --console-address ":9001"' >/home/vagrant/minio-docker-run.sh
+chmod +x /home/vagrant/minio-docker-run.sh
+SCRIPT
+#
+#
+# [2] WINDOWS
+#
+# [2a] Scripts die ALTIJD uitgevoerd worden bij eerste start van VM
+#
+#
+# [2a-1] Installatie WinGET
+#
+#
+$winget_installatie = <<SCRIPT
+# REM powershell -ExecutionPolicy Unrestricted 
+# REM powershell -file ps-winget.ps1
+SCRIPT
+#
+# [2b] Scripts die aangemaakt worden, maar later handmatig gestart moeten worden
+#
+$win_script_aanmaak = <<SCRIPT
+# REM powershell -ExecutionPolicy Unrestricted 
+# REM powershell -file ps-winget.ps1
+SCRIPT
+#
+#
+#
+#
+# ########################################## [BOXES] ######################################################
+#
+#
+#
+#
+# LEGENDA
+# 
+# v = VMware provider
+# o = Oracle provider
+# g = generic
+# gr = gusztavvargadr
+# m = maroskukan
+# u = Ubuntu
+# S/L/M = RAM
+#
+#
+#
+# VOLGORDE
+#
+# [1] VMware Workstation / Fusion PRO
+# [2] Oracle Virtualbox
+#
+#
+#
+#
+Vagrant.configure("2") do |config|
+  # 
+  # #####################################  VMware Workstation/Fusion PRO BOXES #######################################
+  #
+  #
+  # Generic boxes
+  # =============
+  #
+  #
+  # Generic Ubuntu 22.04 LTS
+  # ------------------------
+  #
+  #
+  # ====================================================================================
+  # [vgu2204M] Generic Ubuntu 22.04 LTS met 4GB RAM
+  # ====================================================================================
+  #
+  #
+  config.vm.define "vgu2204M" do |vgu2204M|
+    vgu2204M.vm.box = "generic/ubuntu2204"
+    vgu2204M.vm.box_check_update = true
+	vgu2204M.vm.hostname = "Vagrant-vgu2204M"
+    vgu2204M.vm.network "private_network", type: "dhcp"
+	# https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage
+	vgu2204M.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	vgu2204M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	vgu2204M.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# vgu2204M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/mnt/hgfs"
+	# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+	vgu2204M.vm.post_up_message = "Start scripts in /home/vagrant voor verdere configuratie"
+    vgu2204M.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "4096"
+	  vmw.linked_clone = false
+	  vmw.vmx["tools.syncTime"] = "TRUE"
+	  vmw.vmx["displayName"] = "Vagrant-vgu2204M"
+	  vmw.vmx["annotation"] = "Ubuntu 22.04.02 LTS |0D|0A |0D|0AUsername/Password = vagrant"
+    end 
+   # Scripts die bij eerste start of provision parameter worden uitgevoerd
+   vgu2204M.vm.provision "shell", inline: <<-SHELL
+	#
+	#
+	#
+	#
+   SHELL
+   vgu2204M.vm.provision "shell", inline: $ubuntu_repo
+   vgu2204M.vm.provision "shell", inline: $ubuntu_upgrade  
+   vgu2204M.vm.provision "shell", inline: $ubuntu_utils_install
+   # Scripts die bij IEDERE start van de VM worden uitgevoerd
+   vgu2204M.vm.provision "shell", run: "always", inline: <<-SHELL
+	#
+	# bijvoorbeeld sudo systemctl start nginx
+	#
+	#
+   SHELL
+   vgu2204M.vm.provision "shell", run: "always", inline: $ubuntu_repo
+   vgu2204M.vm.provision "shell", run: "always", inline: $ubuntu_upgrade  
+   vgu2204M.vm.provision "shell", run: "always", inline: $ubuntu_utils_install
+  end 
+  #
+  #
+  # Generic Ubuntu 22.10 LTS
+  # ------------------------
+  #
+  #
+  # ====================================================================================
+  # [vgu2210S] Generic Ubuntu 22.10 LTS met 2GB RAM (SMALL)
+  # ====================================================================================
+  #
+  #
+  config.vm.define "vgu2210S" do |vgu2210S|
+    vgu2210S.vm.box = "generic/ubuntu2210"
+    vgu2210S.vm.box_check_update = true
+	vgu2210S.vm.hostname = "Vagrant-vgu2210S"
+	vgu2210S.vm.network "private_network", type: "dhcp"
+	# https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage
+	vgu2210S.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	vgu2210S.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	vgu2210S.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# vgu2210S.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/mnt/hgfs"
+	# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+    vgu2210S.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "2048"
+	  # Kopie maken van Vagrant BOX onder users\[gebruiker]\vagrant folder uitzetten
+	  vmw.linked_clone = false
+	  vmw.vmx["tools.syncTime"] = "TRUE"
+	  # Display Virtual Machine aanpassen
+	  vmw.vmx["displayName"] = "Vagrant-vgu2210S"
+	  vmw.vmx["annotation"] = "Ubuntu 22.10 LTS |0D|0A |0D|0AUsername/Password = vagrant"
+	  #
+	  #
+	  # == NAT device naar VMnet8
+	  # vmw.nat_device = "VMnet8"
+	  #
+	  # == NAT naar VMnet8 via VMX
+	  # vmw.vmx["ethernet0.present"] = "TRUE"
+	  # vmw.vmx["ethernet0.vnet"] = "VMnet8"
+	  # vmw.vmx["ethernet0.displayName"] = "VMnet8"
+	  # vmw.vmx["ethernet0.connectionType"] = "custom"
+	  # vmw.vmx["ethernet0.virtualDev"] = "e1000"
+	  #
+	  # == Shared Folders via VMX
+      # vmw.vmx["sharedFolder0.present"] = "TRUE"	 
+	  # vmw.vmx["sharedFolder0.enabled"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.readAccess"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.writeAccess"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.hostPath"] = "C://Users"
+	  # vmw.vmx["sharedFolder0.guestName"] = "Users"
+	  # vmw.vmx["sharedFolder0.expiration"] = "never"
+	  # vmw.vmx["sharedFolder.maxNum"] = "1"
+    end 
+   # Scripts die bij eerste start of provision parameter worden uitgevoerd
+   vgu2210S.vm.provision "shell", inline: <<-SHELL
+    #
+	#
+	#
+	#
+	#
+   SHELL
+   vgu2210S.vm.provision "shell", inline: $ubuntu_repo
+   vgu2210S.vm.provision "shell", inline: $ubuntu_upgrade   
+   vgu2210S.vm.provision "shell", inline: $ubuntu_utils_install
+   # Scripts die bij IEDERE start van de VM worden uitgevoerd
+   vgu2210S.vm.provision "shell", run: "always", inline: <<-SHELL
+	#
+	# bijvoorbeeld sudo systemctl start nginx
+	#
+	#
+   SHELL
+   vgu2210S.vm.provision "shell", run: "always", inline: $ubuntu_repo
+   vgu2210S.vm.provision "shell", run: "always", inline: $ubuntu_upgrade   
+   vgu2210S.vm.provision "shell", run: "always", inline: $ubuntu_utils_install
+  end 
+  #
+  #
+  # ====================================================================================  
+  # [vgu2210M] Generic Ubuntu 22.10 LTS met 4GB RAM (MIDDLE)
+  # ====================================================================================
+  #
+  #
+  config.vm.define "vgu2210M" do |vgu2210M|
+    vgu2210M.vm.box = "generic/ubuntu2210"
+    vgu2210M.vm.box_check_update = true
+	vgu2210M.vm.hostname = "Vagrant-vgu2210M"
+	vgu2210M.vm.network "private_network", type: "dhcp"
+	# https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage
+	vgu2210M.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	vgu2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	vgu2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# vgu2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/mnt/hgfs"
+	# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+    vgu2210M.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "4096"
+	  # Kopie maken van Vagrant BOX onder users\[gebruiker]\vagrant folder uitzetten
+	  vmw.linked_clone = false
+	  vmw.vmx["tools.syncTime"] = "TRUE"
+	  # Display Virtual Machine aanpassen
+	  vmw.vmx["displayName"] = "Vagrant-vgu2210M"
+	  vmw.vmx["annotation"] = "Ubuntu 22.10 LTS |0D|0A |0D|0AUsername/Password = vagrant"
+	  #
+	  # == NAT device naar VMnet8
+	  # vmw.nat_device = "VMnet8"
+	  #
+	  # == NAT naar VMnet8 via VMX
+	  # vmw.vmx["ethernet0.present"] = "TRUE"
+	  # vmw.vmx["ethernet0.vnet"] = "VMnet8"
+	  # vmw.vmx["ethernet0.displayName"] = "VMnet8"
+	  # vmw.vmx["ethernet0.connectionType"] = "custom"
+	  # vmw.vmx["ethernet0.virtualDev"] = "e1000"
+	  #
+	  # == Shared Folders via VMX
+      # vmw.vmx["sharedFolder0.present"] = "TRUE"	 
+	  # vmw.vmx["sharedFolder0.enabled"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.readAccess"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.writeAccess"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.hostPath"] = "C://Users"
+	  # vmw.vmx["sharedFolder0.guestName"] = "Users"
+	  # vmw.vmx["sharedFolder0.expiration"] = "never"
+	  # vmw.vmx["sharedFolder.maxNum"] = "1"
+    end 
+   # Scripts die bij eerste start of provision parameter worden uitgevoerd
+   vgu2210M.vm.provision "shell", inline: <<-SHELL
+	#
+	#
+	#
+	#
+   SHELL
+   vgu2210M.vm.provision "shell", inline: $docker_repo
+   vgu2210M.vm.provision "shell", inline: $ubuntu_repo
+   vgu2210M.vm.provision "shell", inline: $ubuntu_upgrade
+   vgu2210M.vm.provision "shell", inline: $ubuntu_utils_install
+   vgu2210M.vm.provision "shell", inline: $docker_rechten
+   vgu2210M.vm.provision "shell", inline: $docker_installatie
+   vgu2210M.vm.provision "shell", inline: $minikube_installatie
+   vgu2210M.vm.provision "shell", inline: $minio_docker
+   vgu2210M.vm.provision "shell", inline: $ansible_installatie
+   # Scripts die bij IEDERE start van de VM worden uitgevoerd
+   vgu2210M.vm.provision "shell", run: "always", inline: <<-SHELL
+	#
+	# bijvoorbeeld sudo systemctl start nginx
+	#
+	#
+   SHELL
+   vgu2210M.vm.provision "shell", run: "always", inline: $ubuntu_repo
+   vgu2210M.vm.provision "shell", run: "always", inline: $ubuntu_upgrade
+   vgu2210M.vm.provision "shell", run: "always", inline: $ubuntu_utils_install
+  end   
+  #
+  #
+  # ====================================================================================  
+  # [vgu2210L] Generic Ubuntu 22.10 LTS met 8GB RAM (LARGE)
+  # ====================================================================================  
+  #
+  #
+  config.vm.define "vgu2210L" do |vgu2210L|
+    vgu2210L.vm.box = "generic/ubuntu2210"
+    vgu2210L.vm.box_check_update = true   
+    vgu2210L.vm.hostname = "Vagrant-vgu2210L"
+	vgu2210L.vm.network "private_network", type: "dhcp"
+	# https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage
+	vgu2210L.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	vgu2210L.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	vgu2210L.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# vgu2210L.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/mnt/hgfs"
+	# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+    #
+	# Installatie Docker-CE en pull images ubuntu en debian
+	#
+	# https://developer.hashicorp.com/vagrant/docs/provisioning/docker
+	#
+	vgu2210L.vm.provision "docker" do |d|
+      d.pull_images "ubuntu"
+      d.pull_images "debian"
+    end
+	#
+	vgu2210L.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "8192"
+	  vmw.linked_clone = false
+	  vmw.vmx["tools.syncTime"] = "TRUE"
+	  # Display Virtual Machine aanpassen
+	  vmw.vmx["displayName"] = "Vagrant-vgu2210L"
+	  vmw.vmx["annotation"] = "Ubuntu 22.10 LTS |0D|0A |0D|0AUsername/Password = vagrant"
+	  #
+	  # == NAT device naar VMnet8
+	  # vmw.nat_device = "VMnet8"
+	  #
+	  # == NAT naar VMnet8 via VMX
+	  # vmw.vmx["ethernet0.present"] = "TRUE"
+	  # vmw.vmx["ethernet0.vnet"] = "VMnet8"
+	  # vmw.vmx["ethernet0.displayName"] = "VMnet8"
+	  # vmw.vmx["ethernet0.connectionType"] = "custom"
+	  # vmw.vmx["ethernet0.virtualDev"] = "e1000"
+	  #
+	  # == Shared Folders via VMX
+      # vmw.vmx["sharedFolder0.present"] = "TRUE"	 
+	  # vmw.vmx["sharedFolder0.enabled"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.readAccess"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.writeAccess"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.hostPath"] = "C://Users"
+	  # vmw.vmx["sharedFolder0.guestName"] = "Users"
+	  # vmw.vmx["sharedFolder0.expiration"] = "never"
+	  # vmw.vmx["sharedFolder.maxNum"] = "1"
+    end 
+   # Scripts die bij eerste start of provision parameter worden uitgevoerd
+   vgu2210L.vm.provision "shell", inline: <<-SHELL
+	#
+    # 
+	#
+	#
+   SHELL
+   vgu2210L.vm.provision "shell", inline: $docker_repo
+   vgu2210L.vm.provision "shell", inline: $ubuntu_repo
+   vgu2210L.vm.provision "shell", inline: $ubuntu_upgrade
+   vgu2210L.vm.provision "shell", inline: $ubuntu_utils_install
+   vgu2210L.vm.provision "shell", inline: $docker_rechten
+   vgu2210L.vm.provision "shell", inline: $docker_installatie
+   vgu2210L.vm.provision "shell", inline: $minikube_installatie
+   vgu2210L.vm.provision "shell", inline: $minio_docker
+   vgu2210L.vm.provision "shell", inline: $ansible_installatie 
+   vgu2210L.vm.provision "shell", inline: $minio_installatie
+   # Scripts die bij IEDERE start van de VM worden uitgevoerd
+   vgu2210L.vm.provision "shell", run: "always", inline: <<-SHELL
+	#
+    # bijvoorbeeld sudo systemctl start nginx
+	#
+	#
+   SHELL
+   vgu2210L.vm.provision "shell", run: "always", inline: $ubuntu_repo
+   vgu2210L.vm.provision "shell", run: "always", inline: $ubuntu_upgrade
+   vgu2210L.vm.provision "shell",  run: "always", inline: $ubuntu_utils_install
+  end 
+  #
+  #
+  # maroskukan boxes
+  # ================
+  #
+  #
+  # maroskukan Ubuntu 22.10 LTS
+  # ---------------------------
+  #
+  #
+  # ====================================================================================
+  # [vmu2210M] Maroskukan Ubuntu 22.10 LTS met 4GB RAM
+  # ====================================================================================
+  #
+  #
+  config.vm.define "vmu2210M" do |vmu2210M|
+    vmu2210M.vm.box = "maroskukan/ubuntu2210"
+    vmu2210M.vm.box_check_update = true
+	vmu2210M.vm.hostname = "Vagrant-vmu2210M"
+    vmu2210M.vm.network "private_network", type: "dhcp"
+	# https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage
+	vmu2210M.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	vmu2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	vmu2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# vmu2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/mnt/hgfs"
+	# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+    vmu2210M.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "4096"
+	  vmw.linked_clone = false
+	  vmw.vmx["tools.syncTime"] = "TRUE"
+	  vmw.vmx["displayName"] = "Vagrant-vmu2210M"
+	  vmw.vmx["annotation"] = "Ubuntu 22.10 LTS |0D|0A |0D|0AUsername/Password = vagrant"
+    end 
+   vmu2210M.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+	#
+	#
+	# 
+   SHELL
+   vmu2210M.vm.provision "shell", inline: $docker_repo
+   vmu2210M.vm.provision "shell", inline: $ubuntu_repo
+   vmu2210M.vm.provision "shell", inline: $ubuntu_upgrade
+   vmu2210M.vm.provision "shell", inline: $ubuntu_utils_install
+   vmu2210M.vm.provision "shell", inline: $docker_rechten
+   vmu2210M.vm.provision "shell", inline: $docker_installatie   
+   vmu2210M.vm.provision "shell", inline: $minikube_installatie
+   vmu2210M.vm.provision "shell", inline: $minio_docker
+   vmu2210M.vm.provision "shell", inline: $ansible_installatie
+  end 
+  #
+  #
+  # maroskukan Ubuntu 23.04
+  # -----------------------
+  #
+  #
+  # ====================================================================================
+  # [vmu2304M] maroskukan Ubuntu 23.04 met 4GB RAM
+  # ====================================================================================  
+  #
+  #
+  config.vm.define "vmu2304M" do |vmu2304M|
+    vmu2304M.vm.box = "maroskukan/ubuntu2304"
+    vmu2304M.vm.box_check_update = true
+	vmu2304M.vm.hostname = "Vagrant-vmu2304M"
+    vmu2304M.vm.network "private_network", type: "dhcp"
+	# https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage
+	vmu2304M.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	vmu2304M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	vmu2304M.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# vmu2304M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/mnt/hgfs"
+	# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+    vmu2304M.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "4096"
+	  vmw.linked_clone = false
+	  vmw.vmx["tools.syncTime"] = "TRUE"
+	  vmw.vmx["displayName"] = "Vagrant-vmu2304M"
+	  vmw.vmx["annotation"] = "Ubuntu 23.04 LTS |0D|0A |0D|0AUsername/Password = vagrant"
+    end 
+   vmu2304M.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+	#
+	#
+	# 
+   SHELL
+   vmu2304M.vm.provision "shell", inline: $docker_repo
+   vmu2304M.vm.provision "shell", inline: $ubuntu_repo
+   vmu2304M.vm.provision "shell", inline: $ubuntu_upgrade
+   vmu2304M.vm.provision "shell", inline: $ubuntu_utils_install
+   vmu2304M.vm.provision "shell", inline: $docker_rechten
+   vmu2304M.vm.provision "shell", inline: $docker_installatie   
+   vmu2304M.vm.provision "shell", inline: $minikube_installatie
+   vmu2304M.vm.provision "shell", inline: $minio_docker
+   vmu2304M.vm.provision "shell", inline: $ansible_installatie
+  end 
+  #
+  #
+  # gusztavvargadr Ubuntu Server 20.04 LTS
+  # --------------------------------------
+  #
+  #
+  # ====================================================================================
+  # [vgru2004L] gusztavvargadr Ubuntu Server 20.04 LTS met 8GB RAM
+  # 
+  # 2023juli29 Foutmelding bij starten VM
+  # 
+  # ====================================================================================  
+  #
+  #
+  config.vm.define "vgru2004L" do |vgru2004L|
+    vgru2004L.vm.box = "gusztavvargadr/ubuntu-server"
+    vgru2004L.vm.box_check_update = true
+	vgru2004L.vm.hostname = "Vagrant-vgru2004L"
+    vgru2004L.vm.network "private_network", type: "dhcp"
+	# https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage
+	vgru2004L.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	vgru2004L.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	vgru2004L.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# vgru2004L.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/mnt/hgfs"
+	# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+    vgru2004L.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "8192"
+	  vmw.linked_clone = false
+	  vmw.vmx["tools.syncTime"] = "TRUE"
+	  vmw.vmx["displayName"] = "Vagrant-vgru2004L"
+	  vmw.vmx["annotation"] = "Ubuntu Server 20.04 LTS |0D|0A |0D|0AUsername/Password = vagrant"
+    end 
+   vgru2004L.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+	#
+	#
+	# 
+   SHELL
+   vgru2004L.vm.provision "shell", inline: $ubuntu_repo
+   vgru2004L.vm.provision "shell", inline: $ubuntu_upgrade
+   vgru2004L.vm.provision "shell", inline: $ubuntu_utils_install
+  end 
+  #
+  #
+  # Windows Boxes
+  # =============
+  # 
+  # 
+  # [vw10eval] Windows 10 Enterprise EVAL   [WERKT NIET!]
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "vw10eval" do |vw10eval|
+    vw10eval.vm.box = "gusztavvargadr/windows-10" 
+    vw10eval.vm.box_check_update = true
+    vw10eval.vm.hostname = "vw10eval"
+    vw10eval.vm.guest = :windows
+    vw10eval.vm.boot_timeout = 18000
+    # vw10eval.vm.communicator = "winrm"
+    # vw10eval.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true
+    # vw10eval.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true
+    # vw10eval.winrm.host = "localhost"
+    vw10eval.vm.provider "vmware_desktop" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+  	  vb.memory = "4096"
+    end
+    # vw10eval.vm.provision "shell", inline: <<-SHELL 
+    vw10eval.vm.provision "shell", privileged: "true", inline: <<-SHELL
+     #
+	 #
+	 #
+	 #
+    SHELL
+  end
+  #
+  # [vw11eval] Windows 11 Enterprise EVAL   [WERKT NIET!]
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "vw11eval" do |vw11eval|
+    vw11eval.vm.box = "gusztavvargadr/windows-11" 
+    vw11eval.vm.box_check_update = true
+    vw11eval.vm.hostname = "vw11eval"
+    vw11eval.vm.guest = :windows
+    # vw11eval.vm.boot_timeout = 3600
+    # vw11eval.vm.communicator = "winrm"
+    # vw11eval.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true
+    # vw11eval.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true
+    # vw11eval.winrm.host = "localhost"
+    vw11eval.vm.provider "vmware_desktop" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+  	  vb.memory = "4096"
+    end
+    # vw11eval.vm.provision "shell", inline: <<-SHELL 
+    vw11eval.vm.provision "shell", privileged: "true", inline: <<-SHELL
+     #
+	 #
+	 #
+	 #
+    SHELL
+  end
+  #
+  # 
+  # =============================================== Oracle Virtuabox ====================================================
+  #
+  #
+  # Generic boxes
+  # =============
+  #
+  #
+  # Generic Ubuntu 22.04 LTS
+  # ------------------------
+  #
+  #
+  # ====================================================================================
+  # [ogu2204M] Generic Ubuntu 22.04 LTS met 4GB RAM
+  # ====================================================================================
+  #
+  #
+  config.vm.define "ogu2204M" do |ogu2204M|
+    ogu2204M.vm.box = "generic/ubuntu2204"
+    ogu2204M.vm.hostname = "Vagrant-ogu2204M"
+    ogu2204M.vm.box_check_update = true
+	# ogu2204M.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	ogu2204M.vm.network "private_network", ip: "192.168.56.210", netmask: "255.255.255.0"
+	ogu2204M.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	ogu2204M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	ogu2204M.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+	ogu2204M.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+	  vb.linked_clone = false
+	  vb.name = "Vagrant-ogu2204M"
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--description", "Ubuntu 22.04 LTS Gebruiker en Password: vagrant"] 
+    end 
+   ogu2204M.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+	#
+	#
+	# 
+   SHELL
+   ogu2204M.vm.provision "shell", inline: $ubuntu_repo
+   ogu2204M.vm.provision "shell", inline: $ubuntu_upgrade   
+   ogu2204M.vm.provision "shell", inline: $ubuntu_utils_installs
+  end 
+  #
+  #
+  # Generic Ubuntu 22.10 LTS
+  # ------------------------
+  #
+  #
+  # ====================================================================================
+  # [ogu2210S] Generic Ubuntu 22.10 LTS met 2GB RAM (SMALL)
+  # ====================================================================================
+  #
+  #
+  config.vm.define "ogu2210S" do |ogu2210S|
+    ogu2210S.vm.box = "generic/ubuntu2210"
+    ogu2210S.vm.hostname = "Vagrant-ogu2210S"
+    ogu2210S.vm.box_check_update = true
+	# ogu2210S.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	ogu2210S.vm.network "private_network", ip: "192.168.56.201", netmask: "255.255.255.0"
+	ogu2210S.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	ogu2210S.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	ogu2210S.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+	ogu2210S.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "2048"
+	  vb.linked_clone = false
+	  vb.name = "Vagrant-ogu2210S"
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--description", "Ubuntu 22.04 LTS Gebruiker en Password: vagrant"] 
+    end 
+   ogu2210S.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+	#
+	#
+	# 
+   SHELL
+   ogu2210S.vm.provision "shell", inline: $ubuntu_repo
+   ogu2210S.vm.provision "shell", inline: $ubuntu_upgrade   
+   ogu2210S.vm.provision "shell", inline: $ubuntu_utils_install
+  end 
+  #  
+  #
+  #
+  # ====================================================================================  
+  # [ogu2210M] Generic Ubuntu 22.10 LTS met 4GB RAM (MIDDLE)
+  # ====================================================================================
+  #
+  #
+  config.vm.define "ogu2210M" do |ogu2210M|
+    ogu2210M.vm.box = "generic/ubuntu2210"
+    ogu2210M.vm.hostname = "Vagrant-ogu2210M"
+    ogu2210M.vm.box_check_update = true
+	# ogu2210M.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	ogu2210M.vm.network "private_network", ip: "192.168.56.202", netmask: "255.255.255.0"
+	ogu2210M.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	ogu2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	ogu2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+	ogu2210M.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+	  vb.linked_clone = false
+	  vb.name = "Vagrant-ogu2210M"
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--description", "Ubuntu 22.04 LTS Gebruiker en Password: vagrant"] 
+    end 
+   ogu2210M.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+	#
+	#
+	# 
+   SHELL
+   ogu2210M.vm.provision "shell", inline: $docker_repo
+   ogu2210M.vm.provision "shell", inline: $ubuntu_repo
+   ogu2210M.vm.provision "shell", inline: $ubuntu_upgrade
+   ogu2210M.vm.provision "shell", inline: $ubuntu_utils_install
+   ogu2210M.vm.provision "shell", inline: $docker_rechten
+   ogu2210M.vm.provision "shell", inline: $docker_installatie
+   ogu2210M.vm.provision "shell", inline: $minikube_installatie
+   ogu2210M.vm.provision "shell", inline: $minio_docker
+   ogu2210M.vm.provision "shell", inline: $ansible_installatie
+  end 
+  #
+  #
+  # ====================================================================================  
+  # [ogu2210L] Generic Ubuntu 22.10 LTS met 8GB RAM (LARGE)
+  # ====================================================================================  
+  #
+  #
+  config.vm.define "ogu2210L" do |ogu2210L|
+    ogu2210L.vm.box = "generic/ubuntu2210"
+    ogu2210L.vm.hostname = "Vagrant-ogu2210L"
+    ogu2210L.vm.box_check_update = true
+	# ogu2210L.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	ogu2210L.vm.network "private_network", ip: "192.168.56.203", netmask: "255.255.255.0"
+	ogu2210L.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	ogu2210L.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	ogu2210L.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+	ogu2210L.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "8192"
+	  vb.linked_clone = false
+	  vb.name = "Vagrant-ogu2210L"
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--description", "Ubuntu 22.04 LTS Gebruiker en Password: vagrant"] 
+    end 
+   ogu2210L.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+	#
+	#
+	# 
+   SHELL
+   ogu2210L.vm.provision "shell", inline: $docker_repo 
+   ogu2210L.vm.provision "shell", inline: $ubuntu_repo
+   ogu2210L.vm.provision "shell", inline: $ubuntu_upgrade
+   ogu2210L.vm.provision "shell", inline: $ubuntu_utils_install
+   ogu2210L.vm.provision "shell", inline: $docker_rechten
+   ogu2210L.vm.provision "shell", inline: $docker_installatie
+   ogu2210L.vm.provision "shell", inline: $minikube_installatie
+   ogu2210L.vm.provision "shell", inline: $minio_docker
+   ogu2210L.vm.provision "shell", inline: $ansible_installatie
+   ogu2210L.vm.provision "shell", inline: $minio_installatie
+  end 
+  #
+  #
+  # Alvistack Ubuntu 22.10 LTS
+  # ---------------------------
+  #
+  #
+  # ====================================================================================
+  # [oau2210M] maroskukan Ubuntu 22.10 met 4GB RAM
+  # ====================================================================================  
+  #
+  #
+  config.vm.define "oau2210M" do |oau2210M|
+    oau2210M.vm.box = "alvistack/ubuntu-22.10"
+    oau2210M.vm.hostname = "Vagrant-oau2210M"
+    oau2210M.vm.box_check_update = true
+	# oau2210M.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	oau2210M.vm.network "private_network", ip: "192.168.56.220", netmask: "255.255.255.0"
+	oau2210M.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	oau2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	oau2210M.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+	oau2210M.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+	  vb.linked_clone = false
+	  vb.name = "Vagrant-oau2210M"
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--description", "Ubuntu 22.04 LTS Gebruiker en Password: vagrant"] 
+    end 
+   oau2210M.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+	#
+	#
+	# 
+   SHELL
+   oau2210M.vm.provision "shell", inline: $docker_repo
+   oau2210M.vm.provision "shell", inline: $ubuntu_repo
+   oau2210M.vm.provision "shell", inline: $ubuntu_upgrade
+   oau2210M.vm.provision "shell", inline: $ubuntu_utils_install
+   oau2210M.vm.provision "shell", inline: $docker_rechten
+   oau2210M.vm.provision "shell", inline: $docker_installatie
+   oau2210M.vm.provision "shell", inline: $minikube_installatie
+   oau2210M.vm.provision "shell", inline: $minio_docker
+   oau2210M.vm.provision "shell", inline: $ansible_installatie
+   oau2210M.vm.provision "shell", inline: $minio_installatie
+  end 
+  #
+  #
+  #
+  # gusztavvargadr Ubuntu Server 20.04 LTS
+  # --------------------------------------
+  #
+  #
+  # ====================================================================================
+  # [vgru2004L] gusztavvargadr Ubuntu Server 20.04 LTS met 8GB RAM
+  #
+  # 20230729 VM start met foutmelding
+  #
+  # ====================================================================================  
+  #
+  #
+  config.vm.define "ogru2004L" do |ogru2004L|
+    ogru2004L.vm.box = "gusztavvargadr/ubuntu-server"
+	ogru2004L.vm.hostname = "Vagrant-ogru2004L"
+	ogru2004L.vm.box_check_update = true
+	# ogru2004L.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	ogru2004L.vm.network "private_network", ip: "192.168.56.221", netmask: "255.255.255.0"
+	ogru2004L.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	ogru2004L.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	ogru2004L.vm.synced_folder "#{ENV['USERPROFILE']}//Documents", "/home/vagrant/documents"
+	# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+	ogru2004L.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "8192"
+	  vb.linked_clone = false
+	  vb.name = "Vagrant-ogru2004L"
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--description", "Ubuntu Server 20.04 LTS Gebruiker en Password: vagrant"]     
+    end 
+   ogru2004L.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+	#
+	#
+	# 
+   SHELL
+   ogru2004L.vm.provision "shell", inline: $ubuntu_repo
+   ogru2004L.vm.provision "shell", inline: $ubuntu_upgrade
+   ogru2004L.vm.provision "shell", inline: $ubuntu_utils_install
+  end 
+  #
+  #
+  # Windows Boxes
+  # =============
+  # 
+  # 
+  # [ow10eval] Windows 10 Enterprise EVAL
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "ow10eval" do |ow10eval|
+    ow10eval.vm.box = "gusztavvargadr/windows-10"
+	ow10eval.vm.box_check_update = true
+	ow10eval.vm.hostname = "ow10eval"
+	# # ow10eval.vm.guest = :windows
+	# ow10eval.vm.boot_timeout = 3600
+	# # ow10eval.vm.communicator = "winrm"
+	# # ow10eval.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
+    # # ow10eval.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
+    # # ow10eval.winrm.host = "localhost"
+	# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+    ow10eval.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+	  vb.linked_clone = false
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  # vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+    end
+   # ow10eval.vm.provision "shell", inline: <<-SHELL 
+    ow10eval.vm.provision "shell", privileged: "true", inline: <<-SHELL
+	 echo $ErrorActionPreference = 'Stop' >ps-winget.ps1
+	 echo $r = Invoke-RestMethod -Method Get -Uri https://api.github.com/repos/microsoft/winget-cli/releases/latest >>ps-winget.ps1
+	 echo $r.assets | ? { $_.name -match "\.msixbundle$" } | % { >>ps-winget.ps1
+	 echo     $downloadedFile = Join-Path $env:Temp $_.name >>ps-winget.ps1
+	 echo     if (Test-Path $downloadedFile) { >>ps-winget.ps1
+	 echo         Remove-Item $downloadedFile -Force >>ps-winget.ps1
+	 echo  } >>ps-winget.ps1
+	 REM powershell -ExecutionPolicy Unrestricted 
+	 REM powershell -file ps-winget.ps1
+    SHELL
+  end
+  #
+  # 
+  # [ow11eval] Windows 11 Enterprise EVAL
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "ow11eval" do |ow11eval|
+    ow11eval.vm.box = "gusztavvargadr/windows-11"
+	ow11eval.vm.box_check_update = true
+	ow11eval.vm.hostname = "ow11eval"
+	# # ow11eval.vm.guest = :windows
+	# ow11eval.vm.boot_timeout = 3600
+	# # ow11eval.vm.communicator = "winrm"
+	# # ow11eval.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
+    # # ow11eval.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
+    # # ow11eval.winrm.host = "localhost"
+	# https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+    ow11eval.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+	  vb.linked_clone = false
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  # vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+    end
+   # ow11eval.vm.provision "shell", inline: <<-SHELL 
+    ow11eval.vm.provision "shell", privileged: "true", inline: <<-SHELL
+	 echo $ErrorActionPreference = 'Stop' >ps-winget.ps1
+	 echo $r = Invoke-RestMethod -Method Get -Uri https://api.github.com/repos/microsoft/winget-cli/releases/latest >>ps-winget.ps1
+	 echo $r.assets | ? { $_.name -match "\.msixbundle$" } | % { >>ps-winget.ps1
+	 echo     $downloadedFile = Join-Path $env:Temp $_.name >>ps-winget.ps1
+	 echo     if (Test-Path $downloadedFile) { >>ps-winget.ps1
+	 echo         Remove-Item $downloadedFile -Force >>ps-winget.ps1
+	 echo  } >>ps-winget.ps1
+	 REM powershell -ExecutionPolicy Unrestricted 
+	 REM powershell -file ps-winget.ps1
+    SHELL
+  end
+  #
+  #
+  # [Einde BOXES]
+  #
+  #
+end

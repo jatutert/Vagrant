@@ -1528,64 +1528,52 @@ Vagrant.configure("2") do |config|
 			winnode.vm.box 				= 	machine[:VagrantBoxName]
 			winnode.vm.box_check_update = 	false
 			#
-			winnode.vm.hostname 		= 	"Vagrant-#{machine[:HostNameVM]}"
+			winnode.vm.hostname 		= 	"#{machine[:HostNameVM]}"
+			#	OUD		winnode.vm.hostname 		= 	"Vagrant-#{machine[:HostNameVM]}"
 			winnode.vm.guest 			= 	:windows
 			winnode.winssh.shell 		= 	"powershell" 		# The shell to use when executing SSH commands from Vagrant. By default this is powershell. Valid values are "cmd" or "powershell".		
 			#
-			# ####################################################################	
 			#
+			#
+			#
+			# 	####################################################################
 			#	Network
 			#
-			#	Adapters
+			#	Ethernet1 NetAdapter // LAB 
 			#
-			#	Adapter 2 Host-Only	
 			winnode.vm.network "private_network", type: "dhcp"
 			#
+			#	Ethernet2 NetAdapter // Vagrant WinRM
 			#
-			#	Adapter 3 Host-Only VMNet 4 10.1.10.0 Netwerk
-			if machine[:HostNameVM] == "DC01"
-				winnode.vm.network "private_network", ip: "10.1.10.11", :netmask => "255.255.255.0", 
-				auto_config: false
-			end
-			if machine[:HostNameVM] == "DB01"
-				winnode.vm.network "private_network", ip: "10.1.10.21", :netmask => "255.255.255.0",
-				auto_config: false
-			end
+			winnode.vm.network "private_network", type: "dhcp"
+			#
+			# 	####################################################################
 			#
 			#
-			#	08 mei 2025 / CoPilot komt met 
-			#	winnode.vm.network "private_network", ip: "192.168.50.5", adapter: 2
-			#
-			#	2024 / Handmatig instellen
-			#	node.vm.network "private_network", ip: "192.168.56.220", netmask: "255.255.255.0"
-			#
-			# 	Adapter 3 Bridged
-			# 	node.vm.network "public_network", bridge: "VMware Virtual Ethernet Adapter for VMnet8"
-			# 	node.vm.network "public_network", bridge: "Ethernet"
-			#
-			#	Port-Forwarding
-			#
-			#	Remote Desktop Protocol (RDP) 	[uitgezet 18 augustus 2024]
-			#	winnode.vm.network :forwarded_port, guest: 3389, host: 53389, auto_correct: true
-			#
-			#	Naslag
-			# 	node.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
-			# 	node.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
-			#
-			# ####################################################################
 			#
 			#
-			# ####################################################################	
+			# 	####################################################################
 			#	WinRM
 			#
-			winnode.vm.communicator 	= 	"winrm" 		# standaard is ssh windows moet naar winrm
+			#	11 mei 2025 uitgezet / Nog wel noodzakeijk ? / 
+			#	winnode.vm.communicator 	= 	"winrm" 		# standaard is ssh windows moet naar winrm
 			#
+			#	11 mei 2025 // Gaat niet goed omdat de Windows VM Hostname nog niet HostNameVM is bij start
+			#	winnode.winrm.host		=	"#{machine[:HostNameVM]}"
 			#
-			# ####################################################################	
-			#
+			# 	####################################################################
+			#	Post Up Message
 			#
 			winnode.vm.post_up_message = "Start scripts in Downloads in VM voor verdere configuratie"
 			#	
+			#	####################################################################
+			#
+			#
+			#
+			#
+			#	#####################################################################
+			#	Hypervisor Specifieke Instellingen
+			#
 			#
 			#	Oracle Virtualbox
 			#
@@ -1607,8 +1595,10 @@ Vagrant.configure("2") do |config|
 					win_node_ovbvm.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
 					win_node_ovbvm.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
 					win_node_ovbvm.customize ["modifyvm", :id, "--description", "Ubuntu 22.04 LTS Gebruiker en Password: vagrant"] 
-					#
 				end
+				#
+				#
+				#
 			end	
 			#
 			#
@@ -1618,59 +1608,94 @@ Vagrant.configure("2") do |config|
 			if machine[:HypervisorVM] == "VMware"
 				#
 				# https://developer.hashicorp.com/vagrant/docs/providers/vmware
-				#			
+				#
 				winnode.vm.provider "vmware_desktop" do |win_node_vmwvm|
 					#
-					win_node_vmwvm.gui 						= 	true
-					win_node_vmwvm.linked_clone				= 	false
+					win_node_vmwvm.gui 								= true
+					win_node_vmwvm.linked_clone						= false
 					#
-					win_node_vmwvm.cpus 					= 	"#{machine[:CPUCoresVM]}"
-					win_node_vmwvm.memory 					= 	"#{machine[:MemoryVM]}"
-					# vmwvm.nat_device 	= "VMnet8"
+					win_node_vmwvm.cpus 							= "#{machine[:CPUCoresVM]}"
+					win_node_vmwvm.memory 							= "#{machine[:MemoryVM]}"
 					#
-					win_node_vmwvm.vmx["tools.syncTime"]	= 	"TRUE"
-					win_node_vmwvm.vmx["displayName"] 		= 	"#{machine[:DisplayName]}"
-					win_node_vmwvm.vmx["annotation"] 		= 	"#{machine[:VagrantBoxNameOSType]} #{machine[:VagrantBoxNameOSVersion]} |0D|0AUsed box is #{machine[:VagrantBoxName]} |0D|0ACreated on #{cur_date} by Vagrant |0D|0AUsername/Password = vagrant |0D|0AUse VAGRANT up #{machine[:HostNameVM]} to boot this virtual machine"
+					win_node_vmwvm.vmx["tools.syncTime"]			= "TRUE"
+					win_node_vmwvm.vmx["displayName"] 				= "#{machine[:DisplayName]}"
+					win_node_vmwvm.vmx["annotation"] 				= "#{machine[:VagrantBoxNameOSType]} #{machine[:VagrantBoxNameOSVersion]} |0D|0AUsed box is #{machine[:VagrantBoxName]} |0D|0ACreated on #{cur_date} by Vagrant |0D|0AUsername/Password = vagrant |0D|0AUse VAGRANT up #{machine[:HostNameVM]} to boot this virtual machine"
+					#
+					#	Ethernet1 NetAdapter // LAB
+					win_node_vmwvm.vmx["ethernet1.connectiontype"] 	= "custom"
+					win_node_vmwvm.vmx["ethernet1.vnet"] 			= "VMnet4"
+					win_node_vmwvm.vmx["ethernet1.displayName"] 	= "VMnet4"
+					#
+					#	Ethernet2 NetAdapter // Vagrant WinRM
+					win_node_vmwvm.vmx["ethernet2.connectiontype"] 	= "custom"
+					win_node_vmwvm.vmx["ethernet2.vnet"] 			= "VMnet1"
+					win_node_vmwvm.vmx["ethernet2.displayName"] 	= "VMnet1"
 				end
+				#
+				#
+				#
 			end	
 			#
-			#	Windows Desktop Out of the Box (OOBE) Scripts
 			#
-			if machine[:VagrantBoxNameOSType] == "windows" && machine[:VagrantBoxNameOSEdition] == "desktop"
+			#	#####################################################################
+			#	Provision
+			#
+			#	Ethernet1 NetAdapter // LAB voorzien van een Static IPV4 Adres
+			#	
+			#	Ethernet2 NetAdapter NIET voorzien van Static IP, anders werkt Vagrant WinRM NIET meer ! 
+			#
+			if machine[:HostNameVM] == "DC01"
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Windows/Powershell/Vagrant-VM-Configure-Static-IP.ps1"
+			end
+			if machine[:HostNameVM] == "DB01"
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Windows/Powershell/Vagrant-VM-Configure-Static-IP.ps1"
+			end
+			#
+			#	Configuratie Windows Omgeving / Algemeen
+			#
+			if machine[:VagrantBoxNameOSType] == "windows"
 				#	Windows Services Stoppen en disabelen (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V006.ps1"
-				#	Windows Policy en Registry Instellingen doen (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Registry-Policy-V001.ps1"
 				#	Windows SSH Client / SSH Server installatie (JT) 
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Config-SSH-V003.ps1"
 				#	Installatie WinGET (Asheroto) (steeds nieuwste versie van het script)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/asheroto/winget-install/master/winget-install.ps1"
 				#	WinGET Accept License Terms (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
-				#	WinGET Install Apps (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Winget-Install-APPS-V001.ps1"
 				#	Download Bestanden en CMD Scripts (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V002.ps1"
 				#	Installatie Applicaties (Powershell 7) (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Application-Install-V001.ps1"
 			end
 			#
-			#	Windows Server initialisatie
+			#	Configuratie Windows Omgeving / Desktop
+			#
+			if machine[:VagrantBoxNameOSType] == "windows" && machine[:VagrantBoxNameOSEdition] == "desktop"
+				#	Windows Policy en Registry Instellingen doen (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Registry-Policy-V001.ps1"
+				#	WinGET Install Apps (JT)
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Winget-Install-APPS-V001.ps1"
+			end
+			#
+			#	Configuratie Windows Omgeving / Server
 			#
 			if machine[:VagrantBoxNameOSType] == "windows" && machine[:VagrantBoxNameOSEdition] == "server"
-				#	Windows Services Stoppen en disabelen (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V006.ps1"
-				#	Windows SSH Client / SSH Server installatie (JT) 
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Config-SSH-V003.ps1"
-				#	Installatie WinGET (Asheroto) (steeds nieuwste versie van het script)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/asheroto/winget-install/master/winget-install.ps1"
-				#	WinGET Accept License Terms (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
-				#	Download Bestanden (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V001.ps1"
-				#	Installatie Applicaties (Powershell 7) (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Application-Install-V001.ps1"
+				#	Geen specifieke configuratie Scripts
 			end
+			#
+			#	https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/OpdrachtCasus1.html
+			#
+			if machine[:HostNameVM] == "DC01"
+				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/02-Install-ActiveDirectory.ps1"
+				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/03-Install-DHCP.ps1"
+				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/04-Install-Routing.ps1"
+			end
+			if machine[:HostNameVM] == "DB01"
+				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/06-Configure-MemberServer.ps1"
+				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/07-Install-SQLServer.ps1"
+			end
+			#
+			#
 			#
 			winnode.vm.provision "shell", privileged: "true", inline: <<-SHELL
 				#

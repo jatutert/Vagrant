@@ -1,0 +1,786 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+
+#
+#	Versie 1.0.18
+#
+
+
+
+# Vagrant Configuratie Bestand voor Virtualisatie omgevingen
+# Gemaakt door John Tutert
+# 
+# Build 20230726-1800
+#
+# https://www.thisprogrammingthing.com/20s15/multiple-vagrant-vms-in-one-vagrantfile/
+#
+Vagrant.configure("2") do |config|
+  # 
+  # =============================================== VMware Workstation/Fusion PRO ====================================================
+  #
+  # [V-ULX-1] Ubuntu Omgeving (Ubuntu 22.10 LTS)
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "vubunt" do |vubunt|
+    vubunt.vm.box = "generic/ubuntu2210"
+    vubunt.vm.box_check_update = true
+	vubunt.vm.hostname = "ulx-vubunt-001"
+    vubunt.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "2048"
+	  vmw.linked_clone = false
+	#  vmw.nat_device = "VMnet8"
+    end 
+   vubunt.vm.provision "shell", inline: <<-SHELL
+    # ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	SHELL
+  end 
+  #
+  # [V-ULX-2] vdckr Omgeving (Ubuntu 22.10 LTS met Docker (inclusief Compose plugin))
+  #
+  config.vm.define "vdckr" do |vdckr|
+    vdckr.vm.box = "generic/ubuntu2210"
+    vdckr.vm.box_check_update = true
+	vdckr.vm.hostname = "ulx-vdckr-001"
+	# https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage
+	vdckr.vm.synced_folder "C://Users//#{ENV['USERNAME']}", "/home/#{ENV['USERNAME']}"
+	vdckr.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/home/vagrant/downloads"
+	# vdckr.vm.synced_folder "#{ENV['USERPROFILE']}//Downloads", "/mnt/hgfs"
+	# https://developer.hashicorp.com/vagrant/docs/providers/vmware
+    vdckr.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "4096"
+	  # Kopie maken van Vagrant BOX onder users\[gebruiker]\vagrant folder uitzetten
+	  vmw.linked_clone = false
+	  # Display Virtual Machine aanpassen
+	  vmw.vmx["displayName"] = "Vagrant-vdckr"
+	  vmw.vmx["annotation"] = "Ubuntu 22.10 LTS |0D|0A |0D|0AUsername/Password = vagrant"
+	  #
+	  # == NAT device naar VMnet8
+	  # vmw.nat_device = "VMnet8"
+	  #
+	  # == NAT naar VMnet8 via VMX
+	  # vmw.vmx["ethernet0.present"] = "TRUE"
+	  # vmw.vmx["ethernet0.vnet"] = "VMnet8"
+	  # vmw.vmx["ethernet0.displayName"] = "VMnet8"
+	  # vmw.vmx["ethernet0.connectionType"] = "custom"
+	  # vmw.vmx["ethernet0.virtualDev"] = "e1000"
+	  #
+	  # == Shared Folders via VMX
+      # vmw.vmx["sharedFolder0.present"] = "TRUE"	 
+	  # vmw.vmx["sharedFolder0.enabled"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.readAccess"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.writeAccess"] = "TRUE"
+	  # vmw.vmx["sharedFolder0.hostPath"] = "C://Users"
+	  # vmw.vmx["sharedFolder0.guestName"] = "Users"
+	  # vmw.vmx["sharedFolder0.expiration"] = "never"
+	  # vmw.vmx["sharedFolder.maxNum"] = "1"
+    end 
+   vdckr.vm.provision "shell", inline: <<-SHELL
+    # ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+    # [1] Network restart
+	#
+	# #sudo /etc/init.d/networking restart
+	sudo netplan apply
+	#
+	# [2] Configuratie omgeving
+	# 
+	# [2a] Ubuntu Repository toevoegen
+	sudo add-apt-repository "deb http://mirror.nl.datapacket.com/ubuntu $(lsb_release -sc) universe"
+	# [2b] Docker Repository toevoegen
+	sudo apt-get update
+	sudo apt-get install -y ca-certificates curl gnupg
+	sudo install -m 0755 -d /etc/apt/keyrings
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	#
+	# [3] Sources.list bestand aanpassen
+	#
+	# [OPTIE] echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i" /etc/apt/sources.list
+	# [OPTIE] sudo sed 's@mirrors.edge.kernel.org@mirror.nl.datapacket.com@' -i /etc/apt/sources.list
+	# sudo apt-get update
+	#
+	# [4] BASH Shell Script vdckr-config.sh
+    #
+	# vdckr script = create script file 
+	echo '#!/bin/bash' > /home/vagrant/vdckr-config.sh
+	echo '#' >> /home/vagrant/vdckr-config.sh
+	echo '# Vagrant vdckr VM Configuration' >> /home/vagrant/vdckr-config.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/vdckr-config.sh
+	echo '#' >> /home/vagrant/vdckr-config.sh
+	# vdckr script = Ubuntu update
+	echo '# Update Ubuntu' >> /home/vagrant/vdckr-config.sh
+	echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list" >> /home/vagrant/vdckr-config.sh
+	echo sudo apt update >> /home/vagrant/vdckr-config.sh
+    echo sudo apt upgrade -y >> /home/vagrant/vdckr-config.sh
+	echo sudo apt autoremove -y >> /home/vagrant/vdckr-config.sh
+	# vdckr script = Install Utilities
+	echo '# Utilities' >> /home/vagrant/vdckr-config.sh
+	echo sudo apt install -y mc screenfetch open-vm-tools wget >> /home/vagrant/vdckr-config.sh
+	# vdckr scriptie = Install Docker-CE & Compose Plugin for Docker-CE
+	echo '# Docker' >> /home/vagrant/vdckr-config.sh
+	echo sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> /home/vagrant/vdckr-config.sh
+	# vdckr script = script executable
+	chmod +x /home/vagrant/vdckr-config.sh
+    #
+	# [5] BASH Shell Script Docker-rights.sh
+    #
+	# https://www.baeldung.com/linux/docker-permission-denied-daemon-socket-error
+	#
+	echo '#!/bin/bash' > /home/vagrant/docker-rights.sh
+	echo '#' >> /home/vagrant/docker-rights.sh
+	echo '# Docker Rechten Configuration' >> /home/vagrant/docker-rights.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/docker-rights.sh
+	echo '#' >> /home/vagrant/docker-rights.sh
+	# Gebruiker vagrant toevoegen aan Docker group
+	echo sudo usermod -aG docker vagrant >> /home/vagrant/docker-rights.sh
+	# Logout om rechten te activeren
+	echo echo "Alleen door nu uit te loggen en in te loggen worden rechten actief" >> /home/vagrant/docker-rights.sh
+	echo echo "Geef commando logout " >> /home/vagrant/docker-rights.sh
+	chmod +x /home/vagrant/docker-rights.sh
+	#
+	# [6] BASH Shell Script Ansible-install.sh
+    #
+	echo '#!/bin/bash' > /home/vagrant/Ansible-install.sh
+	echo '#' >> /home/vagrant/Ansible-install.sh
+	echo '# ANSIBLE Installatie' >> /home/vagrant/Ansible-install.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/Ansible-install.sh
+	echo '#' >> /home/vagrant/Ansible-install.sh
+	echo '# Toevoegen Repository' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt-add-repository ppa:ansible/ansible >> /home/vagrant/Ansible-install.sh
+	echo '# Bijwerken Repository' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt update >> /home/vagrant/Ansible-install.sh
+	echo '# Ansible Install' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt install -y ansible >> /home/vagrant/Ansible-install.sh
+	chmod +x /home/vagrant/Ansible-install.sh
+	#
+	# [7] Restart mode naar auto zetten in plaats van interactief
+	#
+	# https://askubuntu.com/questions/1367139/apt-get-upgrade-auto-restart-services
+	#
+	sudo sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
+    #
+	# [8] MinIO Object Storage in Containers 
+	#
+	# https://blog.knoldus.com/how-to-run-minio-as-a-docker-container/
+	echo '#!/bin/bash' > /home/vagrant/minio-docker-run.sh
+	echo '#' >> /home/vagrant/minio-docker-run.sh
+	echo '# Minio Object Storage on Docker' >> /home/vagrant/minio-docker-run.sh
+	echo 'docker run -d -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=minio99" -e "MINIO_ROOT_PASSWORD=minio123" quay.io/minio/minio server /data --console-address ":9001"' >/home/vagrant/minio-docker-run.sh
+	chmod +x /home/vagrant/minio-docker-run.sh
+    #
+   SHELL
+  end   
+  #
+  # [V-ULX-3] vminik Omgeving (Ubuntu 22.10 LTS met Docker (inclusief Compose plugin) + MiniKube + MinIO)
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "vminik" do |vminik|
+    vminik.vm.box = "generic/ubuntu2210"
+    vminik.vm.box_check_update = true   
+    vminik.vm.hostname = "ulx-vminik-001"
+	vminik.vm.network "private_network", type: "dhcp"
+    vminik.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "4096"
+	  vmw.linked_clone = false
+	  vmw.vmx["displayName"] = "Vagrant-vminik"
+	  vmw.vmx["annotation"] = "Ubuntu 22.10 LTS | Username/Password = vagrant"
+    end 
+   vminik.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+    # [1] Network restart
+	#
+	# #sudo /etc/init.d/networking restart
+	sudo netplan apply
+    #
+	# [2] Configuratie omgeving
+	# 
+	# [2a] Ubuntu Repository toevoegen
+	sudo add-apt-repository "deb http://mirror.nl.datapacket.com/ubuntu $(lsb_release -sc) universe"
+	# [2b] Docker Repository toevoegen
+	sudo apt-get update
+	sudo apt-get install -y ca-certificates curl gnupg
+	sudo install -m 0755 -d /etc/apt/keyrings
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	# [2c] VMware Workstation/Fusion PRO Shared Folders
+	# https://gist.github.com/darrenpmeyer/b69242a45197901f17bfe06e78f4dee3
+	sudo mkdir -p /mnt/hgfs
+	sudo echo '.host:/	/mnt/hgfs	fuse.vmhgfs-fuse	auto,allow_other	0	0' | sudo tee /etc/rc.local > /dev/null
+	#
+	# [3] Sources.list bestand aanpassen
+	#
+	# [OPTIE] echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i" /etc/apt/sources.list
+	# [OPTIE] sudo sed 's@mirrors.edge.kernel.org@mirror.nl.datapacket.com@' -i /etc/apt/sources.list
+	# sudo apt-get update
+	#
+	# [4] BASH Shell Script vminik-config.sh
+    #
+	# vminik script = create script file 
+	echo '#!/bin/bash' > /home/vagrant/vminik-config.sh
+	echo '#' >> /home/vagrant/vminik-config.sh
+	echo '# Vagrant vminik VM Configuration' >> /home/vagrant/vminik-config.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/vminik-config.sh
+	echo '#' >> /home/vagrant/vminik-config.sh
+	# vminik script = Ubuntu update
+	echo '# Update Ubuntu' >> /home/vagrant/vminik-config.sh
+	echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list" >> /home/vagrant/vminik-config.sh
+	echo sudo apt update >> /home/vagrant/vminik-config.sh
+    echo sudo apt upgrade -y >> /home/vagrant/vminik-config.sh
+	echo sudo apt autoremove -y >> /home/vagrant/vminik-config.sh
+	# vminik script = Install Utilities
+	echo '# Utilities' >> /home/vagrant/vminik-config.sh
+	echo sudo apt install -y mc screenfetch open-vm-tools wget >> /home/vagrant/vminik-config.sh
+	# vminik script = Install Docker-CE & Compose Plugin for Docker-CE
+	echo '# Docker' >> /home/vagrant/vminik-config.sh
+	echo sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> /home/vagrant/vminik-config.sh
+    # minik script = Install Minikube
+    echo '# Minikube' >> /home/vagrant/vminik-config.sh   
+    echo wget https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb >> /home/vagrant/vminik-config.sh
+	echo sudo dpkg -i minikube_latest_amd64.deb >> /home/vagrant/vminik-config.sh
+	echo minikube config set driver docker >> /home/vagrant/vminik-config.sh
+	echo sudo snap install kubectl --classic >> /home/vagrant/vminik-config.sh
+	# vminik script = script executable
+	chmod +x /home/vagrant/vminik-config.sh
+	#
+	# [5] BASH Shell Script docker-rights.sh
+    #
+	# https://www.baeldung.com/linux/docker-permission-denied-daemon-socket-error
+	#
+	echo '#!/bin/bash' > /home/vagrant/docker-rights.sh
+	echo '#' >> /home/vagrant/docker-rights.sh
+	echo '# Docker Rechten Configuration' >> /home/vagrant/docker-rights.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/docker-rights.sh
+	echo '#' >> /home/vagrant/docker-rights.sh
+	# Gebruiker vagrant toevoegen aan Docker group
+	echo sudo usermod -aG docker vagrant >> /home/vagrant/docker-rights.sh
+	# Logout om rechten te activeren
+	echo echo "Alleen door nu uit te loggen en in te loggen worden rechten actief" >> /home/vagrant/docker-rights.sh
+	echo echo "Geef commando logout " >> /home/vagrant/docker-rights.sh
+	chmod +x /home/vagrant/docker-rights.sh
+	#
+	# [6] BASH Shell Script Ansible-install.sh
+    #
+	echo '#!/bin/bash' > /home/vagrant/Ansible-install.sh
+	echo '#' >> /home/vagrant/Ansible-install.sh
+	echo '# ANSIBLE Installatie' >> /home/vagrant/Ansible-install.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/Ansible-install.sh
+	echo '#' >> /home/vagrant/Ansible-install.sh
+	echo '# Toevoegen Repository' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt-add-repository ppa:ansible/ansible >> /home/vagrant/Ansible-install.sh
+	echo '# Bijwerken Repository' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt update >> /home/vagrant/Ansible-install.sh
+	echo '# Ansible Install' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt install -y ansible >> /home/vagrant/Ansible-install.sh
+	chmod +x /home/vagrant/Ansible-install.sh
+	#
+	# [7] Restart mode naar auto zetten in plaats van interactief
+	#
+	# https://askubuntu.com/questions/1367139/apt-get-upgrade-auto-restart-services
+	#
+	sudo sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
+    #
+	# [8] MinIO Object Storage in Containers 
+	#
+	# https://blog.knoldus.com/how-to-run-minio-as-a-docker-container/
+	echo '#!/bin/bash' > /home/vagrant/minio-docker-run.sh
+	echo '#' >> /home/vagrant/minio-docker-run.sh
+	echo '# Minio Object Storage on Docker' >> /home/vagrant/minio-docker-run.sh
+	echo 'docker run -d -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=minio99" -e "MINIO_ROOT_PASSWORD=minio123" quay.io/minio/minio server /data --console-address ":9001"' >/home/vagrant/minio-docker-run.sh
+	chmod +x /home/vagrant/minio-docker-run.sh
+	#
+   SHELL
+  end 
+  #
+  # [V-ULX-4] vminik Omgeving (Ubuntu 22.10 LTS met Docker (inclusief Compose plugin) + MiniKube + MinIO Server/Client)
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "vminio" do |vminio|
+    vminio.vm.box = "generic/ubuntu2210"
+    vminio.vm.box_check_update = true
+	vminio.vm.hostname = "ulx-vminio-001"
+    vminio.vm.network "private_network", type: "dhcp"
+    vminio.vm.provider "vmware_desktop" do |vmw|
+      vmw.gui = true
+      vmw.cpus = "2"
+	  vmw.memory = "4096"
+	  vmw.linked_clone = false
+    end 
+   vminio.vm.provision "shell", inline: <<-SHELL
+	# ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+    # [1] Network restart
+	#
+	# #sudo /etc/init.d/networking restart
+	sudo netplan apply
+    #
+	# [2] Configuratie omgeving
+	# 
+	# [2a] Ubuntu Repository toevoegen
+	sudo add-apt-repository "deb http://mirror.nl.datapacket.com/ubuntu $(lsb_release -sc) universe"
+	# [2b] Docker Repository toevoegen
+	sudo apt-get update
+	sudo apt-get install -y ca-certificates curl gnupg
+	sudo install -m 0755 -d /etc/apt/keyrings
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	# [2c] VMware Workstation/Fusion PRO Shared Folders
+	# https://gist.github.com/darrenpmeyer/b69242a45197901f17bfe06e78f4dee3
+	sudo mkdir -p /mnt/hgfs
+	sudo echo '.host:/	/mnt/hgfs	fuse.vmhgfs-fuse	auto,allow_other	0	0' | sudo tee /etc/rc.local > /dev/null
+	#
+	# [3] Sources.list bestand aanpassen
+	#
+	# [OPTIE] echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i" /etc/apt/sources.list
+	# [OPTIE] sudo sed 's@mirrors.edge.kernel.org@mirror.nl.datapacket.com@' -i /etc/apt/sources.list
+	# sudo apt-get update
+	#
+	# [4] BASH Shell Script vminik-config.sh
+    #
+	# vminio script = create script file 
+	echo '#!/bin/bash' > /home/vagrant/vminio-config.sh
+	echo '#' >> /home/vagrant/vminio-config.sh
+	echo '# Vagrant vminik VM Configuration' >> /home/vagrant/vminio-config.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/vminio-config.sh
+	echo '#' >> /home/vagrant/vminio-config.sh
+	# vminik script = Ubuntu update
+	echo '# Update Ubuntu' >> /home/vagrant/vminio-config.sh
+	echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list" >> /home/vagrant/vminio-config.sh
+	echo sudo apt update >> /home/vagrant/vminio-config.sh
+    echo sudo apt upgrade -y >> /home/vagrant/vminio-config.sh
+	echo sudo apt autoremove -y >> /home/vagrant/vminio-config.sh
+	# vminik script = Install Utilities
+	echo '# Utilities' >> /home/vagrant/vminio-config.sh
+	echo sudo apt install -y mc screenfetch open-vm-tools wget >> /home/vagrant/vminio-config.sh
+	# vminik script = Install Docker-CE & Compose Plugin for Docker-CE
+	echo '# Docker' >> /home/vagrant/vminio-config.sh
+	echo sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> /home/vagrant/vminio-config.sh
+    # minik script = Install Minikube
+    echo '# Minikube' >> /home/vagrant/vminio-config.sh   
+    echo wget https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb >> /home/vagrant/vminio-config.sh
+	echo sudo dpkg -i minikube_latest_amd64.deb >> /home/vagrant/vminio-config.sh
+	echo minikube config set driver docker >> /home/vagrant/vminio-config.sh
+	echo sudo snap install kubectl --classic >> /home/vagrant/vminio-config.sh
+	# vminik script = script executable
+	chmod +x /home/vagrant/vminio-config.sh
+	#
+	# [5] BASH Shell Script docker-rights.sh
+    #
+	# https://www.baeldung.com/linux/docker-permission-denied-daemon-socket-error
+	#
+	echo '#!/bin/bash' > /home/vagrant/docker-rights.sh
+	echo '#' >> /home/vagrant/docker-rights.sh
+	echo '# Docker Rechten Configuration' >> /home/vagrant/docker-rights.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/docker-rights.sh
+	echo '#' >> /home/vagrant/docker-rights.sh
+	# Gebruiker vagrant toevoegen aan Docker group
+	echo sudo usermod -aG docker vagrant >> /home/vagrant/docker-rights.sh
+	# Logout om rechten te activeren
+	echo echo "Alleen door nu uit te loggen en in te loggen worden rechten actief" >> /home/vagrant/docker-rights.sh
+	echo echo "Geef commando logout " >> /home/vagrant/docker-rights.sh
+	chmod +x /home/vagrant/docker-rights.sh
+	#
+	# [6] BASH Shell Script Ansible-install.sh
+    #
+	echo '#!/bin/bash' > /home/vagrant/Ansible-install.sh
+	echo '#' >> /home/vagrant/Ansible-install.sh
+	echo '# ANSIBLE Installatie' >> /home/vagrant/Ansible-install.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/Ansible-install.sh
+	echo '#' >> /home/vagrant/Ansible-install.sh
+	echo '# Toevoegen Repository' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt-add-repository ppa:ansible/ansible >> /home/vagrant/Ansible-install.sh
+	echo '# Bijwerken Repository' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt update >> /home/vagrant/Ansible-install.sh
+	echo '# Ansible Install' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt install -y ansible >> /home/vagrant/Ansible-install.sh
+	chmod +x /home/vagrant/Ansible-install.sh
+	#
+	# [7] Restart mode naar auto zetten in plaats van interactief
+	#
+	# https://askubuntu.com/questions/1367139/apt-get-upgrade-auto-restart-services
+	#
+	sudo sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
+    #
+	# [8a] MinIO Object Storage in Containers (Kubernetes/Minikube)
+	#
+	# https://blog.knoldus.com/how-to-run-minio-as-a-docker-container/
+    echo '#!/bin/bash' > /home/vagrant/minio-docker-run.sh
+	echo '#' >> /home/vagrant/minio-docker-run.sh
+	echo '# Minio Object Storage on Docker' >> /home/vagrant/minio-docker-run.sh
+	echo 'docker run -d -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=minio99" -e "MINIO_ROOT_PASSWORD=minio123" quay.io/minio/minio server /data --console-address ":9001"' >/home/vagrant/minio-docker-run.sh
+	chmod +x /home/vagrant/minio-docker-run.sh
+    #
+    # [8b] MinIO Object Storage native install (Linux/Windows Clients)
+	#
+	echo '#!/bin/bash' > /home/vagrant/minio-install.sh
+	echo '#' >> /home/vagrant/minio-install.sh
+	echo '# MinIO Native Installatie' >> /home/vagrant/minio-install.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/minio-install.sh
+	echo '#' >> /home/vagrant/minio-install.sh
+	echo '# Toevoegen Repository' >> /home/vagrant/minio-install.sh
+	# [8b-1] MinIO Server Installatie
+	echo wget https://dl.min.io/server/minio/release/linux-amd64/minio_20230718174940.0.0_amd64.deb >> /home/vagrant/minio-install.sh
+	echo sudo dpkg -i minio_20230718174940.0.0_amd64.deb >> /home/vagrant/minio-install.sh
+	# [8b-2] MinIO Groepen/Gebruikers 
+	echo sudo groupadd -r minio-user >> /home/vagrant/minio-install.sh
+	echo sudo useradd -M -r -g minio-user minio-user >> /home/vagrant/minio-install.sh
+	# [8b-3] MinIO Storage Folder
+	echo sudo mkdir /mnt/data >> /home/vagrant/minio-install.sh
+	echo sudo chown minio-user:minio-user /mnt/data >> /home/vagrant/minio-install.sh
+	# [8b-4] MinIO Configuratie 
+	echo 'echo MINIO_VOLUMES="/mnt/data" >> /etc/default/minio' >> /home/vagrant/minio-install.sh
+	echo 'echo MINIO_OPTS="--certs-dir /home/vagrant/.minio/certs --console-address :9001" >> /etc/default/minio' >> /home/vagrant/minio-install.sh
+	echo 'echo MINIO_ROOT_USER=minioadmin >> /etc/default/minio' >> /home/vagrant/minio-install.sh
+	echo 'echo MINIO_ROOT_PASSWORD=minioadmin >> /etc/default/minio' >> /home/vagrant/minio-install.sh
+	# [8b-5] MinIO UFW poorten openzetten
+	echo sudo ufw allow 9000:9001/tcp >> /home/vagrant/minio-install.sh
+    # [8b-6] Starten MinIO Server
+	echo sudo systemctl start minio >> /home/vagrant/minio-install.sh
+	echo sudo systemctl enable minio >> /home/vagrant/minio-install.sh
+    # [8b-7] MinIO Client Installatie
+	echo wget https://dl.min.io/client/mc/release/linux-amd64/mcli_20230718210538.0.0_amd64.deb >> /home/vagrant/minio-install.sh
+	echo sudo dpkg -i mcli_20230718210538.0.0_amd64.deb >> /home/vagrant/minio-install.sh
+    # [8b-8] KubeCTL MinIO Plugin
+	# https://min.io/docs/minio/kubernetes/upstream/reference/kubectl-minio-plugin.html
+	# https://www.origo.io/info/stabiledocs/guides/minio-object-storage-service/
+	echo wget https://github.com/minio/operator/releases/download/v5.0.6/kubectl-minio_5.0.6_linux_amd64 -O kubectl-minio >> /home/vagrant/minio-install.sh
+    echo chmod +x kubectl-minio >> /home/vagrant/minio-install.sh
+	echo sudo mv kubectl-minio /usr/local/bin/ >> /home/vagrant/minio-install.sh
+	#
+	# https://www.olivercoding.com/2021-03-01-kubernetes-minio-init/
+	# 
+	# echo kubectl create namespace minio-operator >> /home/vagrant/minio-install.sh
+	# echo kubectl minio init --namespace minio-operator >> /home/vagrant/minio-install.sh
+	#
+   SHELL
+  end 
+  # 
+  # [V-W10-1] vw10eval omgeving (Windows 10 Enterprise EVAL)   [WERKT NIET!]
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "vw10eval" do |vw10eval|
+    vw10eval.vm.box = "gusztavvargadr/windows-10" 
+    vw10eval.vm.box_check_update = true
+    vw10eval.vm.hostname = "vw10eval"
+    vw10eval.vm.guest = :windows
+    # vw10eval.vm.boot_timeout = 3600
+    # vw10eval.vm.communicator = "winrm"
+    # vw10eval.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true
+    # vw10eval.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true
+    # vw10eval.winrm.host = "localhost"
+    vw10eval.vm.provider "vmware_desktop" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+  	  vb.memory = "4096"
+    end
+    # vw10eval.vm.provision "shell", inline: <<-SHELL 
+    vw10eval.vm.provision "shell", privileged: "true", inline: <<-SHELL
+  	 # 
+	 #	Powershell Script ps-winget maken voor installatie van WinGet 
+	 #
+	 # echo $ErrorActionPreference = 'Stop' >ps-winget.ps1
+  	 # echo $r = Invoke-RestMethod -Method Get -Uri https://api.github.com/repos/microsoft/winget-cli/releases/latest >>ps-winget.ps1
+  	 # echo $r.assets | ? { $_.name -match "\.msixbundle$" } | % { >>ps-winget.ps1
+  	 # echo     $downloadedFile = Join-Path $env:Temp $_.name >>ps-winget.ps1
+  	 # echo     if (Test-Path $downloadedFile) { >>ps-winget.ps1
+     # echo         Remove-Item $downloadedFile -Force >>ps-winget.ps1
+     # echo  } >>ps-winget.ps1
+	 # [TO BE CONTINUED]
+	 #
+	 # Powershell Script uitvoeren (Installatie WinGET)
+	 #
+     # REM powershell -ExecutionPolicy Unrestricted 
+     # REM powershell -file ps-winget.ps1
+	 #
+    SHELL
+  end
+  #
+  # 
+  # =============================================== Oracle Virtuabox ====================================================
+  #
+  #
+  # [O-ULX-A-1] okudu Omgeving (Ubuntu 22.10 LTS)
+  #
+  # Naslag is te vinden op https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+  # 
+  config.vm.define "okudu" do |okudu|
+    okudu.vm.box = "alvistack/ubuntu-22.10"
+    okudu.vm.hostname = "ulx-okudu-001"
+    okudu.vm.box_check_update = true
+	# okudu.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	#
+	#okudu.vm.network "private_network", ip: "192.168.56.201", netmask: "255.255.255.0"
+	#
+	okudu.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+	  vb.linked_clone = false
+	  vb.name = "Vagrant-okudu"
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  # vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--description", "Gebruiker en Password: vagrant"]
+    end
+    okudu.vm.provision "shell", inline: <<-SHELL
+    # ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	# [1] Bijwerken Ubuntu 22.10 LTS met de laatste updates voor installatie applicaties 
+	sudo apt-get update
+    sudo apt-get upgrade -y
+    # [2] Installeren Midnight Commander en Screenfetch
+	sudo apt-get install -y mc screenfetch open-vm-tools wget
+	#
+	SHELL
+  end
+  #
+  # [O-ULX-G-1] odckr Omgeving (Ubuntu 22.10 LTS met Docker (inclusief Compose plugin))
+  #
+  # Naslag is te vinden op https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+  # 
+  config.vm.define "odckr" do |odckr|
+    odckr.vm.box = "generic/ubuntu2210"
+    odckr.vm.hostname = "ulx-odckr-001"
+    odckr.vm.box_check_update = true
+	odckr.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	odckr.vm.network "private_network", ip: "192.168.56.202", netmask: "255.255.255.0"
+	odckr.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+	  vb.linked_clone = false
+	  vb.name = "Vagrant-odckr"
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--description", "Gebruiker en Password: vagrant"] 
+    end
+    odckr.vm.provision "shell", inline: <<-SHELL
+    # ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	#
+    # [1] Network restart
+	#
+	# #sudo /etc/init.d/networking restart
+	sudo netplan apply
+	#
+	# [2] Ubuntu Mirror DataPacket toevoegen
+	#
+	sudo add-apt-repository "deb http://mirror.nl.datapacket.com/ubuntu $(lsb_release -sc) universe"
+	#
+	#
+	# [3] Repository Docker Software 
+	#
+	sudo apt-get update
+	sudo apt-get install -y ca-certificates curl gnupg
+	sudo install -m 0755 -d /etc/apt/keyrings
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    #
+	# [4] BASH Shell Script odckr-config.sh
+    #
+	# odckr script = create script file 
+	echo '#!/bin/bash' > /home/vagrant/odckr-config.sh
+	echo '#' >> /home/vagrant/odckr-config.sh
+	echo '# Vagrant vdckr VM Configuration' >> /home/vagrant/odckr-config.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/odckr-config.sh
+	echo '#' >> /home/vagrant/odckr-config.sh
+	# odckr script = Ubuntu update
+	echo '# Update Ubuntu' >> /home/vagrant/odckr-config.sh
+	echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list" >> /home/vagrant/odckr-config.sh
+	echo sudo apt update >> /home/vagrant/odckr-config.sh
+    echo sudo apt upgrade -y >> /home/vagrant/odckr-config.sh
+	echo sudo apt autoremove -y >> /home/vagrant/odckr-config.sh
+	# odckr script = Install Utilities
+	echo '# Utilities' >> /home/vagrant/odckr-config.sh
+	echo sudo apt install -y mc screenfetch open-vm-tools wget >> /home/vagrant/odckr-config.sh
+	# odckr scriptie = Install Docker-CE & Compose Plugin for Docker-CE
+	echo '# Docker' >> /home/vagrant/odckr-config.sh
+	echo sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> /home/vagrant/odckr-config.sh
+	# odckr script = script executable
+	chmod +x /home/vagrant/odckr-config.sh
+    #
+	# [5] BASH Shell Script Docker-rights.sh
+    #
+	# https://www.baeldung.com/linux/docker-permission-denied-daemon-socket-error
+	#
+	echo '#!/bin/bash' > /home/vagrant/docker-rights.sh
+	echo '#' >> /home/vagrant/docker-rights.sh
+	echo '# Docker Rechten Configuration' >> /home/vagrant/docker-rights.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/docker-rights.sh
+	echo '#' >> /home/vagrant/docker-rights.sh
+	# Gebruiker vagrant toevoegen aan Docker group
+	echo sudo usermod -aG docker vagrant >> /home/vagrant/docker-rights.sh
+	# Logout om rechten te activeren
+	echo echo "Alleen door nu uit te loggen en in te loggen worden rechten actief" >> /home/vagrant/docker-rights.sh
+	echo echo "Geef commando logout " >> /home/vagrant/docker-rights.sh
+	chmod +x /home/vagrant/docker-rights.sh
+	#
+	# [6] BASH Shell Script Ansible-install.sh
+    #
+	echo '#!/bin/bash' > /home/vagrant/Ansible-install.sh
+	echo '#' >> /home/vagrant/Ansible-install.sh
+	echo '# ANSIBLE Installatie' >> /home/vagrant/Ansible-install.sh
+	echo '# (c) 2023 John Tutert' >> /home/vagrant/Ansible-install.sh
+	echo '#' >> /home/vagrant/Ansible-install.sh
+	echo '# Toevoegen Repository' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt-add-repository ppa:ansible/ansible >> /home/vagrant/Ansible-install.sh
+	echo '# Bijwerken Repository' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt update >> /home/vagrant/Ansible-install.sh
+	echo '# Ansible Install' >> /home/vagrant/Ansible-install.sh
+	echo sudo apt install -y ansible >> /home/vagrant/Ansible-install.sh
+	chmod +x /home/vagrant/Ansible-install.sh
+	#
+	# [7] Restart mode naar auto zetten in plaats van interactief
+	#
+	# https://askubuntu.com/questions/1367139/apt-get-upgrade-auto-restart-services
+	#
+	sudo sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
+    #
+	# [8] MinIO Object Storage in Containers 
+	#
+	# https://blog.knoldus.com/how-to-run-minio-as-a-docker-container/
+    echo '#!/bin/bash' > /home/vagrant/minio-docker-run.sh
+	echo '#' >> /home/vagrant/minio-docker-run.sh
+	echo '# Minio Object Storage on Docker' >> /home/vagrant/minio-docker-run.sh
+	echo 'docker run -d -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=minio99" -e "MINIO_ROOT_PASSWORD=minio123" quay.io/minio/minio server /data --console-address ":9001"' >/home/vagrant/minio-docker-run.sh
+	chmod +x /home/vagrant/minio-docker-run.sh
+    #
+    #
+	# [x] Sources.list bestand aanpassen
+	#
+	# [OPTIE] echo "sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i" /etc/apt/sources.list
+	# [OPTIE] sudo sed 's@mirrors.edge.kernel.org@mirror.nl.datapacket.com@' -i /etc/apt/sources.list
+	# sudo apt-get update
+	#
+	SHELL
+  end
+  #
+  # [O-ULX-G-2] ominik Omgeving (Ubuntu 22.10 LTS met Docker (inclusief Compose plugin) + MiniKube + MinIO)
+  #
+  # Naslag is te vinden op https://developer.hashicorp.com/vagrant/docs/providers/virtualbox
+  # 
+  config.vm.define "ominik" do |ominik|
+    ominik.vm.box = "generic/ubuntu2210"
+    ominik.vm.hostname = "ulx-ominik-001"
+    ominik.vm.box_check_update = true
+	ominik.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protocol: "tcp", id: "webcntr01"	
+    # Host-Only NIC toevoegen met fixed IP
+	ominik.vm.network "private_network", ip: "192.168.56.203", netmask: "255.255.255.0"
+	ominik.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+	  vb.linked_clone = false
+    end
+    ominik.vm.provision "shell", inline: <<-SHELL
+    # ===========================================================================================================   
+	# Dit gedeelte wordt alleen uitgevoerd bij eerste start VM OF bij Provision parameter 
+	# ===========================================================================================================
+	# [1] Bijwerken Ubuntu 22.10 LTS met de laatste updates voor installatie applicaties 
+	sudo apt-get update
+	sudo apt-get -y upgrade
+	sudo apt-get -y autoremove
+	# [2] Installeren Midnight Commander en Screenfetch
+	sudo apt-get update
+	sudo apt-get install -y mc screenfetch open-vm-tools wget
+	# [3] Installeren Docker en Docker Compose zoals beschreven op https://docs.docker.com/engine/install/ubuntu/
+	sudo apt-get install -y ca-certificates curl gnupg
+	sudo install -m 0755 -d /etc/apt/keyrings
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	# [4] Bijwerken Ubuntu 22.10 LTS met de laatste updates
+	sudo apt-get update
+	sudo apt-get upgrade -y
+	# [5] gebruiker vagrant toevoegen aan primary group docker
+	sudo usermod -g docker vagrant
+	# [6] gebruiker vagrant toevoegen aan secondary group root
+	sudo usermod -a -G root vagrant
+    # [7] Installatie Minikube 1.x
+	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb > /dev/null
+	sudo dpkg -i minikube_latest_amd64.deb
+	# [8] Configuratie MiniKube driver Docker
+	minikube config set driver docker
+	# [9] Installatie KubeCTL 
+	sudo snap install kubectl --classic
+	# [10] MinIO Object Storage in Containers 
+	# https://blog.knoldus.com/how-to-run-minio-as-a-docker-container/
+    echo '#!/bin/bash' > /home/vagrant/minio-docker-run.sh
+	echo '#' >> /home/vagrant/minio-docker-run.sh
+	echo '# Minio Object Storage on Docker' >> /home/vagrant/minio-docker-run.sh
+	echo 'docker run -d -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=minio99" -e "MINIO_ROOT_PASSWORD=minio123" quay.io/minio/minio server /data --console-address ":9001"' >/home/vagrant/minio-docker-run.sh
+	chmod +x /home/vagrant/minio-docker-run.sh
+	#
+	SHELL
+  end
+  # 
+  # [V-W10-1] ow10eval omgeving (Windows 10 Enterprise EVAL)
+  #
+  # Naslag VMware omgevingen https://developer.hashicorp.com/vagrant/docs/providers/vmware
+  #
+  config.vm.define "ow10eval" do |ow10eval|
+    ow10eval.vm.box = "gusztavvargadr/windows-10"
+	ow10eval.vm.box_check_update = true
+	ow10eval.vm.hostname = "ow10eval"
+	# # ow10eval.vm.guest = :windows
+	# ow10eval.vm.boot_timeout = 3600
+	# # ow10eval.vm.communicator = "winrm"
+	# # ow10eval.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true  [automatisch aan]
+    # # ow10eval.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true [automatisch aan]
+    # # ow10eval.winrm.host = "localhost"
+    ow10eval.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.cpus = "2"
+	  vb.memory = "4096"
+	  vb.linked_clone = false
+	  vb.customize ["modifyvm", :id, "--vram", "128"]
+	  # vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+	  vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+    end
+   # ow10eval.vm.provision "shell", inline: <<-SHELL 
+    ow10eval.vm.provision "shell", privileged: "true", inline: <<-SHELL
+	 echo $ErrorActionPreference = 'Stop' >ps-winget.ps1
+	 echo $r = Invoke-RestMethod -Method Get -Uri https://api.github.com/repos/microsoft/winget-cli/releases/latest >>ps-winget.ps1
+	 echo $r.assets | ? { $_.name -match "\.msixbundle$" } | % { >>ps-winget.ps1
+	 echo     $downloadedFile = Join-Path $env:Temp $_.name >>ps-winget.ps1
+	 echo     if (Test-Path $downloadedFile) { >>ps-winget.ps1
+	 echo         Remove-Item $downloadedFile -Force >>ps-winget.ps1
+	 echo  } >>ps-winget.ps1
+	 REM powershell -ExecutionPolicy Unrestricted 
+	 REM powershell -file ps-winget.ps1
+    SHELL
+  end
+  # 
+end

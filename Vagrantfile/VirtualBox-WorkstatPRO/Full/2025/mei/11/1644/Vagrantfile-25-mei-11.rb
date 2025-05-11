@@ -1683,18 +1683,6 @@ Vagrant.configure("2") do |config|
 				#	Geen specifieke configuratie Scripts
 			end
 			#
-			#	https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/OpdrachtCasus1.html
-			#
-			if machine[:HostNameVM] == "DC01"
-				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/02-Install-ActiveDirectory.ps1"
-				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/03-Install-DHCP.ps1"
-				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/04-Install-Routing.ps1"
-			end
-			if machine[:HostNameVM] == "DB01"
-				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/06-Configure-MemberServer.ps1"
-				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/07-Install-SQLServer.ps1"
-			end
-			#
 			#
 			#
 			winnode.vm.provision "shell", privileged: "true", inline: <<-SHELL
