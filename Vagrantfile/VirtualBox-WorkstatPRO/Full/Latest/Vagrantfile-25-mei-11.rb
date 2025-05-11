@@ -1558,8 +1558,8 @@ Vagrant.configure("2") do |config|
 			#	11 mei 2025 uitgezet / Nog wel noodzakeijk ? / 
 			#	winnode.vm.communicator 	= 	"winrm" 		# standaard is ssh windows moet naar winrm
 			#
-			#	11 mei 2025 // Gaat niet goed omdat de Windows VM Hostname nog niet HostNameVM is bij start
-			#	winnode.winrm.host		=	"#{machine[:HostNameVM]}"
+			#	WinRM op localhost / 127.0.0.1 zetten omdat anders Statische IP instellingen niet goed gaan
+			winnode.winrm.host		=	"127.0.0.1"
 			#
 			# 	####################################################################
 			#	Post Up Message
@@ -1686,9 +1686,13 @@ Vagrant.configure("2") do |config|
 			#	https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/OpdrachtCasus1.html
 			#
 			if machine[:HostNameVM] == "DC01"
-				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/02-Install-ActiveDirectory.ps1"
-				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/03-Install-DHCP.ps1"
-				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/04-Install-Routing.ps1"
+				# Active Directory
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Windows/Powershell/Vagrant-VM-AD-DC-Promote.ps1"
+				# winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/02-Install-ActiveDirectory.ps1"
+				# DHCP Server
+				# winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/03-Install-DHCP.ps1"
+				# Router
+				# winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/04-Install-Routing.ps1"
 			end
 			if machine[:HostNameVM] == "DB01"
 				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/06-Configure-MemberServer.ps1"
