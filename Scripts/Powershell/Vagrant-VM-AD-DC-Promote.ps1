@@ -26,10 +26,10 @@ Write-Host "Promoveer de server tot een domeincontroller"
 Install-ADDSForest `
     -CreateDnsDelegation:$false `
     -DatabasePath "C:\Windows\NTDS" `
-    -DomainMode Win2022 `
+    -DomainMode Win2016 `
     -DomainName "homelab.net" `
     -DomainNetbiosName "homelab" `
-    -ForestMode Win2022 `
+    -ForestMode Win2016 `
     -InstallDns:$true `
     -LogPath "C:\Windows\NTDS" `
     -NoRebootOnCompletion:$false `
