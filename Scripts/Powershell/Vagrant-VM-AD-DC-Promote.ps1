@@ -5,32 +5,32 @@
 #	For personal or educational use 
 #
 #	Changelog
-#	11 mei	Aanmaken bestand	V001
-#	12 mei	Verbeteren			V002
-#
+#	11 mei	Aanmaken bestand		V001
+#	12 mei	Verbeteren				V002
+#	17 mei 	Domain en Forest Mode	V003
 
 #
 #	Domainname 					homelab.net
 #	Wachtwoord Administrator 	!@WACHTwoord#$
 #
 
-# Installeer AD DS rol
+Write-Host "Installeer AD DS rol"
 Install-WindowsFeature -Name AD-Domain-Services -IncludeAllSubFeature -IncludeManagementTools
 
-# Importeer de ADDSDeployment module
+Write-Host "Importeer de ADDSDeployment module"
 Import-Module ADDSDeployment
 
-# Promoveer de server tot een domeincontroller
+Write-Host "Promoveer de server tot een domeincontroller"
 
 # https://learn.microsoft.com/en-us/powershell/module/addsdeployment/install-addsforest?view=windowsserver2022-ps
 
 Install-ADDSForest `
     -CreateDnsDelegation:$false `
     -DatabasePath "C:\Windows\NTDS" `
-    -DomainMode WinThreshold `
+    -DomainMode Win2022 `
     -DomainName "homelab.net" `
     -DomainNetbiosName "homelab" `
-    -ForestMode WinThreshold `
+    -ForestMode Win2022 `
     -InstallDns:$true `
     -LogPath "C:\Windows\NTDS" `
     -NoRebootOnCompletion:$false `
@@ -39,7 +39,8 @@ Install-ADDSForest `
     -Force:$true
 
 # Herstart de server om de promotie te voltooien
-Restart-Computer
+Restart-Computer -Force -ComputerName localhost -Confirm:$false
+
 
 #
 #	Thats all Folks
