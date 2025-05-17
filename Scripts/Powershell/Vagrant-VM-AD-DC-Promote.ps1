@@ -15,15 +15,14 @@
 #
 
 Write-Host "Installeer AD DS rol"
-Install-WindowsFeature -Name AD-Domain-Services -IncludeAllSubFeature -IncludeManagementTools
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
 
 Write-Host "Importeer de ADDSDeployment module"
 Import-Module ADDSDeployment
 
-Write-Host "Promoveer de server tot een domeincontroller"
-
 # https://learn.microsoft.com/en-us/powershell/module/addsdeployment/install-addsforest?view=windowsserver2022-ps
 
+Write-Host "Promoveer de server tot een domeincontroller"
 Install-ADDSForest `
     -CreateDnsDelegation:$false `
     -DatabasePath "C:\Windows\NTDS" `
@@ -38,9 +37,8 @@ Install-ADDSForest `
     -SysvolPath "C:\Windows\SYSVOL" `
     -Force:$true
 
-# Herstart de server om de promotie te voltooien
+# 	Herstart de server om de promotie te voltooien
 Restart-Computer -Force -ComputerName localhost -Confirm:$false
-
 
 #
 #	Thats all Folks
