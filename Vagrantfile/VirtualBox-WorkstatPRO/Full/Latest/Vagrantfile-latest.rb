@@ -707,13 +707,17 @@ windows_machines=[
 	#
 	#
 	#	############################################
-	#	Provider Oracle 
+	#	############################################
+	#			Provider Oracle 
+	#	############################################
 	#	############################################
 	#
 	#
+	#		#####
 	#	##############
 	#	gusztavvargadr
 	#	##############
+	#		#####
 	#
 	#
 	#	################################
@@ -786,13 +790,17 @@ windows_machines=[
 	#
 	#
 	#	############################################
-	#	Provider Broadcom/VMWare
+	#	############################################
+	#			Provider Broadcom/VMWare
+	#	############################################
 	#	############################################
 	#
 	#
+	#		#####
 	#	################################
 	#	gusztavvargadr
 	#	################################
+			#####
 	#
 	#
 	#	################################
@@ -887,9 +895,11 @@ windows_machines=[
 	},
 	#
 	#
+	#		#####
 	#	################################
 	#	Xenov
 	#	################################
+			#####
 	#
 	#
 	#	################################
@@ -1525,14 +1535,18 @@ Vagrant.configure("2") do |config|
 	windows_machines.each do |machine|
 		config.vm.define machine[:HostNameVM] do |winnode|
 			#
+			#	####################################################################
+			#	Algemeen
+			#
 			winnode.vm.box 				= 	machine[:VagrantBoxName]
 			winnode.vm.box_check_update = 	false
 			#
 			winnode.vm.hostname 		= 	"#{machine[:HostNameVM]}"
 			#	OUD		winnode.vm.hostname 		= 	"Vagrant-#{machine[:HostNameVM]}"
-			winnode.vm.guest 			= 	:windows
+			winnode.vm.guest 			= 	"windows"
 			winnode.winssh.shell 		= 	"powershell" 		# The shell to use when executing SSH commands from Vagrant. By default this is powershell. Valid values are "cmd" or "powershell".		
 			#
+			winnode.vm.boot_timeout = 1800		# 30 minuten
 			#
 			#
 			#
@@ -1558,8 +1572,10 @@ Vagrant.configure("2") do |config|
 			#	11 mei 2025 uitgezet / Nog wel noodzakeijk ? / 
 			#	winnode.vm.communicator 	= 	"winrm" 		# standaard is ssh windows moet naar winrm
 			#
-			#	WinRM op localhost / 127.0.0.1 zetten omdat anders Statische IP instellingen niet goed gaan
-			winnode.winrm.host		=	"127.0.0.1"
+			#
+			winnode.winrm.host			= "127.0.0.1"
+			winnode.winrm.retry_limit	= 10
+			winnode.winrm.timeout		= 1800		# 30 minuten
 			#
 			# 	####################################################################
 			#	Post Up Message
@@ -1645,10 +1661,10 @@ Vagrant.configure("2") do |config|
 			#	Ethernet2 NetAdapter NIET voorzien van Static IP, anders werkt Vagrant WinRM NIET meer ! 
 			#
 			if machine[:HostNameVM] == "DC01"
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Windows/Powershell/Vagrant-VM-Configure-Static-IP.ps1"
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Powershell/Vagrant-VM-Configure-Static-IP.ps1"
 			end
 			if machine[:HostNameVM] == "DB01"
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Windows/Powershell/Vagrant-VM-Configure-Static-IP.ps1"
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Powershell/Vagrant-VM-Configure-Static-IP.ps1"
 			end
 			#
 			#	Configuratie Windows Omgeving / Algemeen
@@ -1663,9 +1679,10 @@ Vagrant.configure("2") do |config|
 				#	WinGET Accept License Terms (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
 				#	Download Bestanden en CMD Scripts (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V002.ps1"
-				#	Installatie Applicaties (Powershell 7) (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Application-Install-V001.ps1"
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V003.ps1"
+				#	Installatie Applicaties (doet alleen installatie van Powershell 7) (JT)
+				#   18 mei 2025 uitgezet
+				#   winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Application-Install-V001.ps1"
 			end
 			#
 			#	Configuratie Windows Omgeving / Desktop
@@ -1686,13 +1703,14 @@ Vagrant.configure("2") do |config|
 			#	https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/OpdrachtCasus1.html
 			#
 			if machine[:HostNameVM] == "DC01"
-				# Active Directory
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Windows/Powershell/Vagrant-VM-AD-DC-Promote.ps1"
-				# winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/02-Install-ActiveDirectory.ps1"
-				# DHCP Server
-				# winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/03-Install-DHCP.ps1"
-				# Router
-				# winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/04-Install-Routing.ps1"
+				# 	Active Directory
+				#	winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Powershell/Vagrant-VM-AD-DC-Promote.ps1"
+				#
+				# 	DHCP Server
+				#	winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Vagrant/refs/heads/main/Scripts/Powershell/03-Install-DHCP.ps1"
+				#
+				# 	Router
+				# 	winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/04-Install-Routing.ps1"
 			end
 			if machine[:HostNameVM] == "DB01"
 				winnode.vm.provision "shell", path: "https://saxionact.github.io/1.4-Scripting-met-Powershell/Casus/06-Configure-MemberServer.ps1"
