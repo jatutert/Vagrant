@@ -24,16 +24,16 @@ Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
 # 2. Promoveer de server tot Domain Controller
 Install-ADDSForest `
     -DomainName $DomainName `
-    -CreateDnsDelegation:$false `
-    -DatabasePath "C:\Windows\NTDS" `
-    -DomainMode "WinThreshold" `
-    -ForestMode "WinThreshold" `
-    -InstallDns:$true `
-    -LogPath "C:\Windows\NTDS" `
-    -NoRebootOnCompletion:$false `
-    -SysvolPath "C:\Windows\SYSVOL" `
-    -Force:$true `
-    -SafeModeAdministratorPassword $SecurePassword
+    -CreateDnsDelegation:$false `
+    -DatabasePath "C:\Windows\NTDS" `
+    -DomainMode "WinThreshold" `
+    -ForestMode "WinThreshold" `
+    -InstallDns:$true `
+    -LogPath "C:\Windows\NTDS" `
+    -NoRebootOnCompletion:$false `
+    -SysvolPath "C:\Windows\SYSVOL" `
+    -Force:$true `
+    -SafeModeAdministratorPassword $SecurePassword
 
 
 # 	Herstart de server om de promotie te voltooien
