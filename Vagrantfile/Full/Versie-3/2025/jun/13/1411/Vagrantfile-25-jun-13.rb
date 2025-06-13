@@ -106,7 +106,7 @@ Changelog
 # ############################################ [Vullen Variabelen] ##########################################
 #
 #	Variable versie Vagrantfile 
-VersieVagrantfile = "08-05-2025"
+VersieVagrantfile = "19-05-2025"
 #
 #	Variable auteur Vagrantfile 
 AuteurVagrantfile = "John Tutert"
@@ -1192,19 +1192,10 @@ Vagrant.configure("2") do |config|
 	#
 	#
 	#
-	# Melding komt elke keer in beeld bij commando met Vagrant ervoor
-	# puts "tekst tekst tekst tekst"
 	#
-	#
-	# ############################################ [Oracle / VMware] ##########################################
-	#
-	#
-	#
-	#
-	#
-	# ####################################
-	#              UBUNTU LINUX
-	# ####################################
+	# ####################################################################
+	#              LINUX VIRTUELE MACHINES
+	# ####################################################################
 	#
 	#
 	#
@@ -1212,20 +1203,18 @@ Vagrant.configure("2") do |config|
 	linux_machines.each do |machine|
 		config.vm.define machine[:HostNameVM] do |ulxnode|
 			#
+			#   ####################################################################
+			#   Algemeen
+			#
 			ulxnode.vm.box 					= machine[:VagrantBoxName]
 			ulxnode.vm.box_check_update		= false
 			ulxnode.vm.hostname 			= "#{machine[:HostNameVM].downcase}"
 			#
 			#
-			# ####################################################################	
-			#
-			#						Virtuele Netwerken 
-			#
-			# ####################################################################	
-			#
+			#   ####################################################################	
+			#   Netwerken
 			#
 			#	Adapter 2 Host-Only | Oracle Virtualbox fixed IP-address
-			#
 			#
 			if machine[:HypervisorVM] == "Oracle"
 				ulxnode.vm.network "private_network", ip: "#{machine[:ip]}", netmask: "255.255.255.0"
@@ -1254,11 +1243,8 @@ Vagrant.configure("2") do |config|
 			#	ulxnode.vm.network :forwarded_port, guest: 9001, host: 9001, auto_correct: true, id: "minio-console`"
 			#	ulxnode.vm.network :forwarded_port, guest: 9090, host: 9090, auto_correct: true, id: "minio-operator"
 			#
-			# ####################################################################
-			#
-			#						SYNCED FOLDERS
-			#
-			# ####################################################################
+			#   ####################################################################
+			#   Synced Folders
 			#
 			#
 			#	12 augustus 2024 uitgezet om tijd te besparen
@@ -1335,7 +1321,7 @@ Vagrant.configure("2") do |config|
 					#
 					#
 					ulxnode_pvd_vmwvm.vmx["tools.syncTime"]	= "TRUE"
-					ulxnode_pvd_vmwvm.vmx["displayName"]	= "#{machine[:DispleyName]}"
+					ulxnode_pvd_vmwvm.vmx["displayName"]	= "#{machine[:DisplayName]}"
 					ulxnode_pvd_vmwvm.vmx["annotation"]		= "#{machine[:VagrantBoxNameOSType]} #{machine[:VagrantBoxNameOSVersion]} |0D|0AUsed box is #{machine[:VagrantBoxName]} |0D|0ACreated on #{cur_date} by Vagrant |0D|0AUsername/Password = vagrant |0D|0AUse VAGRANT up #{machine[:HostNameVM]} to boot this virtual machine"
 					#
 					#
@@ -1671,7 +1657,8 @@ Vagrant.configure("2") do |config|
 			#
 			if machine[:VagrantBoxNameOSType] == "windows"
 				#	Windows Services Stoppen en disabelen (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V006.ps1"
+				#   Configuratie TimeZone naar Amsterdam
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/VM-OOBE-Config-Services-V007.ps1"
 				#	Windows SSH Client / SSH Server installatie (JT) 
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Config-SSH-V003.ps1"
 				#	Installatie WinGET (Asheroto) (steeds nieuwste versie van het script)
@@ -1679,9 +1666,11 @@ Vagrant.configure("2") do |config|
 				#	WinGET Accept License Terms (JT)
 				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-WinGET-Accept-Terms-V001.ps1"
 				#	Download Bestanden en CMD Scripts (JT)
-				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V003.ps1"
+				winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-Download-V004.ps1"
 				#	Installatie Applicaties (doet alleen installatie van Powershell 7) (JT)
 				#   18 mei 2025 uitgezet
+				#   Powershell 7 niet meer op deze manier installeren
+				#   Nieuw manier is installatie in Powershell 5 en dan met WinGet
 				#   winnode.vm.provision "shell", path: "https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/Powershell/VM-OOBE-Application-Install-V001.ps1"
 			end
 			#

@@ -9,7 +9,7 @@
 Vagrant Configuratie for Oracle Virtualbox and VMware Workstation/Fusion PRO hypervisors
 Vagrant is copyrighted by Hashicorp (www.vagrantup.com)
 
-(C) Copyright 2023,2024 JA Tutert
+(C) Copyright 2023 JA Tutert
 
 This configuration may only be used for private use or education use. Business/commercial use is prohibited. 
 It is intended for use with virtual machines on a hypervisor and thus not for configuration of bare-metal or cloud machines.
@@ -19,42 +19,15 @@ Windows boxes only run with Vagrant version 2.4.0 (security error with Vagrant v
 
 Legenda Boxes:
 
-Linux
-
-Distro / Versie / LTS
-
-Ubuntu
-U20-LTS		=	20.04 LTS
-U22-LTS		=	22.04 LTS
-U24-LTS		=	24.04 LTS
-
-D			=	Desktop
-S			=	Server
-
-DBMS		=	Database Management System (DBMS)
-WSRV		=	Webserver
-
-Windows
-W10			=	Windows 10
-W11			=	Windows 11
-W19			=	Windows Server 2019
-W22			=	Windows Server 2022
-
-EDU			=	Education 
-EDN			=	Education N
-ENT			=	Enterprise
-ENN			=	Enterprise N
-HME			=	Home
-PRO			=	PRO
-PED			=	PRO Education
-
-
 POV		provider	Oracle Virtualbox
-BCV		provider	VMWare Workstation / Fusion PRO
+PVD		provider	VMWare Workstation / Fusion PRO
 PDR		provider	Docker
 PMH		provider	Microsoft Hyper-V
 
-
+ULD		Ubuntu Linux desktop
+ULS		Ubuntu Linux server
+ALD		Alpine Linux Desktop
+ALS		Alpine Linux Server
 
 AS	=	Alvistack Box
 GC 	= 	Generic Box
@@ -73,7 +46,7 @@ K	=	Kubernetes
 =end
 #
 #
-versie_vagrantfile = "2024-07-18"
+versie_vagrantfile = "6.23.12.12"
 #
 #
 #	Aanmaken variable met huidige datum 
@@ -98,8 +71,8 @@ linux_machines=[
 	#	Provider: VMware
 	#
 	{
-        :hostname => "U20-LTS-S-BCV-S-001",
-        :weergavenaam => "U20-LTS-S-BCV-S-001",
+        :hostname => "uls-2004-s-001",
+        :weergavenaam => "pvd-uls-2004-S-001",
 		:box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -109,8 +82,8 @@ linux_machines=[
         :cpu => 2,
 	},
 	{
-        :hostname => "U20-LTS-S-BCV-M-001",
-		:weergavenaam => "U20-LTS-S-BCV-M-001",
+        :hostname => "uls-2004-m-001",
+		:weergavenaam => "pvd-uls-2004-M-001",
         :box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -120,8 +93,8 @@ linux_machines=[
         :cpu => 2,
     },
 	{
-		:hostname => "U20-LTS-S-BCV-L-001",
-		:weergavenaam => "U20-LTS-S-BCV-L-001",
+		:hostname => "uls-2004-l-001",
+		:weergavenaam => "pvd-uls-2004-L-001",
 		:box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -131,8 +104,8 @@ linux_machines=[
 		:cpu => 2,
     },
 	{
-		:hostname => "U20-LTS-S-BCV-XL-001",
-		:weergavenaam => "U20-LTS-S-BCV-XL-001",
+		:hostname => "uls-2004-xl-001",
+		:weergavenaam => "pvd-uls-2004-XL-001",
 		:box => "generic/ubuntu2004",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -147,8 +120,8 @@ linux_machines=[
 	#	Provider VMware
 	#
     {
-        :hostname => "U22-LTS-S-BCV-S-001",
-		:weergavenaam => "U22-LTS-S-BCV-S-001",
+        :hostname => "uls-2204-s-001",
+		:weergavenaam => "pvd-uls-2204-S-001",
         :box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -158,8 +131,8 @@ linux_machines=[
         :cpu => 2,
     },
 	{
-        :hostname => "U22-LTS-S-BCV-M-001",
-		:weergavenaam => "U22-LTS-S-BCV-M-001",
+        :hostname => "uls-2204-m-001",
+		:weergavenaam => "pvd-uls-2204-M-001",
         :box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -169,8 +142,8 @@ linux_machines=[
         :cpu => 2,
     },	
 	{
-		:hostname => "U22-LTS-S-BCV-L-001",
-		:weergavenaam => "U22-LTS-S-BCV-L-001",
+		:hostname => "uls-2204-l-001",
+		:weergavenaam => "pvd-uls-2204-L-001",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "server",
@@ -180,8 +153,8 @@ linux_machines=[
 		:cpu => 2,
     },
 	{
-		:hostname => "U22-LTS-S-BCV-XL-001",
-		:weergavenaam => "U22-LTS-S-BCV-XL-001",
+		:hostname => "uls-2204-xl-001",
+		:weergavenaam => "pvd-uls-2204-XL-001",
 		:box => "generic/ubuntu2204",
 		:os => "ubuntu",
 		:osedition => "desktop",
@@ -205,7 +178,7 @@ linux_machines=[
 		:cpu => 2,
     },
 	#
-	# 	Kubernetes MiniKube K8S demo 
+	# Kubernetes MiniKube K8S demo 
 	#
 	{
 		:hostname => "ulx-s-2204-xl-k-001",
@@ -221,8 +194,6 @@ linux_machines=[
 	#
 	#	Ansible Demo 
 	#
-	#	Controller 001
-	#
 	{
 		:hostname => "ulx-s-2204-l-a-001",
 		:weergavenaam => "DEMO-A-Controller",
@@ -235,7 +206,7 @@ linux_machines=[
 		:cpu => 2,
     },
 	#
-	#	Slave #1 (010)
+	#	Slave #1
 	#
 	{
 		:hostname => "ulx-s-2204-l-a-010",
@@ -249,7 +220,7 @@ linux_machines=[
 		:cpu => 2,
     },
 	#
-	#	Slave #2 (011) 
+	#	Slave #2
 	#
 	{
 		:hostname => "ulx-s-2204-l-a-011",
@@ -261,141 +232,9 @@ linux_machines=[
 		:aanbieder => "VMware",
 		:ram => 8192,
 		:cpu => 2,
-    },	
-	#
-	#	Ubuntu 24.04.x LTS Jammy Jellyfish (release xx xx 2024) (EOS April 2028) (EOL April 20xx) 
-	#
-	#	Provider VMware
-	#
-    {
-        :hostname => 		"U24-LTS-S-BCV-S-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-S-001",
-        :box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2204, 
-		:aanbieder => 		"VMware",
-        :ram => 			2048,
-        :cpu => 			2,
-    },
-	{
-        :hostname => 		"U24-LTS-S-BCV-M-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-M-001",
-        :box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2204, 
-		:aanbieder => 		"VMware",
-        :ram => 			4096,
-        :cpu => 			2,
-    },	
-	{
-		:hostname => 		"U24-LTS-S-BCV-L-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-L-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2204, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
-    },
-	{
-		:hostname => 		"U24-LTS-S-BCV-XL-001",
-		:weergavenaam => 	"U24-LTS-S-BCV-XL-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"desktop",
-		:osversie => 		2204, 
-		:aanbieder => 		"VMware",
-		:ram => 			16384,
-		:cpu => 			2,
-	},
-	#
-	#
-	#	Introductie Infrastructuren 
-	#
-	#
-	#	DBMS
-	#
-	{
-		:hostname => 		"u24-lts-s-dbms-001",
-		:weergavenaam => 	"u24-lts-S-dbms-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2204, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
-    },
-	#
-	#	WEBServer
-	#
-	{
-		:hostname => 		"u24-lts-s-wsrv-001",
-		:weergavenaam => 	"u24-lts-S-wsrv-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2204, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
-    },
-	#
-	#
-	#	DOCKER DEMO
-	#
-	#
-	{
-		:hostname => 		"u24-lts-s-dckr-001",
-		:weergavenaam => 	"u24-lts-S-dckr-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2204, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
-    },
-	#
-	#
-	#	ANSIBLE DEMO
-	#
-	#
-	#	MASTER
-	#
-	#
-	{
-		:hostname => 		"u24-lts-s-iacam-001",
-		:weergavenaam => 	"u24-lts-S-iacam-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2204, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
-    },
-	#
-	#	SLAVE
-	#
-	{
-		:hostname => 		"u24-lts-s-iacas-001",
-		:weergavenaam => 	"u24-lts-S-iacas-001",
-		:box => 			"gusztavvargadr/ubuntu-server-2404-lts",
-		:os => 				"ubuntu",
-		:osedition => 		"server",
-		:osversie => 		2204, 
-		:aanbieder => 		"VMware",
-		:ram => 			8192,
-		:cpu => 			2,
     }	
 	#
-	#
-	#
-]
+    ]
 #
 #
 #
@@ -414,61 +253,25 @@ windows_machines=[
 	#
 	#
 	{
-		:hostname => 		"W10-ENT-D-EVAL-VB1",
-		:weergavenaam => 	"W10-ENT-D-EVAL-VB1",
-        :box => 			"gusztavvargadr/windows-10",
-		:os => 				"windows",
-		:osedition => 		"desktop",
-		:osversie => 		10, 
-		:aanbieder => 		"Oracle",
-        :ram => 			8192,
-        :cpu =>	 			2,
+		:hostname => "ow10eval",
+        :box => "gusztavvargadr/windows-10",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 10, 
+		:aanbieder => "Oracle",
+        :ram => 8192,
+        :cpu => 2
 	},
 	{
-        :hostname => 		"W10-ENT-D-EVAL-BV1",
-        :weergavenaam => 	"W10-ENT-D-EVAL-BV1",
-        :box => 			"gusztavvargadr/windows-10",
-		:os => 				"windows",
-		:osedition => 		"desktop",
-		:osversie => 		10, 
-		:aanbieder => 		"VMware",
-        :ram => 			8192,
-        :cpu => 			2,
+        :hostname => "vw10eval",
+        :box => "gusztavvargadr/windows-10",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 10, 
+		:aanbieder => "VMware",
+        :ram => 8192,
+        :cpu => 2
 	},
-	#
-	#
-	#	################################
-	#	Windows Server 2019 DataCenter Evaluation
-	#	################################
-	#
-	#
-	#	##############
-	#	gusztavvargadr
-	#	##############
-	#
-	#
-	{
-		:hostname => 		"W19-STD-S-EVAL-VB1",
-		:weergavenaam => 	"W19-STD-S-EVAL-VB1",
-        :box => 			"gusztavvargadr/windows-server-2019-standard",
-		:os => 				"windows",
-		:osedition => 		"server",
-		:osversie => 		19, 
-		:aanbieder => 		"Oracle",
-        :ram => 			8192,
-        :cpu => 			2,
-	},
-	{
-        :hostname => 		"W19-STD-S-EVAL-BV1",
-        :weergavenaam => 	"W19-STD-S-EVAL-BV1",
-        :box => 			"gusztavvargadr/windows-server-2019-standard",
-		:os => 				"windows",
-		:osedition => 		"server",
-		:osversie => 		19, 
-		:aanbieder => 		"VMware",
-        :ram => 			8192,
-        :cpu => 			2,
-	},	
 	#
 	#
 	#	################################
@@ -482,61 +285,25 @@ windows_machines=[
 	#
 	#
 	{
-		:hostname => 		"W11-ENT-D-EVAL-VB1",
-		:weergavenaam => 	"W11-ENT-D-EVAL-VB1",
-        :box => 			"gusztavvargadr/windows-11",
-		:os => 				"windows",
-		:osedition => 		"desktop",
-		:osversie => 		11, 
-		:aanbieder => 		"Oracle",
-        :ram => 			8192,
-        :cpu => 			2,
+		:hostname => "ow11eval",
+        :box => "gusztavvargadr/windows-11",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 11, 
+		:aanbieder => "Oracle",
+        :ram => 8192,
+        :cpu => 2
 	},
 	{
-        :hostname => 		"W11-ENT-D-EVAL-BV1",
-        :weergavenaam => 	"W11-ENT-D-EVAL-BV1",
-        :box => 			"gusztavvargadr/windows-11",
-		:os => 				"windows",
-		:osedition => 		"desktop",
-		:osversie => 		11, 
-		:aanbieder => 		"VMware",
-        :ram => 			8192,
-        :cpu => 			2,
-	},
-	#
-	#
-	#	################################
-	#	Windows Server 2022 Standard Evaluation
-	#	################################
-	#
-	#
-	#	##############
-	#	gusztavvargadr
-	#	##############
-	#
-	#
-	{
-		:hostname => 		"W22-STD-S-EVAL-VB1",
-		:weergavenaam => 	"W22-STD-S-EVAL-VB1",
-        :box => 			"gusztavvargadr/windows-server-2022-standard",
-		:os => 				"windows",
-		:osedition => 		"server",
-		:osversie => 		22, 
-		:aanbieder => 		"Oracle",
-        :ram => 			8192,
-        :cpu => 			2,
-	},
-	{
-        :hostname => 		"W22-STD-S-EVAL-BV1",
-        :weergavenaam => 	"W22-STD-S-EVAL-BV1",
-        :box => 			"gusztavvargadr/windows-server-2022-standard",
-		:os => 				"windows",
-		:osedition => 		"server",
-		:osversie => 		22, 
-		:aanbieder => 		"VMware",
-        :ram => 			8192,
-        :cpu => 			2,
-	}		
+        :hostname => "vw11eval",
+        :box => "gusztavvargadr/windows-11",
+		:os => "windows",
+		:osedition => "desktop",
+		:osversie => 11, 
+		:aanbieder => "VMware",
+        :ram => 8192,
+        :cpu => 2
+	}
 	#
 	#
 	#
@@ -782,25 +549,10 @@ SCRIPT
 # [2a-1] Installatie WinGET
 #
 #
-$windows_winget_install = <<SCRIPT
-	:: 	Script maakt gebruik van winget-install powershell script
-	::	Origineel is te vinden op 
-	:: 	https://raw.githubusercontent.com/asheroto/winget-install/master/winget-install.ps1
-	::
-	powershell -Command "Invoke-WebRequest -URI https://raw.githubusercontent.com/jatutert/Windows-Config/main/Powershell/asheroto-412-winget-install.ps1 -OutFile C:\Users\$env:USERNAME\Downloads\winget-install.ps1"
-	powershell -file C:\Users\$env:USERNAME\Downloads\winget-install.ps1
-	wsreset
+$winget_installatie = <<SCRIPT
+	# REM powershell -ExecutionPolicy Unrestricted 
+	# REM powershell -file ps-winget.ps1
 SCRIPT
-#
-#
-# [2a-2] Services stoppen
-#
-#
-$windows_services_config = <<SCRIPT
-	powershell -Command "Invoke-WebRequest -URI https://raw.githubusercontent.com/jatutert/Windows-Config/main/Command/Free-Mem-Windows-Server-v01.cmd -OutFile C:\Users\$env:USERNAME\Downloads\Free-Mem-Windows-Server-v01.cmd"
-	%userprofile%\Downloads\Free-Mem-Windows-Server-v01.cmd
-SCRIPT
-#
 #
 # [2b] Scripts die aangemaakt worden, maar later handmatig gestart moeten worden
 #
@@ -981,41 +733,6 @@ Vagrant.configure("2") do |config|
 				#
 			SHELL
 			#
-			# #############################################################
-			#
-			#						Provision
-			#				
-			#						Aanpassen DNS-Settings ivm EduRoam
-			#
-			# #############################################################
-			#
-			#
-			#	sed "s@mirrors.edge.kernel.org@nl.archive.ubuntu.com@" -i /etc/apt/sources.list
-			#
-			#
-			ulxnode.vm.provision "shell", inline: <<-SHELL
-				#
-				#
-				#	AANPASSEN /etc/netplan/01-netcfg.yaml naar de juiste settings IVM EduROAM
-				#
-				#
-				#	DNS Server 1 aanpassen naar ns1.saxion.nl
-				sed "s@4.2.2.1@145.76.2.75@" -i /etc/netplan/01-netcfg.yaml
-				#
-				#	DNS Server 2 aanpassen naar ns2.saxion.nl
-				sed "s@4.2.2.2@145.76.2.85@" -i /etc/netplan/01-netcfg.yaml
-				#
-				# 	Overige DNS servers toevoegen (o.a. d-hk-mer-ib02.infra.saxion.net = 145.2.14.10) 
-				#	sed "s@208.67.220.220@145.2.14.10@" -i /etc/netplan/01-netcfg.yaml
-				sed "s@208.67.220.220@145.2.14.10, 8.8.8.8, 8.8.4.4@" -i /etc/netplan/01-netcfg.yaml
-				#	
-				#	Doorvoeren van wijzigingen 
-				netplan apply 
-				#
-			SHELL
-			#
-			#
-			#
 			#
 			# #############################################################
 			#
@@ -1026,15 +743,12 @@ Vagrant.configure("2") do |config|
 			# #############################################################
 			#
 			ulxnode.vm.provision "shell", inline: <<-SHELL
-				# 	Versie 1 (status: productie) 
-				sudo curl -s -o /home/vagrant/ubuntu-config-V1-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V1-latest.sh
-				sudo chmod +x /home/vagrant/ubuntu-config-V1-latest.sh
-				# 	Versie 2 (status: productie) 
-				sudo curl -s -o /home/vagrant/ubuntu-config-V2-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V2-latest.sh
-				sudo chmod +x /home/vagrant/ubuntu-config-V2-latest.sh
-				#	Versie 3 (status ontwikkeling)
-				sudo curl -s -o /home/vagrant/ubuntu-config-V3-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V3-latest.sh				
-				sudo chmod +x /home/vagrant/ubuntu-config-V3-latest.sh
+				# Versie 1 (status: productie) 
+				sudo curl -s -o /home/vagrant/wsl2-config-latest.sh https://raw.githubusercontent.com/jatutert/WSL2/main/wsl2-config-latest.sh
+				sudo chmod +x /home/vagrant/wsl2-config-latest.sh
+				# Versie 2 (status: test) 
+				sudo curl -s -o /home/vagrant/ubuntu-config-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-latest.sh
+				sudo chmod +x /home/vagrant/ubuntu-config-latest.sh
 				#
 			SHELL
 		#
@@ -1054,12 +768,17 @@ Vagrant.configure("2") do |config|
 	windows_machines.each do |machine|
 		config.vm.define machine[:hostname] do |winnode|
 			#
-			winnode.vm.box 				= 	machine[:box]
-			winnode.vm.box_check_update = 	true
+			winnode.vm.box = machine[:box]
+			winnode.vm.box_check_update = true
 			#
 			winnode.vm.hostname 		= 	"Vagrant-#{machine[:hostname]}"
 			winnode.vm.guest 			= 	:windows
-			winnode.winssh.shell 		= 	"powershell" 		# The shell to use when executing SSH commands from Vagrant. By default this is powershell. Valid values are "cmd" or "powershell".		
+			winnode.vm.boot_timeout 	= 	18000
+			#
+			winnode.winssh.shell 		= 	"cmd" 		# The shell to use when executing SSH commands from Vagrant. By default this is powershell. Valid values are "cmd" or "powershell".		
+			#
+			#	winnode.ssh.username 		= "vagrant"
+			#	winnode.ssh.password 		= "vagrant"
 			#
 			# ####################################################################	
 			#
@@ -1087,7 +806,12 @@ Vagrant.configure("2") do |config|
 			# ####################################################################	
 			#	WinRM
 			#
-			winnode.vm.communicator 	= 	"winrm" 		# standaard is ssh windows moet naar winrm
+			winnode.vm.communicator 	= 	"winrm" 	# standaard is ssh windows moet naar winrm
+			# vw1Xeval.winrm.username = "IEUser"
+			# vw1Xeval.winrm.password = "Passw0rd!"
+			# vw1Xeval.winrm.host = "localhost"  	# The hostname or IP to connect to the WinRM service
+			winnode.winrm.max_tries 	= 	300 			# The maximum number of times to retry opening a shell after failure. This defaults to 20.
+			winnode.winrm.retry_delay 	= 	2 			# The amount of time to wait between retries and defaults to 2 seconds.
 			#
 			#
 			# ####################################################################	
@@ -1138,29 +862,16 @@ Vagrant.configure("2") do |config|
 					# vmwvm.nat_device 	= "VMnet8"
 					#
 					win_node_vmwvm.vmx["tools.syncTime"]	= 	"TRUE"
-					win_node_vmwvm.vmx["displayName"] 		= 	"#{machine[:weergavenaam]}"
-					win_node_vmwvm.vmx["annotation"] 		= 	"#{machine[:os]} #{machine[:osversie]} |0D|0AUsed box is #{machine[:box]} |0D|0ACreated on #{cur_date} by Vagrant |0D|0AUsername/Password = vagrant |0D|0AUse VAGRANT up #{machine[:hostname]} to boot this virtual machine"
+					win_node_vmwvm.vmx["displayName"] 		= 	"Vagrant-#{machine[:weergavenaam]}"
+					win_node_vmwvm.vmx["annotation"] 		= 	"Vagrant-#{machine[:hostname]} |0D|0AUbuntu 22.04.02 LTS |0D|0A |0D|0AUsername/Password = vagrant"
 				end
 			end	
 			#
-			#	Windows Desktop initialisatie
-			#
-			if machine[:os] == "windows" && machine[:osedition] == "desktop"
-				winnode.vm.provision "shell", privileged: "true", inline: $windows_winget_install
-				winnode.vm.provision "shell", privileged: "true", inline: $windows_services_config
-			end
-			#
-			#
-			#	Windows Server initialisatie
-			#
-			if machine[:os] == "windows" && machine[:osedition] == "server"
-				winnode.vm.provision "shell", privileged: "true", inline: $windows_winget_install
-				winnode.vm.provision "shell", privileged: "true", inline: $windows_services_config
-			end
-			#
 			winnode.vm.provision "shell", privileged: "true", inline: <<-SHELL
-				::
-				::
+				#
+				#
+				#
+				#
 			SHELL
 		end
 	end
