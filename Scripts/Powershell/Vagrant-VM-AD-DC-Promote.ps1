@@ -1,12 +1,12 @@
 #
-#	Windows Server 2022 Active Directory Domain Services Domain Controller Promotor
-#	Created by John Tutert for TutSOFT
+#   Windows Server 2022 Active Directory Domain Services Domain Controller Promotor
+#   Created by John Tutert for TutSOFT
 #
-#	For personal or educational use 
+#   For personal or educational use 
 #
 
-#	Dit script kan pas uitgevoerd worden NA de installatie van feature en vervolgens een herstart
-#	Pas dan is het mogelijk om onderstaande stappen uit te voeren. 
+#   Dit script kan pas uitgevoerd worden NA de installatie van feature en vervolgens een herstart
+#   Pas dan is het mogelijk om onderstaande stappen uit te voeren. 
 
 Write-Host "Importeer de ADDSDeployment module"
 Import-Module ADDSDeployment
@@ -36,9 +36,9 @@ Install-ADDSForest `
     -SafeModeAdministratorPassword $SecurePassword
 
 
-# 	Herstart de server om de promotie te voltooien
-#	Restart-Computer -Force -ComputerName localhost -Confirm:$false
+#   Herstart de server om de promotie te voltooien
+#   Restart-Computer -Force -ComputerName localhost -Confirm:$false
 
 #
-#	Thats all Folks
+#   Thats all Folks
 #
